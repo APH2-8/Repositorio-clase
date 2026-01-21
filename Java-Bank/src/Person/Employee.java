@@ -14,28 +14,11 @@ import java.util.Scanner;
  * @see User
  */
 public class Employee extends Person {
-    /**
-     * Identificador único del empleado (inmutable).
-     */
-    final int employeeId;
-
-    /**
-     * Contador estático para generar IDs de usuarios.
-     * Se incrementa con cada nuevo registro.
-     */
-    public static int id = 0;
-
-    /**
-     * Crea una nueva instancia de {@code Employee}.
-     * 
-     * @param id         Identificador del empleado.
-     * @param name       Nombre completo del empleado.
-     * @param password   Contraseña de acceso.
-     * @param birthDate  Fecha de nacimiento en formato texto.
-     * @param employeeId Identificador único numérico del empleado.
-     */
-    public Employee(String id, String name, String password, String birthDate, int employeeId) {
-        super(name, password, birthDate);
+    int employeeId;
+    public int id;
+    public String ID;
+    public Employee(String ID, String name, String password, String birthDate, int employeeId) {
+        super(ID, name, password, birthDate);
         this.employeeId = employeeId;
     }
 
@@ -82,7 +65,7 @@ public class Employee extends Person {
         }
         id += 1;
         String newId = createId(id);
-        User newUser = new User(name, password, birthdate, newId);
+        User newUser = new User(name, password, birthdate, newId, active);
         System.out.println("The register process has ended");
         System.out.println("Your data:");
         System.out.println("Name: " + name);

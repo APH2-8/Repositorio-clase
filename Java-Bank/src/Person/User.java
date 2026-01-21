@@ -19,22 +19,13 @@ import java.util.Scanner;
  */
 public class User extends Person {
     public String id = "";
+    public String ID;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();
 
-    /**
-     * Crea una nueva instancia de {@code User} con la información básica
-     * proporcionada. Inicializa al usuario como activo por defecto y asigna su identificador
-     * único.
-     *
-     * @param name      Nombre completo del usuario.
-     * @param password  Contraseña inicial del usuario.
-     * @param birthDate Fecha de nacimiento en formato texto.
-     * @param id        Identificador único del usuario.
-     */
-    public User(String name, String password, String birthDate, String id) {
-        super(name, password, birthDate);
-        this.active = true;
-        this.id = id;
+    public User(String ID, String name, String password, String birthDate, boolean active) {
+        super(ID, name, password, birthDate);
+        this.active=true;
+
     }
 
     /**
@@ -58,8 +49,8 @@ public class User extends Person {
 
         System.out.println("Please enter your password");
         password = sc.nextLine();
-        checkP = checkPassword(password);
-        while (!checkP) {
+        checkP=checkPassword(password);
+        while (!checkP){
             System.out.println("The password you entered is incorrect");
             System.out.println("The password must contain:");
             System.out.println("* 1 uppercase letter");
@@ -67,7 +58,7 @@ public class User extends Person {
             System.out.println("* 1 number");
             System.out.println("* 1 special character");
             password = sc.nextLine();
-            checkP = checkPassword(password);
+            checkP= checkPassword(password);
         }
 
         System.out.println("Please enter your birthdate (dd/mm/yyyy)");
@@ -79,8 +70,8 @@ public class User extends Person {
             birthdate = sc.nextLine();
             checkD = checkDate(birthdate);
         }
-        id = id + 1;
-        User newUser = new User(name, password, birthdate, id);
+        id = id+1;
+        User newUser = new User(ID, name, password, birthdate, active);
         System.out.println("The register process has ended");
         System.out.println("Your data:");
         System.out.println("Name: " + name);
