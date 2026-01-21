@@ -29,7 +29,7 @@ public abstract class BankAccount implements Accounting {
         this.accNumber = accNumber;
         this.dc = dc;
         this.IBAN = IBAN;
-        this.accountAlias = "Account "+ accNumber;
+        this.accountAlias = "Account " + accNumber;
         this.balance=0.0;
     }
 

@@ -7,12 +7,13 @@ import java.util.Scanner;
 
 public class User extends Person {
     public String id = "";
+    public String ID;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();
 
-    public User( String name, String password, String birthDate, String id) {
-        super(name, password, birthDate);
+    public User(String ID, String name, String password, String birthDate, boolean active) {
+        super(ID, name, password, birthDate);
         this.active=true;
-        this.id = id;
+
     }
 
     @Override
@@ -25,7 +26,7 @@ public class User extends Person {
 
         System.out.println("Please enter your password");
         password = sc.nextLine();
-        checkPassword(password);
+        checkP=checkPassword(password);
         while (!checkP){
             System.out.println("The password you entered is incorrect");
             System.out.println("The password must contain:");
@@ -34,7 +35,7 @@ public class User extends Person {
             System.out.println("* 1 number");
             System.out.println("* 1 special character");
             password = sc.nextLine();
-            checkPassword(password);
+            checkP= checkPassword(password);
         }
 
         System.out.println("Please enter your birthdate (dd/mm/yyyy)");
@@ -47,7 +48,7 @@ public class User extends Person {
             checkD = checkDate(birthdate);
         }
         id = id+1;
-        User newUser = new User(name, password, birthdate, id);
+        User newUser = new User(ID, name, password, birthdate, active);
         System.out.println("The register process has ended");
         System.out.println("Your data:");
         System.out.println("Name: " + name);
