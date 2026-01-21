@@ -6,20 +6,40 @@ import Person.User;
 import java.util.Scanner;
 
 import java.util.ArrayList;
-/*Comentario de prueba*/
-/*Comentario de Pau*/
+/**
+ * Gestiona las pantallas de acceso y menús principales del sistema bancario.
+ * Controla el flujo de registro, autenticación y navegación por las
+ * funcionalidades disponibles.
+ * @version 1.0
+ * @see User
+ */
 public class AccessScreen {
+    /**
+     * Scanner para lectura de entrada del usuario.
+     */
     Scanner sc = new Scanner(System.in);
+    /**
+     * Lista de usuarios registrados en el sistema.
+     */
 
     ArrayList<User> users = new ArrayList<User>();
     ArrayList<Employee> employees = new ArrayList<Employee>();
     ArrayList<Manager> managers = new ArrayList<Manager>();
-
+    /**
+     * Identificador del usuario actualmente en proceso de login.
+     */
     String id="";
+    /**
+     * Usuario dummy utilizado para acceder a métodos de registro.
+     */
     User dummyUser = new User(null, null, null, null, true);
     Employee dummyEmployee = new Employee (null, null, null, null, 0);
     Manager dummyManager = new Manager (null, null, null, null, 0);
-
+    /**
+     * Muestra el menú principal del sistema bancario.
+     * Permite al usuario crear cuenta, iniciar sesión o cerrar la aplicación.
+     * El menú se ejecuta en bucle hasta que el usuario selecciona salir.
+     */
     public void menu(){
 
         int option=0;
@@ -45,7 +65,12 @@ public class AccessScreen {
         }
 
     }
-
+    /**
+     * Muestra el menú de operaciones bancarias para un usuario autenticado.
+     * Permite crear cuentas, realizar depósitos, retiros, transferencias y
+     * recargas.
+     * @param currentUser Usuario actualmente autenticado en el sistema.
+     */
     public void MenuUser(User currentUser){
         int option=0;
         System.out.println("Menu User");
@@ -140,6 +165,13 @@ public class AccessScreen {
             }
         }
     }
+    /**
+     * Gestiona el proceso de inicio de sesión de un usuario.
+     * Solicita ID y contraseña, validando credenciales y estado de la cuenta.
+     * Bloquea la cuenta tras 3 intentos fallidos de contraseña.
+     * Si la cuenta está bloqueada, se informa al usuario que contacte con un
+     * administrador.
+     */
 
     public void login(){
         int option=0;
