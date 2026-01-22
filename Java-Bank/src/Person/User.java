@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class User extends Person {
     public String id = "";
     public String ID;
+    public boolean active;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();
 
     public User(String ID, String name, String password, String birthDate, boolean active) {
