@@ -9,6 +9,7 @@ public class Manager extends Person {
     int managerID;
     public String ID;
     public int id;
+    public boolean active;
 
     public Manager(String ID, String name, String password, String birthDate, int managerID) {
         super(ID, name, password, birthDate);
@@ -48,7 +49,7 @@ public class Manager extends Person {
         }
         id += 1;
         String newId = createId(id);
-        User newUser = new User(name, password, birthdate, newId, active);
+        User newUser = new User(ID, name, password, birthdate, active);
         System.out.println("The register process has ended");
         System.out.println("Your data:");
         System.out.println("Name: " + name);

@@ -18,8 +18,6 @@ public class AccessScreen {
     /**
      * Lista de usuarios registrados en el sistema.
      */
-    ArrayList<User> users = new ArrayList<User>();
-
     /**
      * Scanner para lectura de entrada del usuario.
      */
@@ -30,14 +28,7 @@ public class AccessScreen {
      */
     String id = "";
 
-    /**
-     * Usuario dummy utilizado para acceder a métodos de registro.
-     */
-    User dummyUser = new User(null, null, null, null);
 
-     * Scanner para lectura de entrada del usuario.
-     */
-    Scanner sc = new Scanner(System.in);
     /**
      * Lista de usuarios registrados en el sistema.
      */
@@ -45,10 +36,7 @@ public class AccessScreen {
     ArrayList<User> users = new ArrayList<User>();
     ArrayList<Employee> employees = new ArrayList<Employee>();
     ArrayList<Manager> managers = new ArrayList<Manager>();
-    /**
-     * Identificador del usuario actualmente en proceso de login.
-     */
-    String id="";
+
     /**
      * Usuario dummy utilizado para acceder a métodos de registro.
      */
