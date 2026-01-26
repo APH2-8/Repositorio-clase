@@ -36,6 +36,9 @@ public abstract class Person {
      * @param birthDate Fecha de nacimiento en formato texto.
      */
     public Person(String name, String password, String birthDate) {
+        this.name=name;
+        this.password=password;
+        this.birthDate=birthDate;
     }
 
     /**
