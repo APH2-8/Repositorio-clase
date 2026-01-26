@@ -32,8 +32,6 @@ public class AccessScreen {
     /**
      * Lista de usuarios registrados en el sistema.
      */
-    //Inicializamos el id a 0
-    User dummyUser = new User(null, null, null, "0");
 
     ArrayList<User> users = new ArrayList<User>();
     ArrayList<Employee> employees = new ArrayList<Employee>();
@@ -55,14 +53,13 @@ public class AccessScreen {
         int option=0;
         while(option!=2){
             /*De momento he dejado el menu de Incio sin variaciones, lo suyo es modificarlo para solo dejar hacerl login, y cuando se corrobore
-            * que se trata de un employee o manager, deja hacer cuentas de banco */
+             * que se trata de un employee o manager, deja hacer cuentas de banco */
             /*Es por lo que los menus son un copia y pega del menu users*/
             System.out.println("Welcome to JavaBank ");
             System.out.println("1. Log In");
             System.out.println("2. Close Application");
             System.out.println("Please enter your numbered choice (1 or 2)");
             option = sc.nextInt();
-            sc.nextLine();
             switch (option) {
                 case 1:
                     /*Esto queda eliminado de momento*/
@@ -95,7 +92,7 @@ public class AccessScreen {
         while(option!=5){
             switch (option){
                 case 1:
-                  //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
+                    //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
                     break;
                 case 2:
                     login();
@@ -183,39 +180,25 @@ public class AccessScreen {
      * Si la cuenta está bloqueada, se informa al usuario que contacte con un
      * administrador.
      */
-    public void login() {
-        System.out.println("Please enter user id: ");
-        id = sc.nextLine().trim();
-        User currentUser = null;
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).id.equals(id)) {
-                currentUser = users.get(i);
-            }
-        }
-        if (currentUser == null) {
-            System.out.println("Stated id is not found, please enter a valid id");
-            return;
-        } else {
-            if (!currentUser.active) {
-                System.out.println(
-                        "The account associated with this id is blocked.\n Contact a system admin for more information.");
-            } else {
-                int tries = 0;
-                while (tries <= 3) {
-                    System.out.println("Please enter password: ");
-                    String pass = sc.nextLine().trim();
 
-                    if (pass.equals(currentUser.password)) {
-                        System.out.println("You have successfully logged in");
-                        accountMenu(currentUser);
-                        return;
-                    } else {
-                        System.out.println("Wrong password, please try again");
-                        tries++;
-                        if (tries == 3) {
-                            System.out.println(
-                                    "You have failed to log in, you account has been blocked.\n Please contact a system admin to resolve this issue.");
-                            currentUser.active = false;
+    public void login(){
+        int option=0;
+        while(option!=4) {
+            System.out.println("Please select your profile:");
+            System.out.println("1. User");
+            System.out.println("2. Manager");
+            System.out.println("3. Employee");
+            System.out.println("4. Log Out");
+            option = sc.nextInt();
+            switch (option) {
+                case 1:
+                    System.out.println("Please enter user id: ");
+                    sc.nextLine();
+                    id = sc.nextLine();
+                    User currentUser =  null;
+                    for (int i = 0; i < users.size(); i++) {
+                        if(users.get(i).id.equals(id)){
+                            currentUser =  users.get(i);
                         }
                     }
                     if (currentUser == null){
@@ -248,89 +231,89 @@ public class AccessScreen {
                         }
 
                     }
-                break;
-                    case 2:
-                        System.out.println("Please enter manager id: ");
-                        sc.nextLine();
-                        id = sc.nextLine();
-                        Manager currentManager =  null;
-                        for (int i = 0; i < managers.size(); i++) {
-                            if(managers.get(i).ID.equals(id)){
-                                currentManager =  managers.get(i);
-                            }
+                    break;
+                case 2:
+                    System.out.println("Please enter manager id: ");
+                    sc.nextLine();
+                    id = sc.nextLine();
+                    Manager currentManager =  null;
+                    for (int i = 0; i < managers.size(); i++) {
+                        if(managers.get(i).ID.equals(id)){
+                            currentManager =  managers.get(i);
                         }
-                        if (currentManager == null){
-                            System.out.println("Stated id is not found, please enter a valid id");
-                            return;
+                    }
+                    if (currentManager == null){
+                        System.out.println("Stated id is not found, please enter a valid id");
+                        return;
+                    }
+                    else{
+                        if(!currentManager.active){
+                            System.out.println("The account associated with this id is blocked.\n Contact a system admin for more information.");
                         }
                         else{
-                            if(!currentManager.active){
-                                System.out.println("The account associated with this id is blocked.\n Contact a system admin for more information.");
-                            }
-                            else{
-                                int tries = 0;
-                                while (tries != 3){
-                                    System.out.println("Please enter password: ");
-                                    String pass = sc.nextLine();
-                                    if(pass.equals(currentManager.password)){
-                                        System.out.println("You have successfully logged in");
-                                        menuManager(currentManager);
-                                    }
-                                    else{
-                                        System.out.println("Wrong password, please try again");
-                                        tries++;
-                                        if(tries == 3){
-                                            System.out.println("You have failed to log in, you account has been blocked.\n Please contact a system admin to resolve this issue.");
-                                            currentManager.active = false;
-                                        }
+                            int tries = 0;
+                            while (tries != 3){
+                                System.out.println("Please enter password: ");
+                                String pass = sc.nextLine();
+                                if(pass.equals(currentManager.password)){
+                                    System.out.println("You have successfully logged in");
+                                    menuManager(currentManager);
+                                }
+                                else{
+                                    System.out.println("Wrong password, please try again");
+                                    tries++;
+                                    if(tries == 3){
+                                        System.out.println("You have failed to log in, you account has been blocked.\n Please contact a system admin to resolve this issue.");
+                                        currentManager.active = false;
                                     }
                                 }
-
                             }
 
                         }
+
+                    }
                     break;
-                        case 3:
-                            System.out.println("Please enter employee id: ");
-                            sc.nextLine();
-                            id = sc.nextLine();
-                            Employee currentEmployee =  null;
-                            for (int i = 0; i < employees.size(); i++) {
-                                if(employees.get(i).ID.equals(id)){
-                                    currentEmployee =  employees.get(i);
-                                }
-                            }
-                            if (currentEmployee == null){
-                                System.out.println("Stated id is not found, please enter a valid id");
-                                return;
-                            }
-                            else{
-                                if(!currentEmployee.active){
-                                    System.out.println("The account associated with this id is blocked.\n Contact a system admin for more information.");
+                case 3:
+                    System.out.println("Please enter employee id: ");
+                    sc.nextLine();
+                    id = sc.nextLine();
+                    Employee currentEmployee =  null;
+                    for (int i = 0; i < employees.size(); i++) {
+                        if(employees.get(i).ID.equals(id)){
+                            currentEmployee =  employees.get(i);
+                        }
+                    }
+                    if (currentEmployee == null){
+                        System.out.println("Stated id is not found, please enter a valid id");
+                        return;
+                    }
+                    else{
+                        if(!currentEmployee.active){
+                            System.out.println("The account associated with this id is blocked.\n Contact a system admin for more information.");
+                        }
+                        else{
+                            int tries = 0;
+                            while (tries != 3){
+                                System.out.println("Please enter password: ");
+                                String pass = sc.nextLine();
+                                if(pass.equals(currentEmployee.password)){
+                                    System.out.println("You have successfully logged in");
+                                    menuEmployee(currentEmployee);
                                 }
                                 else{
-                                    int tries = 0;
-                                    while (tries != 3){
-                                        System.out.println("Please enter password: ");
-                                        String pass = sc.nextLine();
-                                        if(pass.equals(currentEmployee.password)){
-                                            System.out.println("You have successfully logged in");
-                                            menuEmployee(currentEmployee);
-                                        }
-                                        else{
-                                            System.out.println("Wrong password, please try again");
-                                            tries++;
-                                            if(tries == 3){
-                                                System.out.println("You have failed to log in, you account has been blocked.\n Please contact a system admin to resolve this issue.");
-                                                currentEmployee.active = false;
-                                            }
-                                        }
+                                    System.out.println("Wrong password, please try again");
+                                    tries++;
+                                    if(tries == 3){
+                                        System.out.println("You have failed to log in, you account has been blocked.\n Please contact a system admin to resolve this issue.");
+                                        currentEmployee.active = false;
                                     }
-
                                 }
-
                             }
-                            break;
+
+                        }
+
+                    }
+                    break;
                 case 4:
                     menu();
                     break;
