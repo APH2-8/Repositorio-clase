@@ -7,13 +7,17 @@ import java.util.Scanner;
 
 public class Manager extends Person {
     int managerID;
-    public String ID;
     public int id;
     public boolean active;
 
-    public Manager(String ID, String name, String password, String birthDate, int managerID) {
-        super(ID, name, password, birthDate);
+    public Manager(String DNI, String name, String password, String birthDate, int managerID) {
+        super(DNI, name, password, birthDate);
         this.managerID = managerID;
+    }
+
+    @Override
+    public String toString() {
+        return ", DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", ID Administrativo: " + this.managerID;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class Manager extends Person {
         }
         id += 1;
         String newId = createId(id);
-        User newUser = new User(ID, name, password, birthdate, active);
+        User newUser = new User(DNI, name, password, birthdate);
         System.out.println("The register process has ended");
         System.out.println("Your data:");
         System.out.println("Name: " + name);

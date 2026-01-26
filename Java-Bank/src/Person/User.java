@@ -19,14 +19,18 @@ import java.util.Scanner;
  */
 public class User extends Person {
     public String id = "";
-    public String ID;
-    public boolean active;
+    public boolean active = false;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();
 
-    public User(String ID, String name, String password, String birthDate, boolean active) {
-        super(ID, name, password, birthDate);
+    public User(String DNI, String name, String password, String birthDate) {
+        super(DNI, name, password, birthDate);
         this.active=true;
 
+    }
+
+    @Override
+    public String toString() {
+        return ", DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate;
     }
 
     /**
@@ -72,7 +76,7 @@ public class User extends Person {
             checkD = checkDate(birthdate);
         }
         id = id+1;
-        User newUser = new User(ID, name, password, birthdate, active);
+        User newUser = new User(DNI, name, password, birthdate);
         System.out.println("The register process has ended");
         System.out.println("Your data:");
         System.out.println("Name: " + name);

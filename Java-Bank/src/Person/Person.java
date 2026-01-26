@@ -13,6 +13,11 @@ package Person;
 public abstract class Person {
 
     /**
+     * DNI de la persona.
+     */
+    public String DNI = "";
+
+    /**
      * Nombre completo de la persona.
      */
     public String name = "";
@@ -27,15 +32,14 @@ public abstract class Person {
      */
     public String password = "";
 
-    public Person(String ID, String name, String password, String birthDate) {}
-
     /**
      * Constructor base para crear una instancia de persona.
      * @param name      Nombre completo de la persona.
      * @param password  Contraseña de acceso.
      * @param birthDate Fecha de nacimiento en formato texto.
      */
-    public Person(String name, String password, String birthDate) {
+    public Person(String DNI, String name, String password, String birthDate) {
+        this.DNI = DNI;
         this.name=name;
         this.password=password;
         this.birthDate=birthDate;
