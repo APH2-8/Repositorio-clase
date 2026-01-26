@@ -32,7 +32,8 @@ public class AccessScreen {
     /**
      * Usuario dummy utilizado para acceder a métodos de registro.
      */
-    User dummyUser = new User(null, null, null, null);
+    //Inicializamos el id a 0
+    User dummyUser = new User(null, null, null, "0");
 
     /**
      * Muestra el menú principal del sistema bancario.
@@ -49,6 +50,7 @@ public class AccessScreen {
             System.out.println("3. Close Application");
             System.out.println("Please enter your numbered choice (1, 2 or 3)");
             option = sc.nextInt();
+            sc.nextLine();
             switch (option) {
                 case 1:
                     User newUser = dummyUser.register();
@@ -111,7 +113,7 @@ public class AccessScreen {
      */
     public void login() {
         System.out.println("Please enter user id: ");
-        id = sc.nextLine();
+        id = sc.nextLine().trim();
         User currentUser = null;
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).id.equals(id)) {
@@ -127,12 +129,14 @@ public class AccessScreen {
                         "The account associated with this id is blocked.\n Contact a system admin for more information.");
             } else {
                 int tries = 0;
-                while (tries != 3) {
+                while (tries <= 3) {
                     System.out.println("Please enter password: ");
-                    String pass = sc.nextLine();
+                    String pass = sc.nextLine().trim();
+
                     if (pass.equals(currentUser.password)) {
                         System.out.println("You have successfully logged in");
                         accountMenu(currentUser);
+                        return;
                     } else {
                         System.out.println("Wrong password, please try again");
                         tries++;
