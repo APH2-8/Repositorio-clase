@@ -106,7 +106,7 @@ public abstract class BankAccount implements Accounting {
         this.dc = dc;
         this.IBAN = IBAN;
         this.accountAlias = "Account " + accNumber;
-        this.balance = 0.0;
+        this.balance=0.0;
     }
 
     /**

@@ -27,10 +27,7 @@ public abstract class Person {
      */
     public String password = "";
 
-    /**
-     * Indica si la persona está activa en el sistema.
-     */
-    public boolean active = true;
+    public Person(String ID, String name, String password, String birthDate) {}
 
     /**
      * Constructor base para crear una instancia de persona.
