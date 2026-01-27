@@ -1,5 +1,7 @@
 package Person;
 
+import java.io.Serializable;
+
 /**
  * Clase abstracta que representa a una persona dentro del sistema bancario.
  * Define el contrato base para todas las personas (usuarios y empleados) que
@@ -10,7 +12,12 @@ package Person;
  * @see User
  * @see Employee
  */
-public abstract class Person {
+public abstract class Person implements Serializable {
+
+    /**
+     * DNI de la persona.
+     */
+    public String DNI = "";
 
     /**
      * Nombre completo de la persona.
@@ -27,15 +34,14 @@ public abstract class Person {
      */
     public String password = "";
 
-    public Person(String ID, String name, String password, String birthDate) {}
-
     /**
      * Constructor base para crear una instancia de persona.
      * @param name      Nombre completo de la persona.
      * @param password  Contraseña de acceso.
      * @param birthDate Fecha de nacimiento en formato texto.
      */
-    public Person(String name, String password, String birthDate) {
+    public Person(String DNI, String name, String password, String birthDate) {
+        this.DNI = DNI;
         this.name=name;
         this.password=password;
         this.birthDate=birthDate;

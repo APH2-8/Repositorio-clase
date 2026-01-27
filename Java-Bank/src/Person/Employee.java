@@ -2,6 +2,7 @@ package Person;
 
 import Account.BankAccount;
 
+import java.io.Serializable;
 import java.time.Year;
 import java.util.Scanner;
 
@@ -13,14 +14,19 @@ import java.util.Scanner;
  * @see Person
  * @see User
  */
-public class Employee extends Person {
-    int employeeId;
+public class Employee extends Person implements Serializable {
+    int employeeID;
     public int id;
-    public String ID;
     public boolean active;
-    public Employee(String ID, String name, String password, String birthDate, int employeeId) {
-        super(ID, name, password, birthDate);
-        this.employeeId = employeeId;
+
+    public Employee(String DNI, String name, String password, String birthDate, int employeeID) {
+        super(DNI, name, password, birthDate);
+        this.employeeID = employeeID;
+    }
+
+    @Override
+    public String toString() {
+        return ", DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", ID Administrativo: " + this.employeeID;
     }
 
     /**
@@ -66,7 +72,7 @@ public class Employee extends Person {
         }
         id += 1;
         String newId = createId(id);
-        User newUser = new User(name, password, birthdate, newId, active);
+        User newUser = new User(name, password, birthdate, newId);
         System.out.println("The register process has ended");
         System.out.println("Your data:");
         System.out.println("Name: " + name);
