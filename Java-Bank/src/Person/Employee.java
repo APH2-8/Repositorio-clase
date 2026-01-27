@@ -2,6 +2,7 @@ package Person;
 
 import Account.BankAccount;
 
+import java.io.Serializable;
 import java.time.Year;
 import java.util.Scanner;
 
@@ -13,7 +14,7 @@ import java.util.Scanner;
  * @see Person
  * @see User
  */
-public class Employee extends Person {
+public class Employee extends Person implements Serializable {
     int employeeID;
     public int id;
     public boolean active;

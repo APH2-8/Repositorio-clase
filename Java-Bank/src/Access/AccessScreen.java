@@ -68,19 +68,25 @@ public class AccessScreen {
                     /*User newUser = dummyUser.register();
                     users.add(newUser);*/
                     try {
-                        ObjectInputStream input = new ObjectInputStream(new FileInputStream("C:\\Users\\gabricmar\\Poyecto2dotrimFINAL\\Repositorio-clase\\Java-Bank\\src\\Persistencia\\users.dat"));
-                        int longitud =  input.readInt();
+                        ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/users.dat"));
+                        int longitud = input.readInt();
                         for (int i = 0; i < longitud; i++) {
-
+                            users.add((User) input.readObject());
                         }
                         input.close();
                         //^ Users en el array ^
-                        input = new ObjectInputStream(new FileInputStream("C:\\Users\\gabricmar\\Poyecto2dotrimFINAL\\Repositorio-clase\\Java-Bank\\src\\Persistencia\\employees.dat"));
-                        employees = (ArrayList <Employee>) input.readObject();
+                        input = new ObjectInputStream(new FileInputStream("Java-Bank/data/employees.dat"));
+                        longitud = input.readInt();
+                        for (int i = 0; i < longitud; i++) {
+                            employees.add((Employee) input.readObject());
+                        }
                         input.close();
                         // ^ Employees en el array ^
-                        input = new ObjectInputStream(new FileInputStream("C:\\Users\\gabricmar\\Poyecto2dotrimFINAL\\Repositorio-clase\\Java-Bank\\src\\Persistencia\\managers.dat"));
-                        managers = (ArrayList <Manager>) input.readObject();
+                        input = new ObjectInputStream(new FileInputStream("Java-Bank/data/managers.dat"));
+                        longitud = input.readInt();
+                        for (int i = 0; i < longitud; i++) {
+                            managers.add((Manager) input.readObject());
+                        }
                         input.close();
                         // ^ Managers en el array ^
                     } catch (IOException e) {
@@ -97,16 +103,25 @@ public class AccessScreen {
                         System.out.println(users);
                         System.out.println(employees);
                         System.out.println(managers);
-                        ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("C:\\Users\\gabricmar\\Poyecto2dotrimFINAL\\Repositorio-clase\\Java-Bank\\src\\Persistencia\\users.dat"));
-                        output.writeObject(users.toString());
+                        ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/users.dat"));
+                        output.writeInt(users.size());
+                        for (int i = 0; i < users.size(); i++) {
+                            output.writeObject(users.get(i));
+                        }
                         output.close();
 
-                        output = new ObjectOutputStream(new FileOutputStream("C:\\Users\\gabricmar\\Poyecto2dotrimFINAL\\Repositorio-clase\\Java-Bank\\src\\Persistencia\\employees.dat"));
-                        output.writeObject(employees.toString());
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/employees.dat"));
+                        output.writeInt(employees.size());
+                        for (int i = 0; i < employees.size(); i++) {
+                            output.writeObject(employees.get(i));
+                        }
                         output.close();
 
-                        output = new ObjectOutputStream(new FileOutputStream("C:\\Users\\gabricmar\\Poyecto2dotrimFINAL\\Repositorio-clase\\Java-Bank\\src\\Persistencia\\managers.dat"));
-                        output.writeObject(managers.toString());
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/managers.dat"));
+                        output.writeInt(managers.size());
+                        for (int i = 0; i < managers.size(); i++) {
+                            output.writeObject(managers.get(i));
+                        }
                         output.close();
 
                     } catch (IOException e) {

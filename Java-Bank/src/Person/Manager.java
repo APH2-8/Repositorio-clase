@@ -2,10 +2,11 @@ package Person;
 
 import Account.BankAccount;
 
+import java.io.Serializable;
 import java.time.Year;
 import java.util.Scanner;
 
-public class Manager extends Person {
+public class Manager extends Person implements Serializable {
     int managerID;
     public int id;
     public boolean active;

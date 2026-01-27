@@ -2,6 +2,7 @@ package Person;
 
 import Account.BankAccount;
 
+import java.io.Serializable;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -17,7 +18,7 @@ import java.util.Scanner;
  * @see Person
  * @see Account.BankAccount
  */
-public class User extends Person {
+public class User extends Person implements Serializable {
     public String id = "";
     public boolean active = false;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();
