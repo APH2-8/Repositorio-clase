@@ -14,6 +14,7 @@ public class Manager extends Person implements Serializable {
     public Manager(String DNI, String name, String password, String birthDate, int managerID) {
         super(DNI, name, password, birthDate);
         this.managerID = managerID;
+        this.active=true;
     }
 
     @Override

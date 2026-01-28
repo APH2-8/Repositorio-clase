@@ -27,7 +27,7 @@ public class AccessScreen {
     /**
      * Identificador del usuario actualmente en proceso de login.
      */
-    String id = "";
+    String DNI = "";
 
 
     /**
@@ -51,7 +51,35 @@ public class AccessScreen {
      * El menú se ejecuta en bucle hasta que el usuario selecciona salir.
      */
     public void menu() {
-
+        try {
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/users.dat"));
+            int longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                users.add((User) input.readObject());
+            }
+            input.close();
+            //^ Users en el array ^
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/employees.dat"));
+            longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                employees.add((Employee) input.readObject());
+            }
+            input.close();
+            // ^ Employees en el array ^
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/managers.dat"));
+            longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                managers.add((Manager) input.readObject());
+            }
+            input.close();
+            // ^ Managers en el array ^
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            System.err.println(e.getMessage());
+        }
         int option = 0;
         while (option != 2) {
             /*De momento he dejado el menu de Incio sin variaciones, lo suyo es modificarlo para solo dejar hacerl login, y cuando se corrobore
@@ -62,41 +90,12 @@ public class AccessScreen {
             System.out.println("2. Close Application");
             System.out.println("Please enter your numbered choice (1 or 2)");
             option = sc.nextInt();
-
             switch (option) {
                 case 1:
                     /*Esto queda eliminado de momento*/
                     /*User newUser = dummyUser.register();
                     users.add(newUser);*/
-                    try {
-                        ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/users.dat"));
-                        int longitud = input.readInt();
-                        for (int i = 0; i < longitud; i++) {
-                            users.add((User) input.readObject());
-                        }
-                        input.close();
-                        //^ Users en el array ^
-                        input = new ObjectInputStream(new FileInputStream("Java-Bank/data/employees.dat"));
-                        longitud = input.readInt();
-                        for (int i = 0; i < longitud; i++) {
-                            employees.add((Employee) input.readObject());
-                        }
-                        input.close();
-                        // ^ Employees en el array ^
-                        input = new ObjectInputStream(new FileInputStream("Java-Bank/data/managers.dat"));
-                        longitud = input.readInt();
-                        for (int i = 0; i < longitud; i++) {
-                            managers.add((Manager) input.readObject());
-                        }
-                        input.close();
-                        // ^ Managers en el array ^
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    } catch (ClassCastException e) {
-                        System.err.println(e.getMessage());
-                    }
+
                     System.out.println(users);
                     System.out.println(employees);
                     System.out.println(managers);
@@ -255,14 +254,15 @@ public class AccessScreen {
             System.out.println("3. Employee");
             System.out.println("4. Log Out");
             option = sc.nextInt();
+            sc.nextLine();
             switch (option) {
                 case 1:
                     System.out.println("Please enter user id: ");
-                    sc.nextInt();
-                    id = sc.nextLine();
+
+                    DNI = sc.nextLine();
                     User currentUser = null;
                     for (int i = 0; i < users.size(); i++) {
-                        if (users.get(i).id.equals(id)) {
+                        if (users.get(i).DNI.equals(DNI)) {
                             currentUser = users.get(i);
                         }
                     }
@@ -296,11 +296,11 @@ public class AccessScreen {
                     break;
                 case 2:
                     System.out.println("Please enter manager id: ");
-                    sc.nextLine();
-                    id = sc.nextLine();
+
+                    DNI = sc.nextLine();
                     Manager currentManager = null;
                     for (int i = 0; i < managers.size(); i++) {
-                        if (managers.get(i).DNI.equals(id)) {
+                        if (managers.get(i).DNI.equals(DNI)) {
                             currentManager = managers.get(i);
                         }
                     }
@@ -334,10 +334,10 @@ public class AccessScreen {
                     break;
                 case 3:
                     System.out.println("Please enter employee id: ");
-                    id = sc.nextLine();
+                    DNI = sc.nextLine();
                     Employee currentEmployee = null;
                     for (int i = 0; i < employees.size(); i++) {
-                        if (employees.get(i).DNI.equals(id)) {
+                        if (employees.get(i).DNI.equals(DNI)) {
                             currentEmployee = employees.get(i);
                         }
                     }
