@@ -62,6 +62,7 @@ public class AccessScreen {
             System.out.println("2. Close Application");
             System.out.println("Please enter your numbered choice (1 or 2)");
             option = sc.nextInt();
+
             switch (option) {
                 case 1:
                     /*Esto queda eliminado de momento*/
@@ -96,6 +97,9 @@ public class AccessScreen {
                     } catch (ClassCastException e) {
                         System.err.println(e.getMessage());
                     }
+                    System.out.println(users);
+                    System.out.println(employees);
+                    System.out.println(managers);
                     login();
                     break;
                 case 2:
@@ -254,7 +258,7 @@ public class AccessScreen {
             switch (option) {
                 case 1:
                     System.out.println("Please enter user id: ");
-                    sc.nextLine();
+                    sc.nextInt();
                     id = sc.nextLine();
                     User currentUser = null;
                     for (int i = 0; i < users.size(); i++) {
