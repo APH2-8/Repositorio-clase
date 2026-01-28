@@ -1,4 +1,5 @@
 package Access;
+import Account.CreditAccount;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
@@ -218,6 +219,30 @@ public class AccessScreen {
         while (option != 6) {
             switch (option) {
                 case 1:
+                    System.out.println("Indique el id del user");
+                    User currentUser = null;
+                    DNI = sc.nextLine();
+                    for(int i=0; i<users.size(); i++) {
+                        if(users.get(i).DNI.equals(DNI)){
+                            System.out.println(users.get(i));
+                            System.out.println("¿Es esta la id del cliente?");
+                            String confirmacion = sc.nextLine();
+                            if(confirmacion.equalsIgnoreCase("S")){
+                                currentUser = users.get(i);
+                            }
+                        }
+                    }
+                    if (currentUser == null) {
+                        System.out.println("El DNI no existe");
+                    }else{
+                        System.out.println("Seleccione 1 o 2 :Crear cuenta de debito(1) o crédito(2)");
+                        int opcionTarjeta = sc.nextInt();
+                        if(opcionTarjeta == 1){
+
+                        }
+
+                    }
+
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
                     break;
                 case 2:
