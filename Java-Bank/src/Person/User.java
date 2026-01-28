@@ -20,7 +20,7 @@ import java.util.Scanner;
  */
 public class User extends Person implements Serializable {
     public String id = "";
-    public boolean active = false;
+    public boolean active;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();
 
     public User(String DNI, String name, String password, String birthDate) {
@@ -31,7 +31,7 @@ public class User extends Person implements Serializable {
 
     @Override
     public String toString() {
-        return ", DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate;
+        return " DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", Cuenta activa: " + this.active;
     }
 
     /**

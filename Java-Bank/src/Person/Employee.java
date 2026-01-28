@@ -22,11 +22,12 @@ public class Employee extends Person implements Serializable {
     public Employee(String DNI, String name, String password, String birthDate, int employeeID) {
         super(DNI, name, password, birthDate);
         this.employeeID = employeeID;
+        this.active=true;
     }
 
     @Override
     public String toString() {
-        return ", DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", ID Administrativo: " + this.employeeID;
+        return " DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", ID Administrativo: " + this.employeeID + ", Cuenta activa: " + this.active;
     }
 
     /**
