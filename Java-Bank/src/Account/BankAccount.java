@@ -2,6 +2,7 @@ package Account;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -10,13 +11,14 @@ import java.util.Scanner;
  * cuentas.
  * Implementa la interfaz {@code Accounting} delegando las operaciones
  * específicas a las subclases.
- * 
+ *
  * @version 1.0
  * @see Accounting
  * @see DebitAccount
  * @see CreditAccount
  */
 public abstract class BankAccount implements Accounting {
+    protected List<Transaction> history;
 
     /**
      * Código de la entidad bancaria (por defecto "9999").
@@ -70,7 +72,7 @@ public abstract class BankAccount implements Accounting {
 
     /**
      * Crea una nueva cuenta bancaria con alias personalizado.
-     * 
+     *
      * @param entity       Código de la entidad bancaria.
      * @param office       Código de la oficina.
      * @param accNumber    Número de cuenta.
@@ -92,7 +94,7 @@ public abstract class BankAccount implements Accounting {
      * Crea una nueva cuenta bancaria con alias automático.
      * El alias se genera automáticamente como "Account" seguido del número de
      * cuenta.
-     * 
+     *
      * @param entity    Código de la entidad bancaria.
      * @param office    Código de la oficina.
      * @param accNumber Número de cuenta.
@@ -106,13 +108,14 @@ public abstract class BankAccount implements Accounting {
         this.dc = dc;
         this.IBAN = IBAN;
         this.accountAlias = "Account " + accNumber;
-        this.balance=0.0;
+        this.balance = 0.0;
     }
 
     /**
      * Calcula el dígito de control (DC) de una cuenta bancaria española.
      * Aplica el algoritmo oficial del sistema bancario español que utiliza
      * pesos específicos para entidad/oficina y número de cuenta.
+     *
      * @param entidad Código de la entidad (se formatea a 4 dígitos).
      * @param oficina Código de la oficina (se formatea a 4 dígitos).
      * @param cuenta  Número de cuenta (se formatea a 10 dígitos).
@@ -123,8 +126,8 @@ public abstract class BankAccount implements Accounting {
         oficina = String.format("%04d", Integer.parseInt(oficina));
         cuenta = String.format("%010d", Long.parseLong(cuenta));
 
-        int[] w1 = { 4, 8, 5, 10, 9, 7, 3, 6 };
-        int[] w2 = { 1, 2, 4, 8, 5, 10, 9, 7, 3, 6 };
+        int[] w1 = {4, 8, 5, 10, 9, 7, 3, 6};
+        int[] w2 = {1, 2, 4, 8, 5, 10, 9, 7, 3, 6};
 
         String bloque1 = entidad + oficina;
         int suma1 = 0;
@@ -156,7 +159,7 @@ public abstract class BankAccount implements Accounting {
      * Genera el código IBAN según el estándar internacional (ISO 13616).
      * El IBAN español tiene el formato: ES + 2 dígitos de control + BBAN (20
      * dígitos).
-     * 
+     *
      * @param entity    Código de la entidad bancaria.
      * @param office    Código de la oficina.
      * @param accNumber Número de cuenta.
@@ -204,6 +207,7 @@ public abstract class BankAccount implements Accounting {
      * Permite cambiar o asignar un alias personalizado a la cuenta.
      * Solicita confirmación al usuario por consola.
      * Si no se proporciona alias, se genera uno automático.
+     *
      * @return El alias asignado a la cuenta.
      */
     public String changeAccountAlias() {
@@ -268,5 +272,20 @@ public abstract class BankAccount implements Accounting {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+
+    // En BankAccount
+    public void printHistory() {
+        System.out.println("Historial de la cuenta " + this.accNumber); // Asumiendo que tienes un número de cuenta
+        for (Transaction t : history) {
+            System.out.println(t);
+        }
+    }
+
+    // Método protegido para añadir movimientos desde las subclases
+    protected void addTransaction(String type, double amount) {
+        Transaction t = new Transaction(type, amount);
+        this.history.add(t);
     }
 }
