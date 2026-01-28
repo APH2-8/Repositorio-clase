@@ -19,7 +19,7 @@ public class Manager extends Person implements Serializable {
 
     @Override
     public String toString() {
-        return ", DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", ID Administrativo: " + this.managerID;
+        return " DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", ID Administrativo: " + this.managerID + ", Cuenta activa: " + this.active;
     }
 
     @Override
