@@ -1,5 +1,7 @@
 package Access;
+import Account.BankAccount;
 import Account.CreditAccount;
+import Account.DebitAccount;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
@@ -207,25 +209,30 @@ public class AccessScreen {
 
     public void menuEmployee(Employee currentEmployee) {
         int option = 0;
-        System.out.println("Menu Employee");
-        System.out.println("Welcome " + currentEmployee.name);
-        System.out.println("1. Create BankAccount");
-        System.out.println("2. Make a deposit");
-        System.out.println("3. Withdraw");
-        System.out.println("4. Transfer Money");
-        System.out.println("5. Recharge SIM card");
-        System.out.println("6. Log Out");
-        System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+
         while (option != 6) {
+            System.out.println("Menu Employee");
+            System.out.println("Welcome " + currentEmployee.name);
+            System.out.println("1. Create BankAccount");
+            System.out.println("2. Make a deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer Money");
+            System.out.println("5. Recharge SIM card");
+            System.out.println("6. Log Out");
+            System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+            option = sc.nextInt();
+
             switch (option) {
                 case 1:
                     System.out.println("Indique el id del user");
-                    User currentUser = null;
+                    sc.nextLine();
                     DNI = sc.nextLine();
+
+                    User currentUser = null;
                     for(int i=0; i<users.size(); i++) {
                         if(users.get(i).DNI.equals(DNI)){
                             System.out.println(users.get(i));
-                            System.out.println("¿Es esta la id del cliente?");
+                            System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
                             String confirmacion = sc.nextLine();
                             if(confirmacion.equalsIgnoreCase("S")){
                                 currentUser = users.get(i);
@@ -238,7 +245,9 @@ public class AccessScreen {
                         System.out.println("Seleccione 1 o 2 :Crear cuenta de debito(1) o crédito(2)");
                         int opcionTarjeta = sc.nextInt();
                         if(opcionTarjeta == 1){
-
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount(null, null, null, null, null);
+                            nuevaBankAccountdebit.createBankAccount();
+                            /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
 
                     }
