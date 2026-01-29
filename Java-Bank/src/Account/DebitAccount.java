@@ -30,7 +30,7 @@ public class DebitAccount extends BankAccount {
      * @param accountAlias Alias personalizado para la cuenta.
      */
     public DebitAccount(String entity, String office, String accNumber, String dc, String IBAN, String accountAlias) {
-        super(entity, office, accNumber, dc, IBAN, accountAlias);
+        super(accNumber, dc, IBAN);
     }
 
     /**
@@ -43,7 +43,7 @@ public class DebitAccount extends BankAccount {
      * @param IBAN      Código IBAN completo.
      */
     public DebitAccount(String entity, String office, String accNumber, String dc, String IBAN) {
-        super(entity, office, accNumber, dc, IBAN);
+        super(accNumber, dc, IBAN);
     }
 
     /**

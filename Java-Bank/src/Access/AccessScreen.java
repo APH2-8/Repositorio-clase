@@ -242,14 +242,22 @@ public class AccessScreen {
                     if (currentUser == null) {
                         System.out.println("El DNI no existe");
                     }else{
-                        System.out.println("Seleccione 1 o 2 :Crear cuenta de debito(1) o crédito(2)");
+                        System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
                         int opcionTarjeta = sc.nextInt();
                         if(opcionTarjeta == 1){
-                            DebitAccount nuevaBankAccountdebit = new DebitAccount(null, null, null, null, null);
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", "");
                             nuevaBankAccountdebit.createBankAccount();
+                            currentUser.bankAccounts.add(nuevaBankAccountdebit);
                             /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
-
+                        if(opcionTarjeta == 2){
+                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "", "", "", 0.0, 0.0);
+                            nuevaBankCredit.createBankAccount();
+                            currentUser.bankAccounts.add(nuevaBankCredit);
+                        }
+                        if(opcionTarjeta == 3){
+                            return;
+                        }
                     }
 
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);

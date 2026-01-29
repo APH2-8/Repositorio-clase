@@ -33,12 +33,7 @@ public class CreditAccount extends BankAccount {
      * @param creditLimit      Límite de crédito disponible.
      * @param creditPercentage Porcentaje de interés aplicado.
      */
-    public CreditAccount(String entity, String office, String accNumber, String dc, String IBAN, String accountAlias,
-            double creditLimit, double creditPercentage) {
-        super(entity, office, accNumber, dc, IBAN, accountAlias);
-        this.creditLimit = creditLimit;
-        this.creditPercentage = creditPercentage;
-    }
+
 
     /**
      * Crea una nueva cuenta de crédito con alias automático.
@@ -53,7 +48,7 @@ public class CreditAccount extends BankAccount {
      */
     public CreditAccount(String entity, String office, String accNumber, String dc, String IBAN, double creditLimit,
             double creditPercentage) {
-        super(entity, office, accNumber, dc, IBAN);
+        super(accNumber, dc, IBAN);
         this.creditLimit = creditLimit;
         this.creditPercentage = creditPercentage;
     }
