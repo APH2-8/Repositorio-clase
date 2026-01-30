@@ -154,7 +154,8 @@ public class AccessScreen {
         System.out.println("2. Withdraw");
         System.out.println("3. Transfer Money");
         System.out.println("4. Recharge SIM card");
-        System.out.println("5. Log Out");
+        System.out.println("5.View accounts");
+        System.out.println("6. Log Out");
         System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
         while (option != 5) {
             switch (option) {
@@ -169,6 +170,9 @@ public class AccessScreen {
                 case 4:
                     return;
                 case 5:
+
+
+                case 6:
                     return;
             }
         }
@@ -265,16 +269,18 @@ public class AccessScreen {
                 case 2:
 
 
-                    login();
+
                     break;
                 case 3:
-                    return;
+                    break;
                 case 4:
-                    return;
+                    break;
                 case 5:
-                    return;
+                    break;
                 case 6:
-                    return;
+                    login();
+                    break;
+
             }
         }
     }

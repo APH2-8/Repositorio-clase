@@ -193,7 +193,7 @@ public abstract class BankAccount implements Accounting {
      */
     public String changeAccountAlias() {
         String alias = "";
-        System.out.println("Do you want to give an alias to your account?");
+        System.out.println("Do you want to give an alias to your account?(yes/no)");
         String check = sc.nextLine();
         if (check.equalsIgnoreCase("yes") || check.equalsIgnoreCase("si")) {
             System.out.println("Introduce the account alias: ");
