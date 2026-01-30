@@ -170,8 +170,11 @@ public class AccessScreen {
                 case 4:
                     return;
                 case 5:
+                    //BankAccount nuevaBankAccount = new BankAccount(null, null,null);
+                    //currentUser.getCuentaDebito();
+                    System.out.println(currentUser.bankAccounts);
 
-
+                    break;
                 case 6:
                     return;
             }

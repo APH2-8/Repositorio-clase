@@ -31,7 +31,7 @@ public class User extends Person implements Serializable {
 
     @Override
     public String toString() {
-        return " DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", Cuenta activa: " + this.active;
+        return " DNI: " + this.DNI + ", Nombre: " + this.name + ", Contraseña: " + this.password + ", Fecha de cumpleaños: " + this.birthDate + ", Cuenta activa: " + this.active ;
     }
 
     /**
@@ -159,5 +159,10 @@ public class User extends Person implements Serializable {
             return false;
         }
     }
+   /* public void getCuentaDebito(){
+        for (int i=0; i < bankAccounts.size();i++ ){
+            System.out.println(bankAccounts.get(i));
+        }
+    }*/
 
 }
