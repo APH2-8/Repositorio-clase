@@ -1,7 +1,9 @@
 package Account;
 
+import Access.AccessScreen;
 import Person.User;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -17,33 +19,25 @@ import java.util.Scanner;
  */
 public class DebitAccount extends BankAccount {
 
+    AccessScreen acc = new AccessScreen();
+
     Scanner sc = new Scanner(System.in);
+
+    @Override
+    public String toString() {
+        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance;
+    }
 
     /**
      * Crea una nueva cuenta de débito con alias personalizado.
-     * 
-     * @param entity       Código de la entidad bancaria.
-     * @param office       Código de la oficina.
+     *
      * @param accNumber    Número de cuenta.
      * @param dc           Dígito de control.
      * @param IBAN         Código IBAN completo.
      * @param accountAlias Alias personalizado para la cuenta.
      */
-    public DebitAccount(String entity, String office, String accNumber, String dc, String IBAN, String accountAlias) {
-        super(accNumber, dc, IBAN);
-    }
-
-    /**
-     * Crea una nueva cuenta de débito con alias automático.
-     * 
-     * @param entity    Código de la entidad bancaria.
-     * @param office    Código de la oficina.
-     * @param accNumber Número de cuenta.
-     * @param dc        Dígito de control.
-     * @param IBAN      Código IBAN completo.
-     */
-    public DebitAccount(String entity, String office, String accNumber, String dc, String IBAN) {
-        super(accNumber, dc, IBAN);
+    public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, User user) {
+        super(accNumber, dc, IBAN, accountAlias,  user);
     }
 
     /**
@@ -52,6 +46,7 @@ public class DebitAccount extends BankAccount {
      * @param amount  Cantidad a depositar (debe ser positiva).
      * @param account Cuenta bancaria destino del depósito.
      */
+
     @Override
     public void deposit(int amount, BankAccount account) {
 
@@ -77,7 +72,6 @@ public class DebitAccount extends BankAccount {
             System.out.println("New balance in " + account.accNumber + " is: " + account.balance);
         }
     }
-
     /**
      * Transfiere dinero desde la cuenta origen a una cuenta destino.
      * Solicita por consola el número de cuenta destino y el importe.
@@ -86,8 +80,7 @@ public class DebitAccount extends BankAccount {
      * @param amount  Parámetro sin usar (la cantidad se solicita por consola).
      * @param account Cuenta bancaria origen de la transferencia.
      */
-    @Override
-    public void transfer(double amount, BankAccount account) {
+    public void transfer(double amount, BankAccount account, ArrayList<BankAccount> bankAccounts) {
 
         try {
             String sourceAcc = account.accNumber;
@@ -101,10 +94,10 @@ public class DebitAccount extends BankAccount {
             } else {
                 account.balance -= ammount;
                 BankAccount destAcc = null;
-                for (int i = 0; i < accounts.size(); i++) {
-                    if (accounts.get(i).accNumber.equals(destinationAcc)) {
-                        accounts.get(i).balance += ammount;
-                        destAcc = accounts.get(i);
+                for (int i = 0; i < bankAccounts.size(); i++) {
+                    if (bankAccounts.get(i).accNumber.equals(destinationAcc)) {
+                        bankAccounts.get(i).balance += ammount;
+                        destAcc = bankAccounts.get(i);
                     }
                 }
                 System.out.println("Operation successful");

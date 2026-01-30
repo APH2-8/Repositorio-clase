@@ -2,6 +2,8 @@ package Account;
 
 import Person.User;
 
+import java.util.ArrayList;
+
 /**
  * Representa una cuenta de crédito en el sistema bancario.
  * Este tipo de cuenta permite al usuario utilizar crédito con un límite establecido
@@ -22,35 +24,23 @@ public class CreditAccount extends BankAccount {
     double creditPercentage = 0.0;
 
     /**
-     * Crea una nueva cuenta de crédito con alias personalizado.
-     * 
-     * @param entity           Código de la entidad bancaria.
-     * @param office           Código de la oficina.
-     * @param accNumber        Número de cuenta.
-     * @param dc               Dígito de control.
-     * @param IBAN             Código IBAN completo.
-     * @param accountAlias     Alias personalizado para la cuenta.
-     * @param creditLimit      Límite de crédito disponible.
-     * @param creditPercentage Porcentaje de interés aplicado.
-     */
-
-
-    /**
-     * Crea una nueva cuenta de crédito con alias automático.
-     * 
-     * @param entity           Código de la entidad bancaria.
-     * @param office           Código de la oficina.
+     * Crea una nueva cuenta de crédito.
+     *
      * @param accNumber        Número de cuenta.
      * @param dc               Dígito de control.
      * @param IBAN             Código IBAN completo.
      * @param creditLimit      Límite de crédito disponible.
      * @param creditPercentage Porcentaje de interés aplicado.
      */
-    public CreditAccount(String entity, String office, String accNumber, String dc, String IBAN, double creditLimit,
-            double creditPercentage) {
-        super(accNumber, dc, IBAN);
+    public CreditAccount(String accNumber, String dc, String IBAN, double creditLimit, double creditPercentage, String accountAlias, User user) {
+        super(accNumber, dc, IBAN, accountAlias, user);
         this.creditLimit = creditLimit;
         this.creditPercentage = creditPercentage;
+    }
+
+    @Override
+    public String toString() {
+        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance; // Añadir limite de credito
     }
 
     @Override
@@ -63,8 +53,9 @@ public class CreditAccount extends BankAccount {
 
     }
 
+
     @Override
-    public void transfer(double amount, BankAccount account) {
+    public void transfer(double amount, BankAccount account, ArrayList<BankAccount> accounts) {
 
     }
 
