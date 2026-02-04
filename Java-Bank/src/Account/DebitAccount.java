@@ -38,7 +38,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      * @param accountAlias Alias personalizado para la cuenta.
      */
     public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, User user) {
-        super(accNumber, dc, IBAN, accountAlias,  user);
+        super(accNumber, dc, IBAN, accountAlias, user);
     }
 
     /**

@@ -259,7 +259,8 @@ public class AccessScreen {
                         if(users.get(i).DNI.equals(DNI)){
                             System.out.println(users.get(i));
                             System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
-                            String confirmacion = sc.nextLine();
+                            String confirmacion;
+                            confirmacion = sc.nextLine();
                             if(confirmacion.equalsIgnoreCase("S")){
                                 currentUser = users.get(i);
                             }
