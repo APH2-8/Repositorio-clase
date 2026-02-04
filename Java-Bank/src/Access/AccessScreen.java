@@ -1,5 +1,7 @@
 package Access;
+import Account.BankAccount;
 import Account.CreditAccount;
+import Account.DebitAccount;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
@@ -146,15 +148,18 @@ public class AccessScreen {
      */
     public void MenuUser(User currentUser) {
         int option = 0;
-        System.out.println("Menu User");
-        System.out.println("Welcome " + currentUser.name);
-        System.out.println("1. Make a deposit");
-        System.out.println("2. Withdraw");
-        System.out.println("3. Transfer Money");
-        System.out.println("4. Recharge SIM card");
-        System.out.println("5. Log Out");
-        System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
-        while (option != 5) {
+
+        while (option != 6) {
+            System.out.println("Menu User");
+            System.out.println("Welcome " + currentUser.name);
+            System.out.println("1. Make a deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Transfer Money");
+            System.out.println("4. Recharge SIM card");
+            System.out.println("5. View accounts");
+            System.out.println("6. Log Out");
+            System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
+            option=sc.nextInt();
             switch (option) {
                 case 1:
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
@@ -167,23 +172,35 @@ public class AccessScreen {
                 case 4:
                     return;
                 case 5:
-                    return;
+                    //BankAccount nuevaBankAccount = new BankAccount(null, null,null);
+                    //currentUser.getCuentaDebito();
+                    System.out.println("hola");
+                    System.out.println(currentUser.bankAccounts);
+
+                    break;
+                case 6:
+                    menu();
+                    break;
+                default:
+                    System.out.println("Introduce un número del 1-6");
             }
         }
     }
 
     public void menuManager(Manager currentManager) {
         int option = 0;
-        System.out.println("Menu Manager");
-        System.out.println("Welcome " + currentManager.name);
-        System.out.println("1. Create BankAccount");
-        System.out.println("2. Make a deposit");
-        System.out.println("3. Withdraw");
-        System.out.println("4. Transfer Money");
-        System.out.println("5. Recharge SIM card");
-        System.out.println("6. Log Out");
-        System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+
         while (option != 6) {
+            System.out.println("Menu Manager");
+            System.out.println("Welcome " + currentManager.name);
+            System.out.println("1. Create BankAccount");
+            System.out.println("2. Make a deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer Money");
+            System.out.println("5. Recharge SIM card");
+            System.out.println("6. Log Out");
+            System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+            option= sc.nextInt();
             switch (option) {
                 case 1:
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
@@ -207,25 +224,30 @@ public class AccessScreen {
 
     public void menuEmployee(Employee currentEmployee) {
         int option = 0;
-        System.out.println("Menu Employee");
-        System.out.println("Welcome " + currentEmployee.name);
-        System.out.println("1. Create BankAccount");
-        System.out.println("2. Make a deposit");
-        System.out.println("3. Withdraw");
-        System.out.println("4. Transfer Money");
-        System.out.println("5. Recharge SIM card");
-        System.out.println("6. Log Out");
-        System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+
         while (option != 6) {
+            System.out.println("Menu Employee");
+            System.out.println("Welcome " + currentEmployee.name);
+            System.out.println("1. Create BankAccount");
+            System.out.println("2. Make a deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer Money");
+            System.out.println("5. Recharge SIM card");
+            System.out.println("6. Log Out");
+            System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+            option = sc.nextInt();
+
             switch (option) {
                 case 1:
                     System.out.println("Indique el id del user");
-                    User currentUser = null;
+                    sc.nextLine();
                     DNI = sc.nextLine();
+
+                    User currentUser = null;
                     for(int i=0; i<users.size(); i++) {
                         if(users.get(i).DNI.equals(DNI)){
                             System.out.println(users.get(i));
-                            System.out.println("¿Es esta la id del cliente?");
+                            System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
                             String confirmacion = sc.nextLine();
                             if(confirmacion.equalsIgnoreCase("S")){
                                 currentUser = users.get(i);
@@ -235,12 +257,22 @@ public class AccessScreen {
                     if (currentUser == null) {
                         System.out.println("El DNI no existe");
                     }else{
-                        System.out.println("Seleccione 1 o 2 :Crear cuenta de debito(1) o crédito(2)");
+                        System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
                         int opcionTarjeta = sc.nextInt();
                         if(opcionTarjeta == 1){
-
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", "");
+                            nuevaBankAccountdebit.createBankAccount();
+                            currentUser.bankAccounts.add(nuevaBankAccountdebit);
+                            /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
-
+                        if(opcionTarjeta == 2){
+                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "", "", "", 0.0, 0.0);
+                            nuevaBankCredit.createBankAccount();
+                            currentUser.bankAccounts.add(nuevaBankCredit);
+                        }
+                        if(opcionTarjeta == 3){
+                            return;
+                        }
                     }
 
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
@@ -248,16 +280,18 @@ public class AccessScreen {
                 case 2:
 
 
-                    login();
+
                     break;
                 case 3:
-                    return;
+                    break;
                 case 4:
-                    return;
+                    break;
                 case 5:
-                    return;
+                    break;
                 case 6:
-                    return;
+                    login();
+                    break;
+
             }
         }
     }

@@ -71,39 +71,17 @@ public abstract class BankAccount implements Accounting {
     Scanner sc = new Scanner(System.in);
 
     /**
-     * Crea una nueva cuenta bancaria con alias personalizado.
-     *
-     * @param entity       Código de la entidad bancaria.
-     * @param office       Código de la oficina.
-     * @param accNumber    Número de cuenta.
-     * @param dc           Dígito de control.
-     * @param IBAN         Código IBAN completo.
-     * @param accountAlias Alias personalizado para la cuenta.
-     */
-    public BankAccount(String entity, String office, String accNumber, String dc, String IBAN, String accountAlias) {
-        this.entity = entity;
-        this.office = office;
-        this.accNumber = accNumber;
-        this.dc = dc;
-        this.IBAN = IBAN;
-        this.accountAlias = accountAlias;
-        this.balance = 0.0;
-    }
-
-    /**
      * Crea una nueva cuenta bancaria con alias automático.
      * El alias se genera automáticamente como "Account" seguido del número de
      * cuenta.
-     *
-     * @param entity    Código de la entidad bancaria.
-     * @param office    Código de la oficina.
+    /* *
+     *  Código de la oficina.
      * @param accNumber Número de cuenta.
      * @param dc        Dígito de control.
      * @param IBAN      Código IBAN completo.
      */
-    public BankAccount(String entity, String office, String accNumber, String dc, String IBAN) {
-        this.entity = entity;
-        this.office = office;
+    public BankAccount(String accNumber, String dc, String IBAN) {
+
         this.accNumber = accNumber;
         this.dc = dc;
         this.IBAN = IBAN;
@@ -195,7 +173,10 @@ public abstract class BankAccount implements Accounting {
 
         entity = getEntity();
         office = getOffice();
-
+        accNumber = String.valueOf((int)(Math.random() * 10));
+        while(accounts.contains(accNumber)){
+            accNumber = String.valueOf((int)(Math.random() * 10));
+        }
         dc = calcDC(entity, office, accNumber);
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
@@ -212,7 +193,7 @@ public abstract class BankAccount implements Accounting {
      */
     public String changeAccountAlias() {
         String alias = "";
-        System.out.println("Do you want to give an alias to your account?");
+        System.out.println("Do you want to give an alias to your account?(yes/no)");
         String check = sc.nextLine();
         if (check.equalsIgnoreCase("yes") || check.equalsIgnoreCase("si")) {
             System.out.println("Introduce the account alias: ");
