@@ -166,14 +166,14 @@ public class AccessScreen {
      */
     public void MenuUser(User currentUser) {
         int option = 0;
-        while (option != 5) {
+        while (option != 6) {
             System.out.println("Menu User");
             System.out.println("Welcome " + currentUser.name);
             System.out.println("1. Make a deposit");
             System.out.println("2. Withdraw");
             System.out.println("3. Transfer Money");
             System.out.println("4. Recharge SIM card");
-            System.out.println("5.View accounts");
+            System.out.println("5. View accounts");
             System.out.println("6. Log Out");
             System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
             option = sc.nextInt();
@@ -195,6 +195,7 @@ public class AccessScreen {
                     }
                     break;
                 case 6:
+                    menu();
                     return;
             }
         }
@@ -264,6 +265,7 @@ public class AccessScreen {
                             if(confirmacion.equalsIgnoreCase("S")){
                                 currentUser = users.get(i);
                             }
+                            break;
                         }
                     }
                     if (currentUser == null) {

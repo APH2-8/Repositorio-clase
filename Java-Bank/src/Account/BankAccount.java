@@ -174,7 +174,7 @@ public abstract class BankAccount implements Accounting, Serializable {
 
         entity = getEntity();
         office = getOffice();
-
+        accNumber = String.valueOf((int) (Math.random() * 99999999 - 10000000) + 1000000);
         dc = calcDC(entity, office, accNumber);
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
