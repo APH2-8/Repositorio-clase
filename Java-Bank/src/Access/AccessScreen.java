@@ -271,7 +271,7 @@ public class AccessScreen {
                         System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
                         int opcionTarjeta = sc.nextInt();
                         if(opcionTarjeta == 1){
-                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", null);
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
                             nuevaBankAccountdebit.createBankAccount();
                             currentUser.bankAccounts.add(nuevaBankAccountdebit);
                             /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/

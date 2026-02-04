@@ -178,7 +178,6 @@ public abstract class BankAccount implements Accounting {
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
         System.out.println("Your account has been created");
-
     }
 
     /**

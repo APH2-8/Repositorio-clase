@@ -3,6 +3,7 @@ package Account;
 import Access.AccessScreen;
 import Person.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -17,7 +18,7 @@ import java.util.Scanner;
  * @see BankAccount
  * @see Accounting
  */
-public class DebitAccount extends BankAccount {
+public class DebitAccount extends BankAccount implements Serializable {
 
     AccessScreen acc = new AccessScreen();
 
