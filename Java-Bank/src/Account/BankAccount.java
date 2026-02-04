@@ -2,6 +2,7 @@ package Account;
 
 import Person.User;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.Scanner;
  * @see DebitAccount
  * @see CreditAccount
  */
-public abstract class BankAccount implements Accounting {
+public abstract class BankAccount implements Accounting, Serializable {
     protected List<Transaction> history;
 
     /**
