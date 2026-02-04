@@ -281,7 +281,7 @@ public class AccessScreen {
                         }
                         if(opcionTarjeta == 2){
                             CreditAccount nuevaBankCredit = new CreditAccount("", "", "",  0.0, 0.0, "", null);
-                            nuevaBankCredit.createBankAccount();
+                            nuevaBankCredit.createCreditAccount();
                             currentUser.bankAccounts.add(nuevaBankCredit);
                         }
                         if(opcionTarjeta == 3){
