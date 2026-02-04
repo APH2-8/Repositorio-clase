@@ -2,6 +2,8 @@ package Account;
 
 import Person.User;
 
+import java.util.ArrayList;
+
 /**
  * Interfaz que define las operaciones bancarias disponibles en el sistema.
  * Todas las cuentas bancarias deben implementar estas operaciones
@@ -29,7 +31,7 @@ interface Accounting {
      * @param amount  Cantidad a transferir.
      * @param account Cuenta bancaria origen de la transferencia.
      */
-    void transfer(double amount, BankAccount account);
+    void transfer(double amount, BankAccount account, ArrayList<BankAccount> accounts);
 
     /**
      * Realiza una recarga de saldo en una tarjeta SIM móvil.

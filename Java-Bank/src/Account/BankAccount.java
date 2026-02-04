@@ -1,5 +1,8 @@
 package Account;
 
+import Person.User;
+
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ import java.util.Scanner;
  * @see DebitAccount
  * @see CreditAccount
  */
-public abstract class BankAccount implements Accounting {
+public abstract class BankAccount implements Accounting, Serializable {
     protected List<Transaction> history;
 
     /**
@@ -60,10 +63,7 @@ public abstract class BankAccount implements Accounting {
      */
     int numNewAccount = 0;
 
-    /**
-     * Lista de cuentas bancarias asociadas.
-     */
-    ArrayList<BankAccount> accounts = new ArrayList<BankAccount>();
+    String idPropietario = "";
 
     /**
      * Scanner para lectura de entrada por consola.
@@ -80,13 +80,14 @@ public abstract class BankAccount implements Accounting {
      * @param dc        Dígito de control.
      * @param IBAN      Código IBAN completo.
      */
-    public BankAccount(String accNumber, String dc, String IBAN) {
+    public BankAccount(String accNumber, String dc, String IBAN, String accountAlias, User currentUser) {
 
         this.accNumber = accNumber;
         this.dc = dc;
         this.IBAN = IBAN;
-        this.accountAlias = "Account " + accNumber;
+        this.accountAlias = accountAlias + " " + accNumber;
         this.balance = 0.0;
+        this.idPropietario = currentUser.id;
     }
 
     /**
@@ -169,19 +170,15 @@ public abstract class BankAccount implements Accounting {
      */
     public void createBankAccount() {
         BankAccount newBankAccount;
-        String entity = "", office = "", dc = "", accNumber = "", IBAN = "", alias = "";
+        String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
 
         entity = getEntity();
         office = getOffice();
-        accNumber = String.valueOf((int)(Math.random() * 10));
-        while(accounts.contains(accNumber)){
-            accNumber = String.valueOf((int)(Math.random() * 10));
-        }
+        accNumber = String.valueOf((int) (Math.random() * 99999999 - 10000000) + 1000000);
         dc = calcDC(entity, office, accNumber);
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
         System.out.println("Your account has been created");
-
     }
 
     /**
@@ -193,7 +190,7 @@ public abstract class BankAccount implements Accounting {
      */
     public String changeAccountAlias() {
         String alias = "";
-        System.out.println("Do you want to give an alias to your account?(yes/no)");
+        System.out.println("Do you want to give an alias to your account?");
         String check = sc.nextLine();
         if (check.equalsIgnoreCase("yes") || check.equalsIgnoreCase("si")) {
             System.out.println("Introduce the account alias: ");
