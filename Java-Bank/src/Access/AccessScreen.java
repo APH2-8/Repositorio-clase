@@ -48,6 +48,8 @@ public class AccessScreen {
     User dummyUser = new User("", "", "", "");
     Employee dummyEmployee = new Employee("", "", "", "", 0);
     Manager dummyManager = new Manager("", "", "", "", 0);
+    DebitAccount debito = new DebitAccount("", "", "", "", dummyUser);
+    CreditAccount credito = new CreditAccount("", "", "", 0.0, 0.0, "", null);
 
     /**
      * Muestra el menú principal del sistema bancario.
@@ -79,13 +81,13 @@ public class AccessScreen {
             }
             input.close();
             // ^ Managers en el array ^
-
-            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/accounts.dat"));
+            genAccounts.add(new CreditAccount("00000000", "12", "25253653", 0.0, 0.0, "Prueba", null));
+            /*input = new ObjectInputStream(new FileInputStream("Java-Bank/data/accounts.dat"));
             longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
                 genAccounts.add((BankAccount) input.readObject());
             }
-            input.close();
+            input.close();*/
             // ^ Cuentas en el array ^
         } catch (IOException e) {
             e.printStackTrace();
@@ -166,7 +168,7 @@ public class AccessScreen {
      */
     public void MenuUser(User currentUser) {
         int option = 0;
-        while (option != 5) {
+        while (option != 6) {
             System.out.println("Menu User");
             System.out.println("Welcome " + currentUser.name);
             System.out.println("1. Make a deposit");
