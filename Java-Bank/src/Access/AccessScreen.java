@@ -148,16 +148,18 @@ public class AccessScreen {
      */
     public void MenuUser(User currentUser) {
         int option = 0;
-        System.out.println("Menu User");
-        System.out.println("Welcome " + currentUser.name);
-        System.out.println("1. Make a deposit");
-        System.out.println("2. Withdraw");
-        System.out.println("3. Transfer Money");
-        System.out.println("4. Recharge SIM card");
-        System.out.println("5.View accounts");
-        System.out.println("6. Log Out");
-        System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
-        while (option != 5) {
+
+        while (option != 6) {
+            System.out.println("Menu User");
+            System.out.println("Welcome " + currentUser.name);
+            System.out.println("1. Make a deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Transfer Money");
+            System.out.println("4. Recharge SIM card");
+            System.out.println("5. View accounts");
+            System.out.println("6. Log Out");
+            System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
+            option=sc.nextInt();
             switch (option) {
                 case 1:
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
@@ -172,27 +174,33 @@ public class AccessScreen {
                 case 5:
                     //BankAccount nuevaBankAccount = new BankAccount(null, null,null);
                     //currentUser.getCuentaDebito();
+                    System.out.println("hola");
                     System.out.println(currentUser.bankAccounts);
 
                     break;
                 case 6:
-                    return;
+                    menu();
+                    break;
+                default:
+                    System.out.println("Introduce un número del 1-6");
             }
         }
     }
 
     public void menuManager(Manager currentManager) {
         int option = 0;
-        System.out.println("Menu Manager");
-        System.out.println("Welcome " + currentManager.name);
-        System.out.println("1. Create BankAccount");
-        System.out.println("2. Make a deposit");
-        System.out.println("3. Withdraw");
-        System.out.println("4. Transfer Money");
-        System.out.println("5. Recharge SIM card");
-        System.out.println("6. Log Out");
-        System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+
         while (option != 6) {
+            System.out.println("Menu Manager");
+            System.out.println("Welcome " + currentManager.name);
+            System.out.println("1. Create BankAccount");
+            System.out.println("2. Make a deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer Money");
+            System.out.println("5. Recharge SIM card");
+            System.out.println("6. Log Out");
+            System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
+            option= sc.nextInt();
             switch (option) {
                 case 1:
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
