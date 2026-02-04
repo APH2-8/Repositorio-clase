@@ -40,6 +40,7 @@ public class AccessScreen {
     ArrayList<User> users = new ArrayList<User>();
     ArrayList<Employee> employees = new ArrayList<Employee>();
     ArrayList<Manager> managers = new ArrayList<Manager>();
+    ArrayList<BankAccount> genAccounts = new ArrayList<>();
 
     /**
      * Usuario dummy utilizado para acceder a métodos de registro.
@@ -62,6 +63,7 @@ public class AccessScreen {
             }
             input.close();
             //^ Users en el array ^
+
             input = new ObjectInputStream(new FileInputStream("Java-Bank/data/employees.dat"));
             longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
@@ -69,6 +71,7 @@ public class AccessScreen {
             }
             input.close();
             // ^ Employees en el array ^
+
             input = new ObjectInputStream(new FileInputStream("Java-Bank/data/managers.dat"));
             longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
@@ -76,6 +79,14 @@ public class AccessScreen {
             }
             input.close();
             // ^ Managers en el array ^
+
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/accounts.dat"));
+            longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                genAccounts.add((BankAccount) input.readObject());
+            }
+            input.close();
+            // ^ Cuentas en el array ^
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -130,6 +141,13 @@ public class AccessScreen {
                         }
                         output.close();
 
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/accounts.dat"));
+                        output.writeInt(genAccounts.size());
+                        for (int i = 0; i < genAccounts.size(); i++) {
+                            output.writeObject(genAccounts.get(i));
+                        }
+                        output.close();
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -148,18 +166,17 @@ public class AccessScreen {
      */
     public void MenuUser(User currentUser) {
         int option = 0;
-
-        while (option != 6) {
+        while (option != 5) {
             System.out.println("Menu User");
             System.out.println("Welcome " + currentUser.name);
             System.out.println("1. Make a deposit");
             System.out.println("2. Withdraw");
             System.out.println("3. Transfer Money");
             System.out.println("4. Recharge SIM card");
-            System.out.println("5. View accounts");
+            System.out.println("5.View accounts");
             System.out.println("6. Log Out");
             System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
-            option=sc.nextInt();
+            option = sc.nextInt();
             switch (option) {
                 case 1:
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
@@ -172,24 +189,19 @@ public class AccessScreen {
                 case 4:
                     return;
                 case 5:
-                    //BankAccount nuevaBankAccount = new BankAccount(null, null,null);
-                    //currentUser.getCuentaDebito();
-                    System.out.println("hola");
-                    System.out.println(currentUser.bankAccounts);
-
+                    System.out.println("Hola");
+                    for(int i = 0; i < currentUser.bankAccounts.size(); i++) {
+                        System.out.println(currentUser.bankAccounts.get(i).toString());
+                    }
                     break;
                 case 6:
-                    menu();
-                    break;
-                default:
-                    System.out.println("Introduce un número del 1-6");
+                    return;
             }
         }
     }
 
     public void menuManager(Manager currentManager) {
         int option = 0;
-
         while (option != 6) {
             System.out.println("Menu Manager");
             System.out.println("Welcome " + currentManager.name);
@@ -200,7 +212,7 @@ public class AccessScreen {
             System.out.println("5. Recharge SIM card");
             System.out.println("6. Log Out");
             System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
-            option= sc.nextInt();
+            option = sc.nextInt();
             switch (option) {
                 case 1:
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
@@ -236,7 +248,6 @@ public class AccessScreen {
             System.out.println("6. Log Out");
             System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
             option = sc.nextInt();
-
             switch (option) {
                 case 1:
                     System.out.println("Indique el id del user");
@@ -260,13 +271,13 @@ public class AccessScreen {
                         System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
                         int opcionTarjeta = sc.nextInt();
                         if(opcionTarjeta == 1){
-                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", "");
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
                             nuevaBankAccountdebit.createBankAccount();
                             currentUser.bankAccounts.add(nuevaBankAccountdebit);
                             /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
                         if(opcionTarjeta == 2){
-                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "", "", "", 0.0, 0.0);
+                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "",  0.0, 0.0, "", null);
                             nuevaBankCredit.createBankAccount();
                             currentUser.bankAccounts.add(nuevaBankCredit);
                         }
