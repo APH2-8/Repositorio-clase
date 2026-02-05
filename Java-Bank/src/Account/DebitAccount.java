@@ -18,11 +18,9 @@ import java.util.Scanner;
  * @see BankAccount
  * @see Accounting
  */
-public class DebitAccount extends BankAccount implements Serializable {
+public class DebitAccount extends BankAccount {
 
     AccessScreen acc = new AccessScreen();
-
-    Scanner sc = new Scanner(System.in);
 
     @Override
     public String toString() {
@@ -82,7 +80,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      * @param account Cuenta bancaria origen de la transferencia.
      */
     public void transfer(double amount, BankAccount account, ArrayList<BankAccount> bankAccounts) {
-
+        Scanner sc = new Scanner(System.in);
         try {
             String sourceAcc = account.accNumber;
             System.out.println("Please enter the destination account number\n");
@@ -118,6 +116,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      */
     @Override
     public void rechargeSIM(int amount, BankAccount account) {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Input the destination phone number\n");
         try {
             String number = sc.nextLine();
@@ -138,7 +137,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      */
     @Override
     public void selectAccount(User user) {
-
+        Scanner sc = new Scanner(System.in);
         BankAccount foundBankAccount = null;
         System.out.println("Select the account you want to use by typing the number of the option");
         for (int i = 0; i < user.bankAccounts.size(); i++) {
@@ -156,5 +155,17 @@ public class DebitAccount extends BankAccount implements Serializable {
             System.out.println(e.getMessage());
         }
 
+    }
+    public DebitAccount createDebitAccount(User currentUser) {
+        String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
+
+        entity = getEntity();
+        office = getOffice();
+        accNumber = String.valueOf((int) (Math.random() * (99999999 - 10000000) + 10000000));
+        dc = calcDC(entity, office, accNumber);
+        IBAN = calcIBAN(entity, office, accNumber);
+        alias = changeAccountAlias();
+        System.out.println("Your account has been created");
+        return new DebitAccount( accNumber,  dc,  IBAN,  accountAlias,  currentUser); //limite de credito falta.
     }
 }
