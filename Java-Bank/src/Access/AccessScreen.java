@@ -331,7 +331,6 @@ public class AccessScreen {
             switch (option) {
                 case 1:
                     System.out.println("Please enter user id: ");
-
                     DNI = sc.nextLine();
                     User currentUser = null;
                     for (int i = 0; i < users.size(); i++) {

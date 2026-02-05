@@ -88,6 +88,7 @@ public abstract class BankAccount implements Accounting, Serializable {
         this.accountAlias = accountAlias + " " + accNumber;
         this.balance = 0.0;
         this.idPropietario = currentUser.id;
+        this.history=new ArrayList<>();
     }
 
     /**

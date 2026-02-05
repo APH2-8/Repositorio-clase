@@ -52,8 +52,9 @@ public class DebitAccount extends BankAccount implements Serializable {
     public void deposit(int amount, BankAccount account) {
 
         account.balance += amount;
-        System.out.println("Deposited " + amount);
+        System.out.println("Deposited: " + amount);
         System.out.println("New Balance: " + account.balance);
+        account.addTransaction("Deposit: ", amount);
     }
 
     /**
@@ -71,6 +72,7 @@ public class DebitAccount extends BankAccount implements Serializable {
             account.balance -= amount;
             System.out.println("Operation successful");
             System.out.println("New balance in " + account.accNumber + " is: " + account.balance);
+            account.addTransaction("Retirada: ", -amount);
         }
     }
     /**
@@ -104,6 +106,8 @@ public class DebitAccount extends BankAccount implements Serializable {
                 System.out.println("Operation successful");
                 System.out.println("New balance in " + sourceAcc + " is: " + account.balance);
                 System.out.println("New balance in " + destinationAcc + " is: " + destAcc.balance);
+                account.addTransaction("Transferencia enviada a " + destAcc.accNumber, -ammount);
+                destAcc.addTransaction("Transferencia recibida de " + account.accNumber, ammount);
             }
         } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
