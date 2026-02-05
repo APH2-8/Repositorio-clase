@@ -24,7 +24,7 @@ public class AccessScreen {
     /**
      * Scanner para lectura de entrada del usuario.
      */
-    Scanner sc = new Scanner(System.in);
+
 
     /**
      * Identificador del usuario actualmente en proceso de login.
@@ -57,7 +57,7 @@ public class AccessScreen {
      * El menú se ejecuta en bucle hasta que el usuario selecciona salir.
      */
     public void menu() {
-        try {
+       /* try {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/users.dat"));
             int longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
@@ -81,7 +81,7 @@ public class AccessScreen {
             }
             input.close();
             // ^ Managers en el array ^
-/*
+
             input = new ObjectInputStream(new FileInputStream("Java-Bank/data/debitAccounts.dat"));
             longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
@@ -94,16 +94,32 @@ public class AccessScreen {
             for (int i = 0; i < longitud; i++) {
                 creditAccounts.add((CreditAccount) input.readObject());
             }
-            input.close();*/
+            input.close();
             // ^ Cuentas en el array ^
-        } catch (IOException e) {
+       } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (ClassCastException e) {
             System.err.println(e.getMessage());
-        }
+        } */
+
+        User user1 = new User("0","Ale", "Ale1234@", "12/12/2000");
+        users.add(user1);
+        users.add(new User("1","Pau", "Pau1234@", "12/12/2000"));
+        users.add(new User("2","Gabs", "Gabs1234@", "12/12/2000"));
+        users.add(new User("3","Kike", "Kike1234@", "12/12/2000"));
+        users.add(new User("4","Aroa", "Aroa1234@", "12/12/2000"));
+        employees.add(new Employee("5", "Empleado1", "Empleado1234@", "12/12/2000", 1000));
+        employees.add(new Employee("6", "Empleado1", "Empleado1234@", "12/12/2000", 1001));
+        employees.add(new Employee("7", "Empleado1", "Empleado1234@", "12/12/2000", 1002));
+        managers.add(new Manager("8", "Manager1", "Manager1234@", "12/12/2000", 10000));
+
+        User usuPrueba = new User("prueba", "Prueba", "Prueba1234@", "12/12/2000");
+        debitAccounts.add(new DebitAccount("11111111", "12", "121211111111", "Prueba1", usuPrueba));
+        creditAccounts.add(new CreditAccount("11111111", "12", "121211111111", 0.0, 0.0, "Prueba1", usuPrueba));
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 2) {
             /*De momento he dejado el menu de Incio sin variaciones, lo suyo es modificarlo para solo dejar hacerl login, y cuando se corrobore
              * que se trata de un employee o manager, deja hacer cuentas de banco */
@@ -126,9 +142,6 @@ public class AccessScreen {
                     break;
                 case 2:
                     try {
-                        User usuPrueba = new User("prueba", "Prueba", "Prueba1234@", "12/12/2000");
-                        debitAccounts.add(new DebitAccount("11111111", "12", "121211111111", "Prueba1", usuPrueba));
-                        creditAccounts.add(new CreditAccount("11111111", "12", "121211111111", 0.0, 0.0, "Prueba1", usuPrueba));
                         System.out.println(users);
                         System.out.println(employees);
                         System.out.println(managers);
@@ -188,6 +201,7 @@ public class AccessScreen {
      */
     public void MenuUser(User currentUser) {
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 6) {
             System.out.println("Menu User");
             System.out.println("Welcome " + currentUser.name);
@@ -232,6 +246,7 @@ public class AccessScreen {
 
     public void menuManager(Manager currentManager) {
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 6) {
             System.out.println("Menu Manager");
             System.out.println("Welcome " + currentManager.name);
@@ -266,6 +281,7 @@ public class AccessScreen {
 
     public void menuEmployee(Employee currentEmployee) {
         int option = 0;
+        Scanner sc = new Scanner(System.in);
 
         while (option != 6) {
             System.out.println("Menu Employee");
@@ -353,6 +369,7 @@ public class AccessScreen {
 
     public void login() {
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 4) {
             System.out.println("Please select your profile:");
             System.out.println("1. User");

@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @see Person
  * @see User
  */
-public class Employee extends Person implements Serializable {
+public class Employee extends Person {
     int employeeID;
     public int id;
     public boolean active;

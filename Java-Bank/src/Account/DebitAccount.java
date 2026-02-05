@@ -18,11 +18,9 @@ import java.util.Scanner;
  * @see BankAccount
  * @see Accounting
  */
-public class DebitAccount extends BankAccount implements Serializable {
+public class DebitAccount extends BankAccount {
 
     AccessScreen acc = new AccessScreen();
-
-    Scanner sc = new Scanner(System.in);
 
     @Override
     public String toString() {
@@ -82,7 +80,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      * @param account Cuenta bancaria origen de la transferencia.
      */
     public void transfer(double amount, BankAccount account, ArrayList<BankAccount> bankAccounts) {
-
+        Scanner sc = new Scanner(System.in);
         try {
             String sourceAcc = account.accNumber;
             System.out.println("Please enter the destination account number\n");
@@ -118,6 +116,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      */
     @Override
     public void rechargeSIM(int amount, BankAccount account) {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Input the destination phone number\n");
         try {
             String number = sc.nextLine();
@@ -138,7 +137,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      */
     @Override
     public void selectAccount(User user) {
-
+        Scanner sc = new Scanner(System.in);
         BankAccount foundBankAccount = null;
         System.out.println("Select the account you want to use by typing the number of the option");
         for (int i = 0; i < user.bankAccounts.size(); i++) {

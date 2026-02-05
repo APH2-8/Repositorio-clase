@@ -66,11 +66,6 @@ public abstract class BankAccount implements Accounting, Serializable {
     String idPropietario = "";
 
     /**
-     * Scanner para lectura de entrada por consola.
-     */
-    Scanner sc = new Scanner(System.in);
-
-    /**
      * Crea una nueva cuenta bancaria con alias automático.
      * El alias se genera automáticamente como "Account" seguido del número de
      * cuenta.
@@ -178,6 +173,7 @@ public abstract class BankAccount implements Accounting, Serializable {
      * @return El alias asignado a la cuenta.
      */
     public String changeAccountAlias() {
+        Scanner sc = new Scanner(System.in);
         String alias = "";
         System.out.println("Do you want to give an alias to your account? Yes or No");
         String check = sc.nextLine();

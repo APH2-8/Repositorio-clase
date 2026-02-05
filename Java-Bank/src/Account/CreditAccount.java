@@ -2,7 +2,6 @@ package Account;
 
 import Person.User;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  * @version 1.0
  * @see BankAccount
  */
-public class CreditAccount extends BankAccount implements Serializable {
+public class CreditAccount extends BankAccount {
     /**
      * Límite de crédito disponible para la cuenta.
      */
