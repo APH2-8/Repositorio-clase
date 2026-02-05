@@ -161,4 +161,16 @@ public class DebitAccount extends BankAccount implements Serializable {
         }
 
     }
+    public DebitAccount createDebitAccount(User currentUser) {
+        String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
+
+        entity = getEntity();
+        office = getOffice();
+        accNumber = String.valueOf((int) (Math.random() * (99999999 - 10000000) + 10000000));
+        dc = calcDC(entity, office, accNumber);
+        IBAN = calcIBAN(entity, office, accNumber);
+        alias = changeAccountAlias();
+        System.out.println("Your account has been created");
+        return new DebitAccount( accNumber,  dc,  IBAN,  accountAlias,  currentUser); //limite de credito falta.
+    }
 }
