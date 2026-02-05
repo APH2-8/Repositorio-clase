@@ -1,5 +1,4 @@
 package Access;
-import Account.BankAccount;
 import Account.CreditAccount;
 import Account.DebitAccount;
 import Person.Employee;
@@ -40,7 +39,8 @@ public class AccessScreen {
     ArrayList<User> users = new ArrayList<User>();
     ArrayList<Employee> employees = new ArrayList<Employee>();
     ArrayList<Manager> managers = new ArrayList<Manager>();
-    public ArrayList<DebitAccount> genAccounts = new ArrayList<DebitAccount>();
+    public ArrayList<DebitAccount> debitAccounts = new ArrayList<DebitAccount>();
+    public ArrayList<CreditAccount> creditAccounts = new ArrayList<CreditAccount>();
         /*Importante: la serializacion hace que se guarden los archivos en otro array list,
         este tenia como objeto para guardar otra cosa ademas de n
          */
@@ -81,13 +81,20 @@ public class AccessScreen {
             }
             input.close();
             // ^ Managers en el array ^
-
-            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/accounts.dat"));
+/*
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/debitAccounts.dat"));
             longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
-                genAccounts.add((BankAccount) input.readObject());
-            }      /*IMPORTANTE*/
+                debitAccounts.add((DebitAccount) input.readObject());
+            }
             input.close();
+
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/creditAccounts.dat"));
+            longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                creditAccounts.add((CreditAccount) input.readObject());
+            }
+            input.close();*/
             // ^ Cuentas en el array ^
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,9 +126,15 @@ public class AccessScreen {
                     break;
                 case 2:
                     try {
+                        User usuPrueba = new User("prueba", "Prueba", "Prueba1234@", "12/12/2000");
+                        debitAccounts.add(new DebitAccount("11111111", "12", "121211111111", "Prueba1", usuPrueba));
+                        creditAccounts.add(new CreditAccount("11111111", "12", "121211111111", 0.0, 0.0, "Prueba1", usuPrueba));
                         System.out.println(users);
                         System.out.println(employees);
                         System.out.println(managers);
+                        System.out.println(creditAccounts);
+                        System.out.println(debitAccounts);
+
                         ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/users.dat"));
                         output.writeInt(users.size());
                         for (int i = 0; i < users.size(); i++) {
@@ -143,10 +156,17 @@ public class AccessScreen {
                         }
                         output.close();
 
-                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/accounts.dat"));
-                        output.writeInt(genAccounts.size());
-                        for (int i = 0; i < genAccounts.size(); i++) {
-                            output.writeObject(genAccounts.get(i));
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/debitAccounts.dat"));
+                        output.writeInt(debitAccounts.size());
+                        for (int i = 0; i < debitAccounts.size(); i++) {
+                            output.writeObject(debitAccounts.get(i));
+                        }
+                        output.close();
+
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/creditAccounts.dat"));
+                        output.writeInt(creditAccounts.size());
+                        for (int i = 0; i < creditAccounts.size(); i++) {
+                            output.writeObject(creditAccounts.get(i));
                         }
                         output.close();
 
@@ -191,10 +211,17 @@ public class AccessScreen {
                 case 4:
                     return;
                 case 5:
-                    System.out.println("Hola");
-                    for(int i = 0; i < genAccounts.size(); i++) {
-                        System.out.println(genAccounts.get(i).toString());
+                    System.out.println("V--Cuentas de Débito--V");
+                    for(int i = 0; i < debitAccounts.size(); i++) {
+                        System.out.println(debitAccounts.get(i).toString());
                     }
+                    System.out.println("^-----^-----^-----^");
+                    System.out.println(" ");
+                    System.out.println("V--Cuentas de Crédito--V");
+                    for(int i = 0; i < creditAccounts.size(); i++) {
+                        System.out.println(creditAccounts.get(i).toString());
+                    }
+                    System.out.println("^-----^-----^-----^");
                     break;
                 case 6:
                     menu();
@@ -278,7 +305,7 @@ public class AccessScreen {
                         if(opcionTarjeta == 1){
                             DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
                             nuevaBankAccountdebit.createDebitAccount(currentUser);
-                            genAccounts.add(nuevaBankAccountdebit);
+                            debitAccounts.add(nuevaBankAccountdebit);
                             /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
                         /*
