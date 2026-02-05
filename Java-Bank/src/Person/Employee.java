@@ -131,7 +131,7 @@ public class Employee extends Person implements Serializable {
         int element3 = Integer.parseInt(myArray[2]);
         int year = Year.now().getValue();
 
-        if (element1 > 32 || element1 < 0) {// check if the day is between 1 and 31
+        if (element1 > 32 || element1 < 0) { // check if the day is between 1 and 31
             return false;
         }
         if (element2 == 4 || element2 == 6 || element2 == 9 || element2 == 11) {// check if it is a 30-day month
@@ -139,13 +139,13 @@ public class Employee extends Person implements Serializable {
                 return false;
             }
         }
-        if (element2 == 2) { // check if february
+        if (element2 == 2) {
             if (element3 % 4 == 0) {
-                if (element1 > 29) {// leap year
+                if (element1 > 29) {
                     return false;
                 }
             } else {
-                if (element1 > 28) {// normal year
+                if (element1 > 28) {
                     return false;
                 }
             }
@@ -168,13 +168,5 @@ public class Employee extends Person implements Serializable {
             newId = "0" + newId;
         }
         return newId;
-    }
-
-    /**
-     * Crea una nueva cuenta bancaria.
-     * @return Una nueva instancia de {@code BankAccount}, o {@code null} si aún no está implementado.
-     */
-    public BankAccount createBankAccount() {
-        return null;
     }
 }
