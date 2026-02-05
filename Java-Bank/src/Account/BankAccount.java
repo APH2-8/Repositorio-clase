@@ -168,18 +168,7 @@ public abstract class BankAccount implements Accounting, Serializable {
      * Inicia el proceso de creación de una nueva cuenta bancaria.
      * Solicita datos por consola y genera automáticamente el DC, IBAN y alias.
      */
-    public void createBankAccount() {
-        BankAccount newBankAccount;
-        String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
 
-        entity = getEntity();
-        office = getOffice();
-        accNumber = String.valueOf((int) (Math.random() * 99999999 - 10000000) + 1000000);
-        dc = calcDC(entity, office, accNumber);
-        IBAN = calcIBAN(entity, office, accNumber);
-        alias = changeAccountAlias();
-        System.out.println("Your account has been created");
-    }
 
     /**
      * Permite cambiar o asignar un alias personalizado a la cuenta.
@@ -190,7 +179,7 @@ public abstract class BankAccount implements Accounting, Serializable {
      */
     public String changeAccountAlias() {
         String alias = "";
-        System.out.println("Do you want to give an alias to your account?");
+        System.out.println("Do you want to give an alias to your account? Yes or No");
         String check = sc.nextLine();
         if (check.equalsIgnoreCase("yes") || check.equalsIgnoreCase("si")) {
             System.out.println("Introduce the account alias: ");

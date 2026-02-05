@@ -69,7 +69,7 @@ public class CreditAccount extends BankAccount implements Serializable {
     public void selectAccount(User user) {
 
     }
-    public CreditAccount createCreditAccount() {
+    public CreditAccount createCreditAccount(User currentUser) {
         BankAccount newBankAccount;
         String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
 
@@ -80,6 +80,6 @@ public class CreditAccount extends BankAccount implements Serializable {
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
         System.out.println("Your account has been created");
-        return new CreditAccount(accNumber, dc, IBAN, 0.0, 0.0, alias, null); //limite de credito falta.
+        return new CreditAccount(accNumber, dc, IBAN, 0.0, 0.0, alias, currentUser); //limite de credito falta.
     }
 }

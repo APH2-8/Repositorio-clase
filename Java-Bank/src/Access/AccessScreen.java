@@ -40,8 +40,10 @@ public class AccessScreen {
     ArrayList<User> users = new ArrayList<User>();
     ArrayList<Employee> employees = new ArrayList<Employee>();
     ArrayList<Manager> managers = new ArrayList<Manager>();
-    ArrayList<BankAccount> genAccounts = new ArrayList<>();
-
+    public ArrayList<DebitAccount> genAccounts = new ArrayList<DebitAccount>();
+        /*Importante: la serializacion hace que se guarden los archivos en otro array list,
+        este tenia como objeto para guardar otra cosa ademas de n
+         */
     /**
      * Usuario dummy utilizado para acceder a métodos de registro.
      */
@@ -84,7 +86,7 @@ public class AccessScreen {
             longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
                 genAccounts.add((BankAccount) input.readObject());
-            }
+            }      /*IMPORTANTE*/
             input.close();
             // ^ Cuentas en el array ^
         } catch (IOException e) {
@@ -190,8 +192,8 @@ public class AccessScreen {
                     return;
                 case 5:
                     System.out.println("Hola");
-                    for(int i = 0; i < currentUser.bankAccounts.size(); i++) {
-                        System.out.println(currentUser.bankAccounts.get(i).toString());
+                    for(int i = 0; i < genAccounts.size(); i++) {
+                        System.out.println(genAccounts.get(i).toString());
                     }
                     break;
                 case 6:
@@ -275,15 +277,19 @@ public class AccessScreen {
                         int opcionTarjeta = sc.nextInt();
                         if(opcionTarjeta == 1){
                             DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
-                            nuevaBankAccountdebit.createBankAccount();
-                            currentUser.bankAccounts.add(nuevaBankAccountdebit);
+                            nuevaBankAccountdebit.createDebitAccount(currentUser);
+                            genAccounts.add(nuevaBankAccountdebit);
                             /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
+                        /*
                         if(opcionTarjeta == 2){
-                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "",  0.0, 0.0, "", null);
-                            nuevaBankCredit.createCreditAccount();
-                            currentUser.bankAccounts.add(nuevaBankCredit);
+                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "",  0.0, 0.0, "", currentUser);
+                            nuevaBankCredit.createCreditAccount(currentUser);
+                            System.out.println("Seleccione el límite de credito:");
+                            genAccounts.add(nuevaBankCredit);
                         }
+
+                         */
                         if(opcionTarjeta == 3){
                             return;
                         }
