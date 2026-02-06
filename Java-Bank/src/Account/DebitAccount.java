@@ -20,8 +20,6 @@ import java.util.Scanner;
  */
 public class DebitAccount extends BankAccount {
 
-    AccessScreen acc = new AccessScreen();
-
     @Override
     public String toString() {
         return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance;
