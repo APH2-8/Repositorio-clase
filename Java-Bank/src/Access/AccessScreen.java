@@ -57,7 +57,7 @@ public class AccessScreen {
      * El menú se ejecuta en bucle hasta que el usuario selecciona salir.
      */
     public void menu() {
-       /* try {
+        try {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/users.dat"));
             int longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
@@ -96,28 +96,14 @@ public class AccessScreen {
             }
             input.close();
             // ^ Cuentas en el array ^
-       } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } catch (ClassCastException e) {
             System.err.println(e.getMessage());
-        } */
+        }
 
-        User user1 = new User("0","Ale", "Ale1234@", "12/12/2000");
-        users.add(user1);
-        users.add(new User("1","Pau", "Pau1234@", "12/12/2000"));
-        users.add(new User("2","Gabs", "Gabs1234@", "12/12/2000"));
-        users.add(new User("3","Kike", "Kike1234@", "12/12/2000"));
-        users.add(new User("4","Aroa", "Aroa1234@", "12/12/2000"));
-        employees.add(new Employee("5", "Empleado1", "Empleado1234@", "12/12/2000", 1000));
-        employees.add(new Employee("6", "Empleado1", "Empleado1234@", "12/12/2000", 1001));
-        employees.add(new Employee("7", "Empleado1", "Empleado1234@", "12/12/2000", 1002));
-        managers.add(new Manager("8", "Manager1", "Manager1234@", "12/12/2000", 10000));
-
-        User usuPrueba = new User("prueba", "Prueba", "Prueba1234@", "12/12/2000");
-        debitAccounts.add(new DebitAccount("11111111", "12", "121211111111", "Prueba1", usuPrueba));
-        creditAccounts.add(new CreditAccount("11111111", "12", "121211111111", 0.0, 0.0, "Prueba1", usuPrueba));
         int option = 0;
         Scanner sc = new Scanner(System.in);
         while (option != 2) {
@@ -226,13 +212,13 @@ public class AccessScreen {
                     return;
                 case 5:
                     System.out.println("V--Cuentas de Débito--V");
-                    for(int i = 0; i < debitAccounts.size(); i++) {
+                    for (int i = 0; i < debitAccounts.size(); i++) {
                         System.out.println(debitAccounts.get(i).toString());
                     }
                     System.out.println("^-----^-----^-----^");
                     System.out.println(" ");
                     System.out.println("V--Cuentas de Crédito--V");
-                    for(int i = 0; i < creditAccounts.size(); i++) {
+                    for (int i = 0; i < creditAccounts.size(); i++) {
                         System.out.println(creditAccounts.get(i).toString());
                     }
                     System.out.println("^-----^-----^-----^");
@@ -301,13 +287,13 @@ public class AccessScreen {
                     DNI = sc.nextLine();
 
                     User currentUser = null;
-                    for(int i=0; i<users.size(); i++) {
-                        if(users.get(i).DNI.equals(DNI)){
+                    for (int i = 0; i < users.size(); i++) {
+                        if (users.get(i).DNI.equals(DNI)) {
                             System.out.println(users.get(i));
                             System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
                             String confirmacion;
                             confirmacion = sc.nextLine();
-                            if(confirmacion.equalsIgnoreCase("S")){
+                            if (confirmacion.equalsIgnoreCase("S")) {
                                 currentUser = users.get(i);
                             }
                             break;
@@ -315,10 +301,10 @@ public class AccessScreen {
                     }
                     if (currentUser == null) {
                         System.out.println("El DNI no existe");
-                    }else{
+                    } else {
                         System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
                         int opcionTarjeta = sc.nextInt();
-                        if(opcionTarjeta == 1){
+                        if (opcionTarjeta == 1) {
                             DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
                             nuevaBankAccountdebit.createDebitAccount(currentUser);
                             debitAccounts.add(nuevaBankAccountdebit);
@@ -333,7 +319,7 @@ public class AccessScreen {
                         }
 
                          */
-                        if(opcionTarjeta == 3){
+                        if (opcionTarjeta == 3) {
                             return;
                         }
                     }
@@ -341,7 +327,6 @@ public class AccessScreen {
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
                     break;
                 case 2:
-
 
 
                     break;
@@ -497,7 +482,5 @@ public class AccessScreen {
                     break;
             }
         }
-
-
     }
 }
