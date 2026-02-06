@@ -80,7 +80,7 @@ public abstract class BankAccount implements Accounting, Serializable {
         this.accNumber = accNumber;
         this.dc = dc;
         this.IBAN = IBAN;
-        this.accountAlias = accountAlias + " " + accNumber;
+        this.accountAlias = accountAlias ;
         this.balance = 0.0;
         this.idPropietario = currentUser.id;
     }
@@ -181,11 +181,9 @@ public abstract class BankAccount implements Accounting, Serializable {
             System.out.println("Introduce the account alias: ");
             alias = sc.nextLine();
         }
-        if (alias.isEmpty()) {
+        if (alias.isEmpty() || alias.isBlank()){
             System.out.println("You have not entered an alias. The account name will default to its number.");
-            alias = "Account " + IBAN;
-        } else {
-            alias = check;
+            alias = "Account ";
         }
         return alias;
     }

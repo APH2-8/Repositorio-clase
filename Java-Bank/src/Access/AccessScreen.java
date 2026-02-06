@@ -295,6 +295,9 @@ public class AccessScreen {
                             confirmacion = sc.nextLine();
                             if (confirmacion.equalsIgnoreCase("S")) {
                                 currentUser = users.get(i);
+                                System.out.println("Usuario seleccionado");
+                                System.out.println(users.get(i));
+                                System.out.println(currentUser);
                             }
                             break;
                         }
@@ -306,8 +309,9 @@ public class AccessScreen {
                         int opcionTarjeta = sc.nextInt();
                         if (opcionTarjeta == 1) {
                             DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
-                            nuevaBankAccountdebit.createDebitAccount(currentUser);
-                            debitAccounts.add(nuevaBankAccountdebit);
+                            DebitAccount cuentaDebitoNueva = nuevaBankAccountdebit.createDebitAccount(currentUser);
+                            debitAccounts.add(cuentaDebitoNueva);
+                            System.out.println(cuentaDebitoNueva);
                             /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
                         /*

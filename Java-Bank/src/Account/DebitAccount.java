@@ -22,7 +22,7 @@ public class DebitAccount extends BankAccount {
 
     @Override
     public String toString() {
-        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance;
+        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance; // raro, gabs comprobará
     }
 
     /**
@@ -155,7 +155,7 @@ public class DebitAccount extends BankAccount {
 
     }
     public DebitAccount createDebitAccount(User currentUser) {
-        String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
+        String entity, office, dc, accNumber, IBAN, alias = "";
 
         entity = getEntity();
         office = getOffice();
@@ -164,6 +164,6 @@ public class DebitAccount extends BankAccount {
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
         System.out.println("Your account has been created");
-        return new DebitAccount( accNumber,  dc,  IBAN,  accountAlias,  currentUser); //limite de credito falta.
+        return new DebitAccount( accNumber,  dc,  IBAN,  alias,  currentUser);
     }
 }
