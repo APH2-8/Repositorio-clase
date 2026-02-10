@@ -189,6 +189,26 @@ public abstract class BankAccount implements Accounting, Serializable {
         return alias;
     }
 
+    public double asignarLimiteCredito() {
+        Scanner sc = new Scanner(System.in);
+        double limiteCredito = 0.0;
+        System.out.println("--- Límite de crédito ---");
+        System.out.println("1.- 500$");
+        System.out.println("2.- 1000$");
+        System.out.println("3.- 5000$");
+        System.out.println("4.- Salir");
+        System.out.println("Seleccione el límite de credito que quiere para la cuenta:");
+        limiteCredito = sc.nextDouble();
+        while (limiteCredito != 500 && limiteCredito != 1000 &&  limiteCredito != 5000){
+            System.out.println("El límite debe ser uno de los valores predefinidos, introduzca un valor válido");
+            System.out.println("-------||-------||-------||-------");
+            System.out.println("Seleccione el límite de credito que quiere para la cuenta:");
+            limiteCredito = sc.nextDouble();
+        }
+        System.out.println("Límite establecido a "+limiteCredito+".");
+        return limiteCredito;
+    }
+
     /// Getters y Setters
 
     public String getEntity() {

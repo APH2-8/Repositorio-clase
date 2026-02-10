@@ -316,17 +316,14 @@ public class AccessScreen {
                             DebitAccount cuentaDebitoNueva = nuevaBankAccountdebit.createDebitAccount(currentUser);
                             debitAccounts.add(cuentaDebitoNueva);
                             System.out.println(cuentaDebitoNueva);
-                            /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
                         }
-                        /*
                         if(opcionTarjeta == 2){
-                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "",  0.0, 0.0, "", currentUser);
-                            nuevaBankCredit.createCreditAccount(currentUser);
-                            System.out.println("Seleccione el límite de credito:");
-                            genAccounts.add(nuevaBankCredit);
+                            CreditAccount cuentaCreditoNueva = new CreditAccount("", "", "",  0.0, 0.0, "", currentUser.DNI);
+                            cuentaCreditoNueva.createCreditAccount(currentUser);
+                            creditAccounts.add(cuentaCreditoNueva);
+                            System.out.println(cuentaCreditoNueva);
                         }
 
-                         */
                         if (opcionTarjeta == 3) {
                             return;
                         }

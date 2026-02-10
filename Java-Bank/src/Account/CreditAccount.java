@@ -79,7 +79,8 @@ public class CreditAccount extends BankAccount {
         dc = calcDC(entity, office, accNumber);
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
+        double credito = asignarLimiteCredito();
         System.out.println("Your account has been created");
-        return new CreditAccount(accNumber, dc, IBAN, 0.0, 0.0, alias, currentUser.DNI); //limite de credito falta.
+        return new CreditAccount(accNumber, dc, IBAN, credito, 0.0, alias, currentUser.DNI); //limite de credito falta.
     }
 }
