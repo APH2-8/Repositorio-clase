@@ -33,8 +33,8 @@ public class DebitAccount extends BankAccount {
      * @param IBAN         Código IBAN completo.
      * @param accountAlias Alias personalizado para la cuenta.
      */
-    public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, User user) {
-        super(accNumber, dc, IBAN, accountAlias, user);
+    public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, String DNI) {
+        super(accNumber, dc, IBAN, accountAlias, DNI);
     }
 
     /**
@@ -164,6 +164,6 @@ public class DebitAccount extends BankAccount {
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
         System.out.println("Your account has been created");
-        return new DebitAccount( accNumber,  dc,  IBAN,  alias,  currentUser);
+        return new DebitAccount( accNumber,  dc,  IBAN,  alias,  currentUser.DNI);
     }
 }

@@ -213,13 +213,17 @@ public class AccessScreen {
                 case 5:
                     System.out.println("V--Cuentas de Débito--V");
                     for (int i = 0; i < debitAccounts.size(); i++) {
-                        System.out.println(debitAccounts.get(i).toString());
+                        if (debitAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                            System.out.println(debitAccounts.get(i).toString());
+                        }
                     }
                     System.out.println("^-----^-----^-----^");
                     System.out.println(" ");
                     System.out.println("V--Cuentas de Crédito--V");
                     for (int i = 0; i < creditAccounts.size(); i++) {
-                        System.out.println(creditAccounts.get(i).toString());
+                        if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                            System.out.println(creditAccounts.get(i).toString());
+                        }
                     }
                     System.out.println("^-----^-----^-----^");
                     break;
@@ -308,7 +312,7 @@ public class AccessScreen {
                         System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
                         int opcionTarjeta = sc.nextInt();
                         if (opcionTarjeta == 1) {
-                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser.DNI);
                             DebitAccount cuentaDebitoNueva = nuevaBankAccountdebit.createDebitAccount(currentUser);
                             debitAccounts.add(cuentaDebitoNueva);
                             System.out.println(cuentaDebitoNueva);
@@ -339,6 +343,17 @@ public class AccessScreen {
                 case 4:
                     break;
                 case 5:
+                  /*  System.out.println("V--Cuentas de Débito--V");
+                    for (int i = 0; i < debitAccounts.size(); i++) {
+                        System.out.println(debitAccounts.get(i).toString());
+                    }
+                    System.out.println("^-----^-----^-----^");
+                    System.out.println(" ");
+                    System.out.println("V--Cuentas de Crédito--V");
+                    for (int i = 0; i < creditAccounts.size(); i++) {
+                        System.out.println(creditAccounts.get(i).toString());
+                    }
+                    System.out.println("^-----^-----^-----^");*/ // Sirve para ver todas las cuentas, sin importar usuarios
                     break;
                 case 6:
                     login();

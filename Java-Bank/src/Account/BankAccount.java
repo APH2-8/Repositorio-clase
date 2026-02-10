@@ -21,6 +21,7 @@ import java.util.Scanner;
  * @see CreditAccount
  */
 public abstract class BankAccount implements Accounting, Serializable {
+    private static final long serialVersionUID = 1L;
     protected List<Transaction> history;
 
     /**
@@ -75,14 +76,14 @@ public abstract class BankAccount implements Accounting, Serializable {
      * @param dc        Dígito de control.
      * @param IBAN      Código IBAN completo.
      */
-    public BankAccount(String accNumber, String dc, String IBAN, String accountAlias, User currentUser) {
+    public BankAccount(String accNumber, String dc, String IBAN, String accountAlias, String DNI) {
 
         this.accNumber = accNumber;
         this.dc = dc;
         this.IBAN = IBAN;
         this.accountAlias = accountAlias ;
         this.balance = 0.0;
-        this.idPropietario = currentUser.id;
+        this.idPropietario = DNI;
     }
 
     /**
@@ -213,6 +214,10 @@ public abstract class BankAccount implements Accounting, Serializable {
 
     public double getBalance() {
         return balance;
+    }
+
+    public String getIdPropietario() {
+        return idPropietario;
     }
 
     public void setDc(String dc) {
