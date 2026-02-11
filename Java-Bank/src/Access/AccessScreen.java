@@ -322,7 +322,8 @@ public class AccessScreen {
                     String dni = sc.nextLine();
                     for(int i = 0; i < users.size(); i++) {
                         if(users.get(i).DNI.equals(dni)){
-                            users.get(i).active = true;
+                            currentUser = users.get(i);
+                            currentUser.active = true;
                         }
                     }
                     break;
