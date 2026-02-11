@@ -51,6 +51,7 @@ public class DebitAccount extends BankAccount {
         System.out.println("Deposited: " + amount);
         System.out.println("New Balance: " + account.balance);
         account.addTransaction("Deposit: ", amount);
+
     }
 
     /**
