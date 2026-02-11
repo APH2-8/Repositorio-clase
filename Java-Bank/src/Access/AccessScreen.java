@@ -56,7 +56,7 @@ public class AccessScreen {
      * Permite al usuario crear cuenta, iniciar sesión o cerrar la aplicación.
      * El menú se ejecuta en bucle hasta que el usuario selecciona salir.
      */
-    public void menu() {
+    public void inicio() {
         try {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/users.dat"));
             int longitud = input.readInt();
@@ -103,6 +103,10 @@ public class AccessScreen {
         } catch (ClassCastException e) {
             System.err.println(e.getMessage());
         }
+        menu();
+    }
+
+    public void menu() {
 
         int option = 0;
         Scanner sc = new Scanner(System.in);
@@ -323,7 +327,7 @@ public class AccessScreen {
                     }
                     break;
                 case 7:
-                    break;
+                    return;
                 default:
                     System.out.println("Elija una opción del 1-7");
             }
@@ -430,7 +434,7 @@ public class AccessScreen {
                     }
                     break;
                 case 7:
-                    break;
+                    return;
                 default:
                     System.out.println("del 1 al 7");
 
