@@ -21,6 +21,7 @@ import java.util.Scanner;
  * @see CreditAccount
  */
 public abstract class BankAccount implements Accounting, Serializable {
+    private static final long serialVersionUID = 1L;
     protected List<Transaction> history;
 
     /**
@@ -66,11 +67,6 @@ public abstract class BankAccount implements Accounting, Serializable {
     String idPropietario = "";
 
     /**
-     * Scanner para lectura de entrada por consola.
-     */
-    Scanner sc = new Scanner(System.in);
-
-    /**
      * Crea una nueva cuenta bancaria con alias automático.
      * El alias se genera automáticamente como "Account" seguido del número de
      * cuenta.
@@ -80,14 +76,15 @@ public abstract class BankAccount implements Accounting, Serializable {
      * @param dc        Dígito de control.
      * @param IBAN      Código IBAN completo.
      */
-    public BankAccount(String accNumber, String dc, String IBAN, String accountAlias, User currentUser) {
+    public BankAccount(String accNumber, String dc, String IBAN, String accountAlias, String DNI) {
 
         this.accNumber = accNumber;
         this.dc = dc;
         this.IBAN = IBAN;
-        this.accountAlias = accountAlias + " " + accNumber;
+        this.accountAlias = accountAlias ;
         this.balance = 0.0;
-        this.idPropietario = currentUser.id;
+        this.idPropietario = DNI;
+        this.history=new ArrayList<>();
     }
 
     /**
@@ -178,6 +175,7 @@ public abstract class BankAccount implements Accounting, Serializable {
      * @return El alias asignado a la cuenta.
      */
     public String changeAccountAlias() {
+        Scanner sc = new Scanner(System.in);
         String alias = "";
         System.out.println("Do you want to give an alias to your account? Yes or No");
         String check = sc.nextLine();
@@ -185,13 +183,31 @@ public abstract class BankAccount implements Accounting, Serializable {
             System.out.println("Introduce the account alias: ");
             alias = sc.nextLine();
         }
-        if (alias.isEmpty()) {
+        if (alias.isEmpty() || alias.isBlank()){
             System.out.println("You have not entered an alias. The account name will default to its number.");
-            alias = "Account " + IBAN;
-        } else {
-            alias = check;
+            alias = "Account ";
         }
         return alias;
+    }
+
+    public double asignarLimiteCredito() {
+        Scanner sc = new Scanner(System.in);
+        double limiteCredito = 0.0;
+        System.out.println("--- Límite de crédito ---");
+        System.out.println("1.- 500$");
+        System.out.println("2.- 1000$");
+        System.out.println("3.- 5000$");
+        System.out.println("4.- Salir");
+        System.out.println("Seleccione el límite de credito que quiere para la cuenta:");
+        limiteCredito = sc.nextDouble();
+        while (limiteCredito != 500 && limiteCredito != 1000 &&  limiteCredito != 5000){
+            System.out.println("El límite debe ser uno de los valores predefinidos, introduzca un valor válido");
+            System.out.println("-------||-------||-------||-------");
+            System.out.println("Seleccione el límite de credito que quiere para la cuenta:");
+            limiteCredito = sc.nextDouble();
+        }
+        System.out.println("Límite establecido a "+limiteCredito+".");
+        return limiteCredito;
     }
 
     /// Getters y Setters
@@ -219,6 +235,10 @@ public abstract class BankAccount implements Accounting, Serializable {
 
     public double getBalance() {
         return balance;
+    }
+
+    public String getIdPropietario() {
+        return idPropietario;
     }
 
     public void setDc(String dc) {

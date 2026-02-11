@@ -18,15 +18,11 @@ import java.util.Scanner;
  * @see BankAccount
  * @see Accounting
  */
-public class DebitAccount extends BankAccount implements Serializable {
-
-    AccessScreen acc = new AccessScreen();
-
-    Scanner sc = new Scanner(System.in);
+public class DebitAccount extends BankAccount {
 
     @Override
     public String toString() {
-        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance;
+        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance; // raro, gabs comprobará
     }
 
     /**
@@ -37,8 +33,8 @@ public class DebitAccount extends BankAccount implements Serializable {
      * @param IBAN         Código IBAN completo.
      * @param accountAlias Alias personalizado para la cuenta.
      */
-    public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, User user) {
-        super(accNumber, dc, IBAN, accountAlias, user);
+    public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, String DNI) {
+        super(accNumber, dc, IBAN, accountAlias, DNI);
     }
 
     /**
@@ -52,8 +48,10 @@ public class DebitAccount extends BankAccount implements Serializable {
     public void deposit(int amount, BankAccount account) {
 
         account.balance += amount;
-        System.out.println("Deposited " + amount);
+        System.out.println("Deposited: " + amount);
         System.out.println("New Balance: " + account.balance);
+        account.addTransaction("Deposit: ", amount);
+
     }
 
     /**
@@ -71,6 +69,7 @@ public class DebitAccount extends BankAccount implements Serializable {
             account.balance -= amount;
             System.out.println("Operation successful");
             System.out.println("New balance in " + account.accNumber + " is: " + account.balance);
+            account.addTransaction("Retirada: ", -amount);
         }
     }
     /**
@@ -82,7 +81,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      * @param account Cuenta bancaria origen de la transferencia.
      */
     public void transfer(double amount, BankAccount account, ArrayList<BankAccount> bankAccounts) {
-
+        Scanner sc = new Scanner(System.in);
         try {
             String sourceAcc = account.accNumber;
             System.out.println("Please enter the destination account number\n");
@@ -104,6 +103,8 @@ public class DebitAccount extends BankAccount implements Serializable {
                 System.out.println("Operation successful");
                 System.out.println("New balance in " + sourceAcc + " is: " + account.balance);
                 System.out.println("New balance in " + destinationAcc + " is: " + destAcc.balance);
+                account.addTransaction("Transferencia enviada a " + destAcc.accNumber, -ammount);
+                destAcc.addTransaction("Transferencia recibida de " + account.accNumber, ammount);
             }
         } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
@@ -118,6 +119,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      */
     @Override
     public void rechargeSIM(int amount, BankAccount account) {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Input the destination phone number\n");
         try {
             String number = sc.nextLine();
@@ -138,7 +140,7 @@ public class DebitAccount extends BankAccount implements Serializable {
      */
     @Override
     public void selectAccount(User user) {
-
+        Scanner sc = new Scanner(System.in);
         BankAccount foundBankAccount = null;
         System.out.println("Select the account you want to use by typing the number of the option");
         for (int i = 0; i < user.bankAccounts.size(); i++) {
@@ -158,7 +160,7 @@ public class DebitAccount extends BankAccount implements Serializable {
 
     }
     public DebitAccount createDebitAccount(User currentUser) {
-        String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
+        String entity, office, dc, accNumber, IBAN, alias = "";
 
         entity = getEntity();
         office = getOffice();
@@ -167,6 +169,6 @@ public class DebitAccount extends BankAccount implements Serializable {
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
         System.out.println("Your account has been created");
-        return new DebitAccount( accNumber,  dc,  IBAN,  accountAlias,  currentUser); //limite de credito falta.
+        return new DebitAccount( accNumber,  dc,  IBAN,  alias,  currentUser.DNI);
     }
 }

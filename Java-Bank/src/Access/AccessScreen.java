@@ -1,5 +1,4 @@
 package Access;
-import Account.BankAccount;
 import Account.CreditAccount;
 import Account.DebitAccount;
 import Person.Employee;
@@ -25,7 +24,7 @@ public class AccessScreen {
     /**
      * Scanner para lectura de entrada del usuario.
      */
-    Scanner sc = new Scanner(System.in);
+
 
     /**
      * Identificador del usuario actualmente en proceso de login.
@@ -40,7 +39,8 @@ public class AccessScreen {
     ArrayList<User> users = new ArrayList<User>();
     ArrayList<Employee> employees = new ArrayList<Employee>();
     ArrayList<Manager> managers = new ArrayList<Manager>();
-    public ArrayList<DebitAccount> genAccounts = new ArrayList<DebitAccount>();
+    public ArrayList<DebitAccount> debitAccounts = new ArrayList<DebitAccount>();
+    public ArrayList<CreditAccount> creditAccounts = new ArrayList<CreditAccount>();
         /*Importante: la serializacion hace que se guarden los archivos en otro array list,
         este tenia como objeto para guardar otra cosa ademas de n
          */
@@ -82,11 +82,18 @@ public class AccessScreen {
             input.close();
             // ^ Managers en el array ^
 
-            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/accounts.dat"));
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/debitAccounts.dat"));
             longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
-                genAccounts.add((BankAccount) input.readObject());
-            }      /*IMPORTANTE*/
+                debitAccounts.add((DebitAccount) input.readObject());
+            }
+            input.close();
+
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/creditAccounts.dat"));
+            longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                creditAccounts.add((CreditAccount) input.readObject());
+            }
             input.close();
             // ^ Cuentas en el array ^
         } catch (IOException e) {
@@ -96,7 +103,9 @@ public class AccessScreen {
         } catch (ClassCastException e) {
             System.err.println(e.getMessage());
         }
+
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 2) {
             /*De momento he dejado el menu de Incio sin variaciones, lo suyo es modificarlo para solo dejar hacerl login, y cuando se corrobore
              * que se trata de un employee o manager, deja hacer cuentas de banco */
@@ -122,6 +131,9 @@ public class AccessScreen {
                         System.out.println(users);
                         System.out.println(employees);
                         System.out.println(managers);
+                        System.out.println(creditAccounts);
+                        System.out.println(debitAccounts);
+
                         ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/users.dat"));
                         output.writeInt(users.size());
                         for (int i = 0; i < users.size(); i++) {
@@ -143,10 +155,17 @@ public class AccessScreen {
                         }
                         output.close();
 
-                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/accounts.dat"));
-                        output.writeInt(genAccounts.size());
-                        for (int i = 0; i < genAccounts.size(); i++) {
-                            output.writeObject(genAccounts.get(i));
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/debitAccounts.dat"));
+                        output.writeInt(debitAccounts.size());
+                        for (int i = 0; i < debitAccounts.size(); i++) {
+                            output.writeObject(debitAccounts.get(i));
+                        }
+                        output.close();
+
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/creditAccounts.dat"));
+                        output.writeInt(creditAccounts.size());
+                        for (int i = 0; i < creditAccounts.size(); i++) {
+                            output.writeObject(creditAccounts.get(i));
                         }
                         output.close();
 
@@ -168,6 +187,7 @@ public class AccessScreen {
      */
     public void MenuUser(User currentUser) {
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 6) {
             System.out.println("Menu User");
             System.out.println("Welcome " + currentUser.name);
@@ -191,10 +211,21 @@ public class AccessScreen {
                 case 4:
                     return;
                 case 5:
-                    System.out.println("Hola");
-                    for(int i = 0; i < genAccounts.size(); i++) {
-                        System.out.println(genAccounts.get(i).toString());
+                    System.out.println("V--Cuentas de Débito--V");
+                    for (int i = 0; i < debitAccounts.size(); i++) {
+                        if (debitAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                            System.out.println(debitAccounts.get(i).toString());
+                        }
                     }
+                    System.out.println("^-----^-----^-----^");
+                    System.out.println(" ");
+                    System.out.println("V--Cuentas de Crédito--V");
+                    for (int i = 0; i < creditAccounts.size(); i++) {
+                        if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                            System.out.println(creditAccounts.get(i).toString());
+                        }
+                    }
+                    System.out.println("^-----^-----^-----^");
                     break;
                 case 6:
                     menu();
@@ -205,6 +236,7 @@ public class AccessScreen {
 
     public void menuManager(Manager currentManager) {
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 7) {
             System.out.println("Menu Manager");
             System.out.println("Welcome " + currentManager.name);
@@ -213,100 +245,7 @@ public class AccessScreen {
             System.out.println("3. Withdraw");
             System.out.println("4. Transfer Money");
             System.out.println("5. Recharge SIM card");
-            System.out.println("6. Unlock User");
-            System.out.println("7. Log Out");
-            System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5, 6 or 7)");
-            option = sc.nextInt();
-            switch (option) {
-                case 1:
-                    System.out.println("Indique el id del user");
-                    sc.nextLine();
-                    DNI = sc.nextLine();
-
-                    User currentUser = null;
-                    for(int i=0; i<users.size(); i++) {
-                        if(users.get(i).DNI.equals(DNI)){
-                            System.out.println(users.get(i));
-                            System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
-                            String confirmacion;
-                            confirmacion = sc.nextLine();
-                            if(confirmacion.equalsIgnoreCase("S")){
-                                currentUser = users.get(i);
-                            }
-                            break;
-                        }
-                    }
-                    if (currentUser == null) {
-                        System.out.println("El DNI no existe");
-                    }else{
-                        System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
-                        int opcionTarjeta = sc.nextInt();
-                        if(opcionTarjeta == 1){
-                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
-                            nuevaBankAccountdebit.createDebitAccount(currentUser);
-                            genAccounts.add(nuevaBankAccountdebit);
-                            /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
-                        }
-                        /*
-                        if(opcionTarjeta == 2){
-                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "",  0.0, 0.0, "", currentUser);
-                            nuevaBankCredit.createCreditAccount(currentUser);
-                            System.out.println("Seleccione el límite de credito:");
-                            genAccounts.add(nuevaBankCredit);
-                        }
-
-                         */
-                        if(opcionTarjeta == 3){
-                            return;
-                        }
-                    }
-
-                    //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    System.out.println("Unlock User:");
-                    for(int i = 0; i < users.size(); i++) {
-                        if(users.get(i).active == false){
-                            System.out.println(users.get(i).toString());
-                        }
-                    }
-                    System.out.println("Select User to unlock:");
-                    String dni = sc.nextLine();
-                    for(int i = 0; i < users.size(); i++) {
-                        if(users.get(i).DNI.equals(dni)){
-                            users.get(i).active = true;
-                        }
-                    }
-                    break;
-                case 7:
-                    menu();
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-            }
-        }
-    }
-
-    public void menuEmployee(Employee currentEmployee) {
-        int option = 0;
-
-        while (option != 7) {
-            System.out.println("Menu Employee");
-            System.out.println("Welcome " + currentEmployee.name);
-            System.out.println("1. Create BankAccount");
-            System.out.println("2. Make a deposit");
-            System.out.println("3. Withdraw");
-            System.out.println("4. Transfer Money");
-            System.out.println("5. Recharge SIM card");
-            System.out.println("6. Unlock User");
+            System.out.println("6. Unlock user");
             System.out.println("7. Log Out");
             System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
             option = sc.nextInt();
@@ -317,39 +256,40 @@ public class AccessScreen {
                     DNI = sc.nextLine();
 
                     User currentUser = null;
-                    for(int i=0; i<users.size(); i++) {
-                        if(users.get(i).DNI.equals(DNI)){
+                    for (int i = 0; i < users.size(); i++) {
+                        if (users.get(i).DNI.equals(DNI)) {
                             System.out.println(users.get(i));
                             System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
                             String confirmacion;
                             confirmacion = sc.nextLine();
-                            if(confirmacion.equalsIgnoreCase("S")){
+                            if (confirmacion.equalsIgnoreCase("S")) {
                                 currentUser = users.get(i);
+                                System.out.println("Usuario seleccionado");
+                                System.out.println(users.get(i));
+                                System.out.println(currentUser);
                             }
                             break;
                         }
                     }
                     if (currentUser == null) {
                         System.out.println("El DNI no existe");
-                    }else{
+                    } else {
                         System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
                         int opcionTarjeta = sc.nextInt();
-                        if(opcionTarjeta == 1){
-                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser);
-                            nuevaBankAccountdebit.createDebitAccount(currentUser);
-                            genAccounts.add(nuevaBankAccountdebit);
-                            /*HASTA AQUI FUNCIONA, SE NECESITA crear BankAccount*/
+                        if (opcionTarjeta == 1) {
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser.DNI);
+                            DebitAccount cuentaDebitoNueva = nuevaBankAccountdebit.createDebitAccount(currentUser);
+                            debitAccounts.add(cuentaDebitoNueva);
+                            System.out.println(cuentaDebitoNueva);
                         }
-                        /*
                         if(opcionTarjeta == 2){
-                            CreditAccount nuevaBankCredit = new CreditAccount("", "", "",  0.0, 0.0, "", currentUser);
-                            nuevaBankCredit.createCreditAccount(currentUser);
-                            System.out.println("Seleccione el límite de credito:");
-                            genAccounts.add(nuevaBankCredit);
+                            CreditAccount cuentaCreditoNueva = new CreditAccount("", "", "",  0.0, 0.0, "", currentUser.DNI);
+                            cuentaCreditoNueva.createCreditAccount(currentUser);
+                            creditAccounts.add(cuentaCreditoNueva);
+                            System.out.println(cuentaCreditoNueva);
                         }
 
-                         */
-                        if(opcionTarjeta == 3){
+                        if (opcionTarjeta == 3) {
                             return;
                         }
                     }
@@ -357,12 +297,122 @@ public class AccessScreen {
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
                     break;
                 case 2:
+
+
+                    login();
+                    break;
+                case 3:
+                    return;
+                case 4:
+                    return;
+                case 5:
+                    return;
+                case 6:
+                    System.out.println("Unlock User:");
+                    for(int i = 0; i < users.size(); i++) {
+                        if(users.get(i).active == false){
+                            System.out.println(users.get(i).toString());
+                        }
+                    }
+                    System.out.println("Select User to unlock:");
+                    String dni = sc.nextLine();
+                    for(int i = 0; i < users.size(); i++) {
+                        if(users.get(i).DNI.equals(dni)){
+                            users.get(i).active = true;
+                        }
+                    }
+                    break;
+                case 7:
+                    break;
+                default:
+                    System.out.println("Elija una opción del 1-7");
+            }
+        }
+    }
+
+    public void menuEmployee(Employee currentEmployee) {
+        int option = 0;
+        Scanner sc = new Scanner(System.in);
+
+        while (option != 7){
+            System.out.println("Menu Employee");
+            System.out.println("Welcome " + currentEmployee.name);
+            System.out.println("1. Create BankAccount");
+            System.out.println("2. Make a deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Transfer Money");
+            System.out.println("5. Recharge SIM card");
+            System.out.println("6. Unlock user");
+            System.out.println("7. Log Out");
+            System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5, 6 or 7)");
+            option = sc.nextInt();
+            switch (option) {
+                case 1:
+                    System.out.println("Indique el id del user");
+                    sc.nextLine();
+                    DNI = sc.nextLine();
+
+                    User currentUser = null;
+                    for (int i = 0; i < users.size(); i++) {
+                        if (users.get(i).DNI.equals(DNI)) {
+                            System.out.println(users.get(i));
+                            System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
+                            String confirmacion;
+                            confirmacion = sc.nextLine();
+                            if (confirmacion.equalsIgnoreCase("S")) {
+                                currentUser = users.get(i);
+                                System.out.println("Usuario seleccionado");
+                                System.out.println(users.get(i));
+                                System.out.println(currentUser);
+                            }
+                            break;
+                        }
+                    }
+                    if (currentUser == null) {
+                        System.out.println("El DNI no existe");
+                    } else {
+                        System.out.println("Seleccione 1, 2 o 3 :Crear cuenta de debito(1) o crédito(2), atras (3)");
+                        int opcionTarjeta = sc.nextInt();
+                        if (opcionTarjeta == 1) {
+                            DebitAccount nuevaBankAccountdebit = new DebitAccount("", "", "", "", currentUser.DNI);
+                            DebitAccount cuentaDebitoNueva = nuevaBankAccountdebit.createDebitAccount(currentUser);
+                            debitAccounts.add(cuentaDebitoNueva);
+                            System.out.println(cuentaDebitoNueva);
+                        }
+                        if(opcionTarjeta == 2){
+                            CreditAccount cuentaCreditoNueva = new CreditAccount("", "", "",  0.0, 0.0, "", currentUser.DNI);
+                            cuentaCreditoNueva.createCreditAccount(currentUser);
+                            creditAccounts.add(cuentaCreditoNueva);
+                            System.out.println(cuentaCreditoNueva);
+                        }
+
+                        if (opcionTarjeta == 3) {
+                            return;
+                        }
+                    }
+
+                    //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
+                    break;
+                case 2:
+
+
                     break;
                 case 3:
                     break;
                 case 4:
                     break;
                 case 5:
+                  /*  System.out.println("V--Cuentas de Débito--V");
+                    for (int i = 0; i < debitAccounts.size(); i++) {
+                        System.out.println(debitAccounts.get(i).toString());
+                    }
+                    System.out.println("^-----^-----^-----^");
+                    System.out.println(" ");
+                    System.out.println("V--Cuentas de Crédito--V");
+                    for (int i = 0; i < creditAccounts.size(); i++) {
+                        System.out.println(creditAccounts.get(i).toString());
+                    }
+                    System.out.println("^-----^-----^-----^");*/ // Sirve para ver todas las cuentas, sin importar usuarios
                     break;
                 case 6:
                     System.out.println("Unlock User:");
@@ -380,10 +430,9 @@ public class AccessScreen {
                     }
                     break;
                 case 7:
-                    menu();
                     break;
                 default:
-                    System.out.println("Invalid choice");
+                    System.out.println("del 1 al 7");
 
             }
         }
@@ -399,6 +448,7 @@ public class AccessScreen {
 
     public void login() {
         int option = 0;
+        Scanner sc = new Scanner(System.in);
         while (option != 4) {
             System.out.println("Please select your profile:");
             System.out.println("1. User");
@@ -410,7 +460,6 @@ public class AccessScreen {
             switch (option) {
                 case 1:
                     System.out.println("Please enter user id: ");
-
                     DNI = sc.nextLine();
                     User currentUser = null;
                     for (int i = 0; i < users.size(); i++) {
@@ -523,10 +572,8 @@ public class AccessScreen {
                     break;
                 case 4:
                     menu();
-                break;
+                    break;
             }
         }
-
-
     }
 }
