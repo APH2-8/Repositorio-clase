@@ -19,6 +19,7 @@ import java.util.Scanner;
  * @see Accounting
  */
 public class DebitAccount extends BankAccount {
+    private static final long serialVersionUID = 12L;
 
     @Override
     public String toString() {
