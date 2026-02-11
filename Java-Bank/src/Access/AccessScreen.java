@@ -320,6 +320,7 @@ public class AccessScreen {
                     }
                     System.out.println("Select User to unlock:");
                     String dni = sc.nextLine();
+                    sc.nextInt();
                     for(int i = 0; i < users.size(); i++) {
                         if(users.get(i).DNI.equals(dni)){
                             users.get(i).active = true;
@@ -485,6 +486,7 @@ public class AccessScreen {
                                 if (pass.equals(currentUser.password)) {
                                     System.out.println("You have successfully logged in");
                                     MenuUser(currentUser);
+                                    break;
                                 } else {
                                     System.out.println("Wrong password, please try again");
                                     tries++;
@@ -523,6 +525,7 @@ public class AccessScreen {
                                 if (pass.equals(currentManager.password)) {
                                     System.out.println("You have successfully logged in");
                                     menuManager(currentManager);
+                                    break;
                                 } else {
                                     System.out.println("Wrong password, please try again");
                                     tries++;
@@ -560,6 +563,7 @@ public class AccessScreen {
                                 if (pass.equals(currentEmployee.password)) {
                                     System.out.println("You have successfully logged in");
                                     menuEmployee(currentEmployee);
+                                    break;
                                 } else {
                                     System.out.println("Wrong password, please try again");
                                     tries++;
