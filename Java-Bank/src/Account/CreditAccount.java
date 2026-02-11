@@ -13,6 +13,8 @@ import java.util.ArrayList;
  * @see BankAccount
  */
 public class CreditAccount extends BankAccount {
+    private static final long serialVersionUID = 11L;
+
     /**
      * Límite de crédito disponible para la cuenta.
      */
