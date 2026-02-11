@@ -18,7 +18,7 @@ import java.util.Scanner;
  * @see Person
  * @see Account.BankAccount
  */
-public class User extends Person implements Serializable {
+public class User extends Person {
     public String id = "";
     public boolean active;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.Year;
 import java.util.Scanner;
 
-public class Manager extends Person implements Serializable {
+public class Manager extends Person {
     int managerID;
     public int id;
     public boolean active;
