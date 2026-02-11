@@ -319,11 +319,14 @@ public class AccessScreen {
                         }
                     }
                     System.out.println("Select User to unlock:");
+                    sc.nextLine();
                     String dni = sc.nextLine();
-                    sc.nextInt();
                     for(int i = 0; i < users.size(); i++) {
                         if(users.get(i).DNI.equals(dni)){
-                            users.get(i).active = true;
+                            currentUser= users.get(i);
+                            currentUser.active=true;
+                            System.out.println("¡Usuario activado!");
+                            break;
                         }
                     }
                     break;
@@ -427,6 +430,7 @@ public class AccessScreen {
                         }
                     }
                     System.out.println("Select User to unlock:");
+                    sc.nextLine();
                     String dni = sc.nextLine();
                     for(int i = 0; i < users.size(); i++) {
                         if(users.get(i).DNI.equals(dni)){
