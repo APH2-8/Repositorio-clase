@@ -271,8 +271,8 @@ public abstract class BankAccount implements Accounting, Serializable {
     }
 
     // Método protegido para añadir movimientos desde las subclases
-    protected void addTransaction(String type, double amount) {
-        Transaction t = new Transaction(type, amount);
+    protected void addTransaction(String type, double amount, String DNI) {
+        Transaction t = new Transaction(type, amount, DNI);
         this.history.add(t);
     }
 }
