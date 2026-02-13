@@ -125,10 +125,10 @@ public class AccessScreen {
             /*De momento he dejado el menu de Incio sin variaciones, lo suyo es modificarlo para solo dejar hacerl login, y cuando se corrobore
              * que se trata de un employee o manager, deja hacer cuentas de banco */
             /*Es por lo que los menus son un copia y pega del menu users*/
-            System.out.println("Welcome to JavaBank ");
-            System.out.println("1. Log In");
-            System.out.println("2. Close Application");
-            System.out.println("Please enter your numbered choice (1 or 2)");
+            System.out.println("¡Bienvenido a JavaBank!");
+            System.out.println("1. Entrar");
+            System.out.println("2. Salir de la aplicación");
+            System.out.println("Por favor, selecciona una opción (1 o 2)");
             option = sc.nextInt();
             switch (option) {
                 case 1:
@@ -215,22 +215,22 @@ public class AccessScreen {
         int option = 0;
         Scanner sc = new Scanner(System.in);
         while (option != 6) {
-            System.out.println("Menu User");
-            System.out.println("Welcome " + currentUser.name);
-            System.out.println("1. Make a deposit");
-            System.out.println("2. Withdraw");
-            System.out.println("3. Transfer Money");
-            System.out.println("4. Recharge SIM card");
-            System.out.println("5. View accounts");
-            System.out.println("6. Log Out");
-            System.out.println("Please enter your numbered choice (1, 2, 3, 4 or 5)");
+            System.out.println("Menú usuario");
+            System.out.println("¡Bienvenido " + currentUser.name + "!");
+            System.out.println("1. Ingresar");
+            System.out.println("2. Retirar");
+            System.out.println("3. Transferir");
+            System.out.println("4. Recargar SIM");
+            System.out.println("5. Ver cuentas");
+            System.out.println("6. Salir");
+            System.out.println("Por favor, selecciona una opción:  (1, 2, 3, 4 or 5)");
             option = sc.nextInt();
             switch (option) {
                 case 1:
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
                     break;
                 case 2:
-                    login();
+
                     break;
                 case 3:
                     return;
@@ -264,14 +264,14 @@ public class AccessScreen {
         int option = 0;
         Scanner sc = new Scanner(System.in);
         while (option != 8) {
-            System.out.println("Menu Manager");
-            System.out.println("Welcome " + currentManager.name);
-            System.out.println("1. Create BankAccount");
-            System.out.println("2. Make a deposit");
-            System.out.println("3. Withdraw");
-            System.out.println("4. Transfer Money");
-            System.out.println("5. Recharge SIM card");
-            System.out.println("6. Unlock user");
+            System.out.println("Menú Manager");
+            System.out.println("¡Bienvenido " + currentManager.name + "!");
+            System.out.println("1. Crear cuenta bancaria");
+            System.out.println("2. Ingresar");
+            System.out.println("3. Retirar");
+            System.out.println("4. Transferir dinero");
+            System.out.println("5. Recargar SIM");
+            System.out.println("6. Desbloquear usuario");
             System.out.println("7. Ver historial de cuentas");
             System.out.println("8. Log Out");
             System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
