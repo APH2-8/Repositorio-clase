@@ -51,40 +51,41 @@ public class User extends Person {
         Scanner sc = new Scanner(System.in);
         String name, birthdate, password;
         boolean checkP = false, checkD = false;
-        System.out.println("Please enter your name and surnames");
+        System.out.println("Introduzca nombre y apellidos: ");
         name = sc.nextLine();
 
-        System.out.println("Please enter your password");
+        System.out.println("Introduzca su contraseña:");
         password = sc.nextLine();
         checkP=checkPassword(password);
         while (!checkP){
-            System.out.println("The password you entered is incorrect");
-            System.out.println("The password must contain:");
-            System.out.println("* 1 uppercase letter");
-            System.out.println("* 1 lowercase letter");
-            System.out.println("* 1 number");
-            System.out.println("* 1 special character");
+            System.out.println("Contraseña con formato incorrecto.");
+            System.out.println("La contraseña debe contener:");
+            System.out.println("* 8 dígitos");
+            System.out.println("* 1 mayúscula");
+            System.out.println("* 1 minúscula");
+            System.out.println("* 1 número");
+            System.out.println("* 1 caracter especial");
             password = sc.nextLine();
             checkP= checkPassword(password);
         }
 
-        System.out.println("Please enter your birthdate (dd/mm/yyyy)");
+        System.out.println("Introduzca su fecha de nacimiento (dd/mm/yyyy): ");
         birthdate = sc.nextLine();
         checkD = checkDate(birthdate);
         while (!checkD) {
-            System.out.println("The date you entered is incorrect, please try again");
-            System.out.println("Remember to use the following format: dd/mm/yyyy");
+            System.out.println("La fecha introducida es incorrecta, inténtelo de nuevo: ");
+            System.out.println("Recuerde usar el siguiente formato: dd/mm/yyyy");
             birthdate = sc.nextLine();
             checkD = checkDate(birthdate);
         }
         id = id+1;
         User newUser = new User(DNI, name, password, birthdate);
-        System.out.println("The register process has ended");
-        System.out.println("Your data:");
-        System.out.println("Name: " + name);
-        System.out.println("Birthdate: " + birthdate);
-        System.out.println("Password: " + password);
-        System.out.println("Id: " + id);
+        System.out.println("El resgistro se ha completado");
+        System.out.println("Tus datos: ");
+        System.out.println("Nombre: " + name);
+        System.out.println("Fecha de nacimiento: " + birthdate);
+        System.out.println("Contraseña: " + password);
+        System.out.println("ID: " + id);
         return newUser;
     }
     public void setActive() {

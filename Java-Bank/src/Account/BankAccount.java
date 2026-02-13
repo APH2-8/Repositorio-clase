@@ -177,15 +177,15 @@ public abstract class BankAccount implements Accounting, Serializable {
     public String changeAccountAlias() {
         Scanner sc = new Scanner(System.in);
         String alias = "";
-        System.out.println("Do you want to give an alias to your account? Yes or No");
+        System.out.println("¿Quieres asignarle un alias a tu cuenta? (sí o no)");
         String check = sc.nextLine();
-        if (check.equalsIgnoreCase("yes") || check.equalsIgnoreCase("si")) {
-            System.out.println("Introduce the account alias: ");
+        if (check.equalsIgnoreCase("si") || check.equalsIgnoreCase("sí")) {
+            System.out.println("Introduce el alias de tu cuenta: ");
             alias = sc.nextLine();
         }
         if (alias.isEmpty() || alias.isBlank()){
-            System.out.println("You have not entered an alias. The account name will default to its number.");
-            alias = "Account ";
+            System.out.println("No has ingresado ningún alias, su alias por defecto será su número.");
+            alias = "Cuenta ";
         }
         return alias;
     }
@@ -194,9 +194,9 @@ public abstract class BankAccount implements Accounting, Serializable {
         Scanner sc = new Scanner(System.in);
         double limiteCredito = 0.0;
         System.out.println("--- Límite de crédito ---");
-        System.out.println("1.- 500$");
-        System.out.println("2.- 1000$");
-        System.out.println("3.- 5000$");
+        System.out.println("1.- 500€");
+        System.out.println("2.- 1000€");
+        System.out.println("3.- 5000€");
         System.out.println("4.- Salir");
         System.out.println("Seleccione el límite de credito que quiere para la cuenta:");
         limiteCredito = sc.nextDouble();

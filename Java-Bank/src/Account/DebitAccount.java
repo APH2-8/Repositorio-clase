@@ -66,8 +66,8 @@ public class DebitAccount extends BankAccount {
             System.out.println("Insufficient funds");
         } else {
             account.balance -= amount;
-            System.out.println("Operation successful");
-            System.out.println("New balance in " + account.accNumber + " is: " + account.balance);
+            System.out.println("Operación realizada correctamente");
+            System.out.println("Saldo actual: " + account.accNumber + " is: " + account.balance);
             account.addTransaction("Retirada: ", -amount, account.idPropietario);
         }
     }
@@ -83,13 +83,13 @@ public class DebitAccount extends BankAccount {
         Scanner sc = new Scanner(System.in);
         try {
             String sourceAcc = account.accNumber;
-            System.out.println("Please enter the destination account number\n");
+            System.out.println("Por favor, seleccione la cuenta de destino: \n");
             String destinationAcc = sc.nextLine();
-            System.out.println("Please enter the amount to be transferred (With decimals)\n");
+            System.out.println("Indique la cantidad a transferir:  (con decimales)\n");
             double ammount = sc.nextDouble();
 
             if (ammount > account.balance) {
-                System.out.println("Insufficient funds");
+                System.out.println("Fondos insuficientes.");
             } else {
                 account.balance -= ammount;
                 BankAccount destAcc = null;
@@ -99,9 +99,9 @@ public class DebitAccount extends BankAccount {
                         destAcc = bankAccounts.get(i);
                     }
                 }
-                System.out.println("Operation successful");
-                System.out.println("New balance in " + sourceAcc + " is: " + account.balance);
-                System.out.println("New balance in " + destinationAcc + " is: " + destAcc.balance);
+                System.out.println("Operación realizada correctamente");
+                System.out.println("Saldo actual:  " + sourceAcc + " is: " + account.balance);
+                System.out.println("Saldo actual:  " + destinationAcc + " is: " + destAcc.balance);
                 account.addTransaction("Transferencia enviada a " + destAcc.accNumber, -ammount, account.idPropietario);
                 destAcc.addTransaction("Transferencia recibida de " + account.accNumber, ammount, account.idPropietario);
             }
@@ -119,11 +119,11 @@ public class DebitAccount extends BankAccount {
     @Override
     public void rechargeSIM(int amount, BankAccount account) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Input the destination phone number\n");
+        System.out.println("Ingrese el número de teléfono\n");
         try {
             String number = sc.nextLine();
             while (number.length() != 9) {
-                System.out.println("Please enter a valid phone number (9 digits)\n");
+                System.out.println("Introduzca un número de teléfono válido (9 digitos)\n");
                 number = sc.nextLine();
             }
         } catch (InputMismatchException e) {
@@ -141,17 +141,17 @@ public class DebitAccount extends BankAccount {
     public void selectAccount(User user) {
         Scanner sc = new Scanner(System.in);
         BankAccount foundBankAccount = null;
-        System.out.println("Select the account you want to use by typing the number of the option");
+        System.out.println("Selecciones la opción que desee: ");
         for (int i = 0; i < user.bankAccounts.size(); i++) {
             String aliasBA = user.bankAccounts.get(i).accountAlias;
-            System.out.println("Option " + (i + 1) + ": " + aliasBA);
+            System.out.println("Opción: " + (i + 1) + ": " + aliasBA);
         }
         try {
             int option = sc.nextInt();
             sc.nextLine();
             foundBankAccount = user.bankAccounts.get(option - 1);
             System.out.println(
-                    "Selected account: " + foundBankAccount.accNumber + " Balance: " + foundBankAccount.balance);
+                    "Cuenta seleccionada: " + foundBankAccount.accNumber + " Saldo: " + foundBankAccount.balance);
 
         } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
@@ -167,7 +167,7 @@ public class DebitAccount extends BankAccount {
         dc = calcDC(entity, office, accNumber);
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
-        System.out.println("Your account has been created");
+        System.out.println("¡Su cuenta ha sido creada!");
         return new DebitAccount( accNumber,  dc,  IBAN,  alias,  currentUser.DNI);
     }
 }
