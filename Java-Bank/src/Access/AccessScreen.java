@@ -1,6 +1,8 @@
 package Access;
+import Account.BankAccount;
 import Account.CreditAccount;
 import Account.DebitAccount;
+import Account.Transaction;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
@@ -41,6 +43,7 @@ public class AccessScreen {
     ArrayList<Manager> managers = new ArrayList<Manager>();
     public ArrayList<DebitAccount> debitAccounts = new ArrayList<DebitAccount>();
     public ArrayList<CreditAccount> creditAccounts = new ArrayList<CreditAccount>();
+    public ArrayList<Transaction> historial = new  ArrayList<Transaction>();
         /*Importante: la serializacion hace que se guarden los archivos en otro array list,
         este tenia como objeto para guardar otra cosa ademas de n
          */
@@ -96,6 +99,14 @@ public class AccessScreen {
             }
             input.close();
             // ^ Cuentas en el array ^
+
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/transactions.dat"));
+            longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                historial.add((Transaction) input.readObject());
+            }
+            input.close();
+            // ^ Historial en el array ^
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -128,6 +139,9 @@ public class AccessScreen {
                     System.out.println(users);
                     System.out.println(employees);
                     System.out.println(managers);
+                    System.out.println(debitAccounts);
+                    System.out.println(creditAccounts);
+                    System.out.println(historial);
                     login();
                     break;
                 case 2:
@@ -137,6 +151,7 @@ public class AccessScreen {
                         System.out.println(managers);
                         System.out.println(creditAccounts);
                         System.out.println(debitAccounts);
+                        System.out.println(historial);
 
                         ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/users.dat"));
                         output.writeInt(users.size());
@@ -173,10 +188,17 @@ public class AccessScreen {
                         }
                         output.close();
 
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/transactions.dat"));
+                        output.writeInt(historial.size());
+                        for (int i = 0; i < historial.size(); i++) {
+                            output.writeObject(historial.get(i));
+                        }
+                        output.close();
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    break;
+                    System.exit(0);
             }
         }
 
@@ -241,7 +263,7 @@ public class AccessScreen {
     public void menuManager(Manager currentManager) {
         int option = 0;
         Scanner sc = new Scanner(System.in);
-        while (option != 7) {
+        while (option != 8) {
             System.out.println("Menu Manager");
             System.out.println("Welcome " + currentManager.name);
             System.out.println("1. Create BankAccount");
@@ -250,7 +272,8 @@ public class AccessScreen {
             System.out.println("4. Transfer Money");
             System.out.println("5. Recharge SIM card");
             System.out.println("6. Unlock user");
-            System.out.println("7. Log Out");
+            System.out.println("7. Ver historial de cuentas");
+            System.out.println("8. Log Out");
             System.out.println("Please enter your numbered choice (1, 2, 3, 4, 5 or 6)");
             option = sc.nextInt();
             switch (option) {
@@ -331,6 +354,14 @@ public class AccessScreen {
                     }
                     break;
                 case 7:
+                    System.out.println("Ingrese el ID del usuario del que desea ver el historial: ");
+                    sc.nextLine();
+                    for(int i = 0; i < historial.size(); i++) {
+                        if (historial.get(i).idAsociado.equals(DNI)) {
+                            System.out.println(historial.get(i).toString());
+                        }
+                    }
+                case 8:
                     return;
                 default:
                     System.out.println("Elija una opción del 1-7");

@@ -1,17 +1,21 @@
 package Account; // O el paquete que decidas
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Transaction {
+public class Transaction implements Serializable {
+    private static final long serialVersionUID = 3L;
     private String type; // "Ingreso", "Retirada", "Transferencia enviada", etc.
     private double amount;
     private LocalDateTime date;
+    public String idAsociado;
 
-    public Transaction(String type, double amount) {
+    public Transaction(String type, double amount, String idAsociado) {
         this.type = type;
         this.amount = amount;
         this.date = LocalDateTime.now(); // Toma la fecha/hora actual
+        this.idAsociado = idAsociado;
     }
 
     @Override
