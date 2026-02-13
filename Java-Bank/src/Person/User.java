@@ -86,6 +86,9 @@ public class User extends Person {
         System.out.println("Id: " + id);
         return newUser;
     }
+    public void setActive() {
+        this.active=true;
+    }
 
     /**
      * Valida si una fecha proporcionada en formato texto correcta.

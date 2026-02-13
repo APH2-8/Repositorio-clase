@@ -19,12 +19,11 @@ import java.util.Scanner;
  * @see Accounting
  */
 public class DebitAccount extends BankAccount {
-
-    AccessScreen acc = new AccessScreen();
+    private static final long serialVersionUID = 12L;
 
     @Override
     public String toString() {
-        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance;
+        return "ID Asociado: "+ this.idPropietario + ", IBAN: " + this.IBAN + ", Alias: " + this.accountAlias + ", Balance: " + this.balance; // raro, gabs comprobará
     }
 
     /**
@@ -35,8 +34,8 @@ public class DebitAccount extends BankAccount {
      * @param IBAN         Código IBAN completo.
      * @param accountAlias Alias personalizado para la cuenta.
      */
-    public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, User user) {
-        super(accNumber, dc, IBAN, accountAlias, user);
+    public DebitAccount(String accNumber, String dc, String IBAN, String accountAlias, String DNI) {
+        super(accNumber, dc, IBAN, accountAlias, DNI);
     }
 
     /**
@@ -50,8 +49,10 @@ public class DebitAccount extends BankAccount {
     public void deposit(int amount, BankAccount account) {
 
         account.balance += amount;
-        System.out.println("Deposited " + amount);
+        System.out.println("Deposited: " + amount);
         System.out.println("New Balance: " + account.balance);
+        account.addTransaction("Deposit: ", amount);
+
     }
 
     /**
@@ -69,6 +70,7 @@ public class DebitAccount extends BankAccount {
             account.balance -= amount;
             System.out.println("Operation successful");
             System.out.println("New balance in " + account.accNumber + " is: " + account.balance);
+            account.addTransaction("Retirada: ", -amount);
         }
     }
     /**
@@ -102,6 +104,8 @@ public class DebitAccount extends BankAccount {
                 System.out.println("Operation successful");
                 System.out.println("New balance in " + sourceAcc + " is: " + account.balance);
                 System.out.println("New balance in " + destinationAcc + " is: " + destAcc.balance);
+                account.addTransaction("Transferencia enviada a " + destAcc.accNumber, -ammount);
+                destAcc.addTransaction("Transferencia recibida de " + account.accNumber, ammount);
             }
         } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
@@ -157,7 +161,7 @@ public class DebitAccount extends BankAccount {
 
     }
     public DebitAccount createDebitAccount(User currentUser) {
-        String entity = "9999", office = "8888", dc = "", accNumber = "", IBAN = "", alias = "";
+        String entity, office, dc, accNumber, IBAN, alias = "";
 
         entity = getEntity();
         office = getOffice();
@@ -166,6 +170,6 @@ public class DebitAccount extends BankAccount {
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
         System.out.println("Your account has been created");
-        return new DebitAccount( accNumber,  dc,  IBAN,  accountAlias,  currentUser); //limite de credito falta.
+        return new DebitAccount( accNumber,  dc,  IBAN,  alias,  currentUser.DNI);
     }
 }

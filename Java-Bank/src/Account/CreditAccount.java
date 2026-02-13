@@ -13,6 +13,8 @@ import java.util.ArrayList;
  * @see BankAccount
  */
 public class CreditAccount extends BankAccount {
+    private static final long serialVersionUID = 11L;
+
     /**
      * Límite de crédito disponible para la cuenta.
      */
@@ -32,10 +34,11 @@ public class CreditAccount extends BankAccount {
      * @param creditLimit      Límite de crédito disponible.
      * @param creditPercentage Porcentaje de interés aplicado.
      */
-    public CreditAccount(String accNumber, String dc, String IBAN, double creditLimit, double creditPercentage, String accountAlias, User user) {
-        super(accNumber, dc, IBAN, accountAlias, user);
+    public CreditAccount(String accNumber, String dc, String IBAN, double creditLimit, double creditPercentage, String accountAlias, String DNI) {
+        super(accNumber, dc, IBAN, accountAlias, DNI);
         this.creditLimit = creditLimit;
         this.creditPercentage = creditPercentage;
+
     }
 
     @Override
@@ -78,7 +81,8 @@ public class CreditAccount extends BankAccount {
         dc = calcDC(entity, office, accNumber);
         IBAN = calcIBAN(entity, office, accNumber);
         alias = changeAccountAlias();
+        double credito = asignarLimiteCredito();
         System.out.println("Your account has been created");
-        return new CreditAccount(accNumber, dc, IBAN, 0.0, 0.0, alias, currentUser); //limite de credito falta.
+        return new CreditAccount(accNumber, dc, IBAN, credito, 0.0, alias, currentUser.DNI); //limite de credito falta.
     }
 }
