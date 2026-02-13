@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @see Employee
  */
 public abstract class Person implements Serializable {
+    private static final long serialVersionUID = 2L;
 
     /**
      * DNI de la persona.

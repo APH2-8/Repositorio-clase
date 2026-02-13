@@ -15,6 +15,7 @@ import java.util.Scanner;
  * @see User
  */
 public class Employee extends Person {
+    private static final long serialVersionUID = 22L;
     int employeeID;
     public int id;
     public boolean active;

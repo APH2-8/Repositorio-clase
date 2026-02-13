@@ -19,6 +19,7 @@ import java.util.Scanner;
  * @see Account.BankAccount
  */
 public class User extends Person {
+    private static final long serialVersionUID = 21L;
     public String id = "";
     public boolean active;
     public ArrayList<BankAccount> bankAccounts = new ArrayList<>();
