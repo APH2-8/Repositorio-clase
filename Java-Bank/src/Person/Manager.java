@@ -7,6 +7,7 @@ import java.time.Year;
 import java.util.Scanner;
 
 public class Manager extends Person {
+    private static final long serialVersionUID = 23L;
     int managerID;
     public int id;
     public boolean active;
