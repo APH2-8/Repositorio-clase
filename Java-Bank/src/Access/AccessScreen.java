@@ -3,6 +3,7 @@ import Account.BankAccount;
 import Account.CreditAccount;
 import Account.DebitAccount;
 import Account.Transaction;
+import Features.Store;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
@@ -214,7 +215,7 @@ public class AccessScreen {
     public void MenuUser(User currentUser) {
         int option = 0;
         Scanner sc = new Scanner(System.in);
-        while (option != 6) {
+        while (option != 7) {
             System.out.println("Menú usuario");
             System.out.println("¡Bienvenido " + currentUser.name + "!");
             System.out.println("1. Ingresar");
@@ -222,7 +223,8 @@ public class AccessScreen {
             System.out.println("3. Transferir");
             System.out.println("4. Recargar SIM");
             System.out.println("5. Ver cuentas");
-            System.out.println("6. Salir");
+            System.out.println("6. JavaStore");
+            System.out.println("7. Salir");
             System.out.println("Por favor, selecciona una opción:  (1, 2, 3, 4, 5, 6)");
             option = sc.nextInt();
             switch (option) {
@@ -254,6 +256,9 @@ public class AccessScreen {
                     System.out.println("^-----^-----^-----^");
                     break;
                 case 6:
+                    Store tienda = new Store(1000000000, "", "", 0.0, "", false);
+                    tienda.StoreInicio();
+                case 7:
                     menu();
                     return;
             }
