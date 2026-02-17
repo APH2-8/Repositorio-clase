@@ -171,11 +171,14 @@ public class Store implements Serializable {
             option = sc.nextInt();
             switch (option) {
                 case 1:
-                    System.out.println(productosDisponibles);
+                    for (int i = 0; i < compraFinal.size(); i++) {
+                        System.out.println(compraFinal.get(i).toString());
+                    }
                 case 2:
                     System.out.println("Selecciona la ID del producto que deseas meter en la cesta:");
                     option = sc.nextInt();
                 case 3:
+                    confirmarCompra();
                     break;
                 case 4:
                     break;
@@ -183,6 +186,16 @@ public class Store implements Serializable {
             break;
         }
         return productos;
+    }
+
+    public void confirmarCompra() {
+        int option = 0;
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Seleccione el método de pago:");
+        System.out.println("Número de targeta: ");
+        option = sc.nextInt();
+        // no están hechas las targetas, hasta que no estén hechas no se puede usar la tienda
     }
 
     public String getTipoProducto() {
