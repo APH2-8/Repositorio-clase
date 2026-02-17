@@ -1,5 +1,4 @@
 package Access;
-import Account.BankAccount;
 import Account.CreditAccount;
 import Account.DebitAccount;
 import Account.Transaction;
@@ -21,13 +20,6 @@ import java.util.ArrayList;
  * @see User
  */
 public class AccessScreen {
-    /**
-     * Lista de usuarios registrados en el sistema.
-     */
-    /**
-     * Scanner para lectura de entrada del usuario.
-     */
-
 
     /**
      * Identificador del usuario actualmente en proceso de login.
@@ -48,12 +40,6 @@ public class AccessScreen {
         /*Importante: la serializacion hace que se guarden los archivos en otro array list,
         este tenia como objeto para guardar otra cosa ademas de n
          */
-    /**
-     * Usuario dummy utilizado para acceder a métodos de registro.
-     */
-    User dummyUser = new User("", "", "", "");
-    Employee dummyEmployee = new Employee("", "", "", "", 0);
-    Manager dummyManager = new Manager("", "", "", "", 0);
 
     /**
      * Muestra el menú principal del sistema bancario.
@@ -123,9 +109,6 @@ public class AccessScreen {
         int option = 0;
         Scanner sc = new Scanner(System.in);
         while (option != 2) {
-            /*De momento he dejado el menu de Incio sin variaciones, lo suyo es modificarlo para solo dejar hacerl login, y cuando se corrobore
-             * que se trata de un employee o manager, deja hacer cuentas de banco */
-            /*Es por lo que los menus son un copia y pega del menu users*/
             System.out.println("¡Bienvenido a JavaBank!");
             System.out.println("1. Entrar");
             System.out.println("2. Salir de la aplicación");
@@ -133,10 +116,6 @@ public class AccessScreen {
             option = sc.nextInt();
             switch (option) {
                 case 1:
-                    /*Esto queda eliminado de momento*/
-                    /*User newUser = dummyUser.register();
-                    users.add(newUser);*/
-
                     System.out.println(users);
                     System.out.println(employees);
                     System.out.println(managers);
@@ -223,9 +202,9 @@ public class AccessScreen {
             System.out.println("3. Transferir");
             System.out.println("4. Recargar SIM");
             System.out.println("5. Ver cuentas");
-            System.out.println("6. JavaStore");
-            System.out.println("7. Salir");
-            System.out.println("Por favor, selecciona una opción:  (1, 2, 3, 4, 5, 6)");
+            System.out.println("7. JavaStore");
+            System.out.println("8. Salir");
+            System.out.println("Por favor, selecciona una opción:  (1, 2, 3, 4, 5, 6 o 7)");
             option = sc.nextInt();
             switch (option) {
                 case 1:
