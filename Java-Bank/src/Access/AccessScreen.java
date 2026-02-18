@@ -565,7 +565,7 @@ public class AccessScreen {
                                     System.out.println("Contraseña incorrecta, inténtelo de nuevo.");
                                     tries++;
                                     if (tries == 3) {
-                                        System.out.println("La cuenta asociada a este ID está bloqueada.\n Contacte con el personal del banco");
+                                        System.out.println("La cuenta asociada a este ID está bloqueada.\nContacte con el personal del banco");
                                         currentManager.active = false;
                                     }
                                 }
@@ -589,7 +589,7 @@ public class AccessScreen {
                         return;
                     } else {
                         if (!currentEmployee.active) {
-                            System.out.println("La cuenta asociada a este ID está bloqueada.\n Contacte con el personal del banco");
+                            System.out.println("La cuenta asociada a este ID está bloqueada.\nContacte con el personal del banco");
                         } else {
                             int tries = 0;
                             while (tries != 3) {
@@ -603,7 +603,7 @@ public class AccessScreen {
                                     System.out.println("Contraseña incorrecta, inténtelo de nuevo: ");
                                     tries++;
                                     if (tries == 3) {
-                                        System.out.println("La cuenta asociada a este ID está bloqueada.\n Contacte con el personal del banco");
+                                        System.out.println("La cuenta asociada a este ID está bloqueada.\nContacte con el personal del banco");
                                         currentEmployee.active = false;
                                     }
                                 }
