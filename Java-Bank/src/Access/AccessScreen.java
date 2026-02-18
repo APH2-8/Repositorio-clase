@@ -3,6 +3,7 @@ import Account.CreditAccount;
 import Account.DebitAccount;
 import Account.Transaction;
 import Features.Store;
+import Features.Tarjeta; ///NUEVO
 import Person.Employee;
 import Person.Manager;
 import Person.User;
@@ -37,6 +38,7 @@ public class AccessScreen {
     public ArrayList<DebitAccount> debitAccounts = new ArrayList<DebitAccount>();
     public ArrayList<CreditAccount> creditAccounts = new ArrayList<CreditAccount>();
     public ArrayList<Transaction> historial = new  ArrayList<Transaction>();
+    public ArrayList<Tarjeta> tarjetas = new ArrayList<>();  ///NUEVO
         /*Importante: la serializacion hace que se guarden los archivos en otro array list,
         este tenia como objeto para guardar otra cosa ademas de n
          */
@@ -94,6 +96,12 @@ public class AccessScreen {
             }
             input.close();
             // ^ Historial en el array ^
+/*
+            input = new ObjectInputStream(new FileInputStream("Java-Bank/data/storeProducts.dat"));  ///NUEVO
+            longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                tarjetas.add((Tarjeta) input.readObject());
+            } */
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -175,6 +183,12 @@ public class AccessScreen {
                         }
                         output.close();
 
+                        output = new ObjectOutputStream(new FileOutputStream("Java-Bank/data/transactions.dat"));  ///NUEVO
+                        output.writeInt(tarjetas.size());
+                        for (int i = 0; i < tarjetas.size(); i++) {
+                            output.writeObject(tarjetas.get(i));
+                        }
+                        output.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -236,7 +250,7 @@ public class AccessScreen {
                     break;
                 case 6:
                     Store tienda = new Store(1000000000, "", "", 0.0, "", false);
-                    tienda.StoreInicio();
+                    tienda.StoreInicio(tarjetas, currentUser);  ///NUEVO
                 case 7:
                     menu();
                     return;

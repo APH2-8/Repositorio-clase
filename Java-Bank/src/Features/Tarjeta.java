@@ -1,18 +1,25 @@
 package Features;
 import Account.BankAccount;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Tarjeta {
 
-    private int codigoJavaBank = 428165;
-    private String numTarjeta;
-    private int cvv;
-    private int numSecreto;
-    private LocalDateTime fechaCaducidad;
-    private LocalDateTime fechaCreacion;
-    private BankAccount cuentaAsociada;
-    private boolean activo;
+    public int codigoJavaBank = 428165;
+    public String numTarjeta;
+    public int cvv;
+    public int numSecreto;
+    public LocalDateTime fechaCaducidad;
+    public LocalDateTime fechaCreacion;
+    public BankAccount cuentaAsociada;
+    public boolean activo;
+
+    ArrayList<Tarjeta> tarjetas = new ArrayList <>();
 
     public Tarjeta (int numeroSecreto, BankAccount cuentaAsociada) {
         this.numTarjeta = (String.valueOf(codigoJavaBank) + (int) (Math.random() * (999999999 - 100000000) + 100000000) + (int) (Math.random() * (9 - 1) + 1));
@@ -22,6 +29,24 @@ public class Tarjeta {
         this.fechaCreacion = LocalDateTime.now();
         this.cuentaAsociada = cuentaAsociada;
         this.activo = true;
+    }
+
+    public void TarjetasInicio() {
+        tarjetas.clear();
+        /*try {
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/storeProducts.dat"));
+            int longitud = input.readInt();
+            for (int i = 0; i < longitud; i++) {
+                tarjetas.add((Tarjeta) input.readObject());
+            }
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            System.err.println(e.getMessage());
+        }*/
     }
 
     @Override
@@ -51,14 +76,36 @@ public class Tarjeta {
     public void apagarTarjeta(Tarjeta tarjetaAsociada) {
         Scanner sc = new Scanner(System.in);
         String dato = "";
-        System.out.println("¿Estás segur@? (S / N): ");
-        dato = sc.nextLine();
-        if (dato.equalsIgnoreCase("S")) {
-            setEstadoTarjeta(tarjetaAsociada);
-        } else if (dato.equalsIgnoreCase("N")) {
-            System.out.println("Operación cancelada");
+        if (!tarjetaAsociada.activo) {
+            System.out.println("Esta tarjeta ya está inactiva");
         } else {
-            System.out.println("Opción no válida. \n Operación cancelada");
+            System.out.println("¿Estás segur@? (S / N): ");
+            dato = sc.nextLine();
+            if (dato.equalsIgnoreCase("S")) {
+                setEstadoTarjeta(tarjetaAsociada, false);
+            } else if (dato.equalsIgnoreCase("N")) {
+                System.out.println("Operación cancelada");
+            } else {
+                System.out.println("Opción no válida. \n Operación cancelada");
+            }
+        }
+    }
+
+    public void encenderTarjeta(Tarjeta tarjetaAsociada) {
+        Scanner sc = new Scanner(System.in);
+        String dato = "";
+        if (tarjetaAsociada.activo) {
+            System.out.println("Esta tarjeta ya está activa");
+        } else {
+            System.out.println("¿Estás segur@? (S / N): ");
+            dato = sc.nextLine();
+            if (dato.equalsIgnoreCase("S")) {
+                setEstadoTarjeta(tarjetaAsociada, true);
+            } else if (dato.equalsIgnoreCase("N")) {
+                System.out.println("Operación cancelada");
+            } else {
+                System.out.println("Opción no válida. \n Operación cancelada");
+            }
         }
     }
 
@@ -70,8 +117,8 @@ public class Tarjeta {
         this.cvv = CVV;
     }
 
-    public void setEstadoTarjeta(Tarjeta tarjeta) {
-        this.activo = false;
+    public void setEstadoTarjeta(Tarjeta tarjeta, boolean estado) {
+        tarjeta.activo = estado;
     }
 }
 
