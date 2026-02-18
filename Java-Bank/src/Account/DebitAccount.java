@@ -79,6 +79,7 @@ public class DebitAccount extends BankAccount {
      * @param amount  Parámetro sin usar (la cantidad se solicita por consola).
      * @param account Cuenta bancaria origen de la transferencia.
      */
+    @Override
     public void transfer(double amount, BankAccount account, ArrayList<BankAccount> bankAccounts) {
         Scanner sc = new Scanner(System.in);
         try {
