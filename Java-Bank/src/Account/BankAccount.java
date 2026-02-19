@@ -5,6 +5,7 @@ import Person.User;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -269,10 +270,76 @@ public abstract class BankAccount implements Accounting, Serializable {
             System.out.println(t);
         }
     }
-
-    // Método protegido para añadir movimientos desde las subclases
+    // Metodo protegido para añadir movimientos desde las subclases
     protected void addTransaction(String type, double amount, String DNI) {
         Transaction t = new Transaction(type, amount, DNI);
         this.history.add(t);
+    }
+    @Override
+    public void deposit(int amount, BankAccount account) {
+
+        account.balance += amount;
+        System.out.println("Deposited: " + amount);
+        System.out.println("New Balance: " + account.balance);
+        account.addTransaction("Deposit: ", amount, account.idPropietario);
+
+    }
+
+    /**
+     * Retira una cantidad de dinero de la cuenta especificada.
+     * Valida que haya saldo suficiente antes de realizar la operación.
+     * @param amount  Cantidad a retirar.
+     * @param account Cuenta bancaria de la que se retirará el dinero.
+     */
+    @Override
+    public void withdraw(int amount, BankAccount account) {
+
+        if (account.balance <= 0 || account.balance - amount < 0) {
+            System.out.println("Insufficient funds");
+        } else {
+            account.balance -= amount;
+            System.out.println("Operation successful");
+            System.out.println("New balance in " + account.accNumber + " is: " + account.balance);
+            account.addTransaction("Retirada: ", -amount, account.idPropietario);
+        }
+    }
+    /**
+     * Transfiere dinero desde la cuenta origen a una cuenta destino.
+     * Solicita por consola el número de cuenta destino y el importe.
+     * Valida que haya saldo suficiente y busca la cuenta destino entre las cuentas
+     * registradas.
+     * @param amount  Parámetro sin usar (la cantidad se solicita por consola).
+     * @param account Cuenta bancaria origen de la transferencia.
+     */
+    @Override
+    public void transfer(double amount, BankAccount account, ArrayList<BankAccount> bankAccounts) {
+        Scanner sc = new Scanner(System.in);
+        try {
+            String sourceAcc = account.accNumber;
+            System.out.println("Please enter the destination account number\n");
+            String destinationAcc = sc.nextLine();
+            System.out.println("Please enter the amount to be transferred (With decimals)\n");
+            double ammount = sc.nextDouble();
+
+            if (ammount > account.balance) {
+                System.out.println("Insufficient funds");
+            } else {
+                account.balance -= ammount;
+                BankAccount destAcc = null;
+                for (int i = 0; i < bankAccounts.size(); i++) {
+                    if (bankAccounts.get(i).accNumber.equals(destinationAcc)) {
+                        bankAccounts.get(i).balance += ammount;
+                        destAcc = bankAccounts.get(i);
+                    }
+                }
+                System.out.println("Operation successful");
+                System.out.println("New balance in " + sourceAcc + " is: " + account.balance);
+                System.out.println("New balance in " + destinationAcc + " is: " + destAcc.balance);
+                account.addTransaction("Transferencia enviada a " + destAcc.accNumber, -ammount, account.idPropietario);
+                destAcc.addTransaction("Transferencia recibida de " + account.accNumber, ammount, account.idPropietario);
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

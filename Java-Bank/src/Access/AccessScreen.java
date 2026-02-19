@@ -1,10 +1,12 @@
 package Access;
+import Account.BankAccount;
 import Account.CreditAccount;
 import Account.DebitAccount;
 import Account.Transaction;
 import Features.Store;
 import Person.Employee;
 import Person.Manager;
+import Utils.Database;
 import Person.User;
 
 import java.io.*;
@@ -20,13 +22,14 @@ import java.util.ArrayList;
  * @see User
  */
 public class AccessScreen {
-
     /**
      * Identificador del usuario actualmente en proceso de login.
      */
     String DNI = "";
-
-
+    /**
+     * Objeto para gestionar la conexión con la Base de Datos.
+     */
+    Database db = new Database();
     /**
      * Lista de usuarios registrados en el sistema.
      */
@@ -47,7 +50,7 @@ public class AccessScreen {
      * El menú se ejecuta en bucle hasta que el usuario selecciona salir.
      */
     public void inicio() {
-        try {
+        /*try {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/users.dat"));
             int longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
@@ -101,6 +104,7 @@ public class AccessScreen {
         } catch (ClassCastException e) {
             System.err.println(e.getMessage());
         }
+        */
         menu();
     }
 
@@ -116,16 +120,18 @@ public class AccessScreen {
             option = sc.nextInt();
             switch (option) {
                 case 1:
-                    System.out.println(users);
+                   /* System.out.println(users);
                     System.out.println(employees);
                     System.out.println(managers);
                     System.out.println(debitAccounts);
                     System.out.println(creditAccounts);
                     System.out.println(historial);
+
+                    */
                     login();
                     break;
                 case 2:
-                    try {
+                   /* try {
                         System.out.println(users);
                         System.out.println(employees);
                         System.out.println(managers);
@@ -177,7 +183,8 @@ public class AccessScreen {
 
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }
+                    }*/
+                    System.out.println("Cerrando la aplicación...");
                     System.exit(0);
             }
         }
@@ -208,28 +215,79 @@ public class AccessScreen {
             option = sc.nextInt();
             switch (option) {
                 case 1:
-                    //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
-                    break;
+                int eleccion=0;
+                BankAccount currentAccount = null;
+                System.out.println("Seleccione entre cuentas de debito o credito (1: debito) (2: credito)");
+                eleccion = sc.nextInt();
+                ArrayList<DebitAccount> currentUserDebitAccount = new ArrayList<>();
+                currentUserDebitAccount.add(new DebitAccount("","","", "",""));
+                ArrayList<CreditAccount> currentUserCreditAccount = new ArrayList<>();
+                currentUserCreditAccount.add(new CreditAccount("","","",0,0,"",""));
+
+
+                if (eleccion == 1) {
+                    System.out.println("Seleccione el id de su cuenta de debito");
+
+                    for (int i = 1; i < debitAccounts.size(); i++) {
+                        if (debitAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                            currentUserDebitAccount.add(debitAccounts.get(i));
+                        }
+                    }
+                    for (int i = 1; i < currentUserDebitAccount.size(); i++) {
+                        System.out.println((i)+ "- " + currentUserDebitAccount.get(i).toString());
+                    }
+                    int eleccionDebito=-1;
+                    eleccionDebito = sc.nextInt();
+                    BankAccount currentUserDebit = currentUserDebitAccount.get(eleccionDebito);
+                    System.out.println("Seleccione la cantidad a ingresar: ");
+                    int amount = sc.nextInt();
+
+                    currentUserDebitAccount.get(eleccionDebito).deposit(amount, currentUserDebit);
+
+                }else if (eleccion == 2) {
+                    System.out.println("Seleccione el id de su cuenta de credito: ");
+
+                    for (int i = 1; i < creditAccounts.size(); i++) {
+                        if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                            System.out.println(creditAccounts.get(i).toString());
+                            currentUserCreditAccount.add(creditAccounts.get(i));
+
+                        }
+                    }
+                    for (int i = 1; i < currentUserCreditAccount.size(); i++) {
+                        System.out.println((i)+ "- " + currentUserCreditAccount.get(i).toString());
+                    }
+                    int eleccionCredito=-1;
+                    eleccionCredito = sc.nextInt();
+                    BankAccount currentUserCredit = currentUserCreditAccount.get(eleccionCredito);
+                    System.out.println("Seleccione la cantidad a ingresar: ");
+                    int amount = sc.nextInt();
+
+                    currentUserCreditAccount.get(eleccionCredito).deposit(amount, currentUserCredit);
+                }
+                break;
                 case 2:
 
                     break;
                 case 3:
-                    return;
+                    System.out.println("No implementado");
+                    break;
                 case 4:
-                    return;
+                    System.out.println("No implementado");
+                    break;
                 case 5:
                     System.out.println("V--Cuentas de Débito--V");
-                    for (int i = 0; i < debitAccounts.size(); i++) {
-                        if (debitAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
-                            System.out.println(debitAccounts.get(i).toString());
+                    for (int i = 0; i < currentUser.bankAccounts.size(); i++) {
+                        if (currentUser.bankAccounts.get(i) instanceof DebitAccount) {
+                            System.out.println(currentUser.bankAccounts.get(i).toString());
                         }
                     }
                     System.out.println("^-----^-----^-----^");
                     System.out.println(" ");
                     System.out.println("V--Cuentas de Crédito--V");
-                    for (int i = 0; i < creditAccounts.size(); i++) {
-                        if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
-                            System.out.println(creditAccounts.get(i).toString());
+                    for (int i = 0; i < currentUser.bankAccounts.size(); i++) {
+                        if (currentUser.bankAccounts.get(i) instanceof CreditAccount) {
+                            System.out.println(currentUser.bankAccounts.get(i).toString());
                         }
                     }
                     System.out.println("^-----^-----^-----^");
@@ -237,6 +295,7 @@ public class AccessScreen {
                 case 6:
                     Store tienda = new Store(1000000000, "", "", 0.0, "", false);
                     tienda.StoreInicio();
+                    break;
                 case 7:
                     menu();
                     return;
@@ -455,6 +514,8 @@ public class AccessScreen {
                     break;
                 case 7:
                     return;
+                case 8:
+                    menu();
                 default:
                     System.out.println("Error, seleccione una opción del 1 al 7");
 
@@ -485,116 +546,87 @@ public class AccessScreen {
                 case 1:
                     System.out.println("Por favor, ingrese su ID de usuario: ");
                     DNI = sc.nextLine();
-                    User currentUser = null;
-                    for (int i = 0; i < users.size(); i++) {
-                        if (users.get(i).DNI.equals(DNI)) {
-                            currentUser = users.get(i);
-                        }
-                    }
-                    if (currentUser == null) {
-                        System.out.println("No se ha encontrado el ID. Por favor, ingrese un ID válido.");
-                        return;
-                    } else {
-                        if (!currentUser.active) {
-                            System.out.println("La cuenta asociada a este ID está bloqueada.\n Contacte con el personal del banco");
-                        } else {
-                            int tries = 0;
-                            while (tries != 3) {
-                                System.out.println("Por favor, ingrese su contraseña: ");
-                                String pass = sc.nextLine();
-                                if (pass.equals(currentUser.password)) {
-                                    System.out.println("Inicio sesión completado");
-                                    MenuUser(currentUser);
-                                    break;
-                                } else {
-                                    System.out.println("Contraseña incorrecta, inténtelo de nuevo: ");
-                                    tries++;
-                                    if (tries == 3) {
-                                        System.out.println("Contraseña incorrecta, tu cuenta ha sido bloqueada.\n  Contacte con el personal del banco");
-                                        currentUser.active = false;
-                                    }
-                                }
+                    int tries = 0;
+                    boolean loginCorrecto = false;
+
+                    while (tries < 3 && !loginCorrecto) {
+                        System.out.println("Por favor, ingrese su contraseña: ");
+                        String pass = sc.nextLine();
+                        User currentUser = db.loginUser(DNI, pass);
+
+                        if (currentUser == null) {
+                            tries++;
+                            System.out.println("Credenciales incorrectas. Intento " + tries + " de 3.");
+                            if (tries == 3) {
+                                System.out.println("Has agotado los intentos. Por seguridad, contacte con el banco.");
                             }
+                        } else {
+                            if (!currentUser.active) {
+                                System.out.println("La cuenta asociada a este ID está bloqueada.\nContacte con el personal del banco");
+                                tries = 3;
+                            } else {
+                                System.out.println("Inicio sesión completado. ¡Bienvenido " + currentUser.name + "!");
 
+                                currentUser.bankAccounts = db.getUserAccounts(currentUser.DNI);
+
+                                MenuUser(currentUser);
+                                loginCorrecto = true;
+                            }
                         }
-
                     }
                     break;
                 case 2:
-                    System.out.println("Por favor, ingrese su ID de Manager: ");
-
+                    System.out.println("Por favor, ingrese su ID de Manager (DNI): ");
                     DNI = sc.nextLine();
-                    Manager currentManager = null;
-                    for (int i = 0; i < managers.size(); i++) {
-                        if (managers.get(i).DNI.equals(DNI)) {
-                            currentManager = managers.get(i);
-                        }
-                    }
-                    if (currentManager == null) {
-                        System.out.println("No se ha encontrado el ID. Por favor, ingrese un ID válido.");
-                        return;
-                    } else {
-                        if (!currentManager.active) {
-                            System.out.println("La cuenta asociada a este ID está bloqueada.\n Contacte con el personal del banco");
-                        } else {
-                            int tries = 0;
-                            while (tries != 3) {
-                                System.out.println("Por favor, ingrese su contraseña: ");
-                                String pass = sc.nextLine();
-                                if (pass.equals(currentManager.password)) {
-                                    System.out.println("Inicio de sesión correcto.");
-                                    menuManager(currentManager);
-                                    break;
-                                } else {
-                                    System.out.println("Contraseña incorrecta, inténtelo de nuevo.");
-                                    tries++;
-                                    if (tries == 3) {
-                                        System.out.println("La cuenta asociada a este ID está bloqueada.\nContacte con el personal del banco");
-                                        currentManager.active = false;
-                                    }
-                                }
+                    int triesManager = 0;
+                    boolean loginManagerOk = false;
+
+                    while (triesManager < 3 && !loginManagerOk) {
+                        System.out.println("Por favor, ingrese su contraseña: ");
+                        String pass = sc.nextLine();
+                        Manager currentManager = db.loginManager(DNI, pass);
+
+                        if (currentManager == null) {
+                            triesManager++;
+                            System.out.println("Credenciales incorrectas. Intento " + triesManager + " de 3.");
+                            if (triesManager == 3) {
+                                System.out.println("Cuenta bloqueada por seguridad.");
                             }
-
+                        } else {
+                            if (!currentManager.active) {
+                                System.out.println("Esta cuenta de Manager está desactivada.");
+                                triesManager = 3;
+                            } else {
+                                System.out.println("Inicio de sesión correcto.");
+                                menuManager(currentManager);
+                                loginManagerOk = true;
+                            }
                         }
-
                     }
                     break;
                 case 3:
-                    System.out.println("Por favor, ingrese su ID de empleado: ");
+                    System.out.println("Por favor, ingrese su ID de empleado (DNI): ");
                     DNI = sc.nextLine();
-                    Employee currentEmployee = null;
-                    for (int i = 0; i < employees.size(); i++) {
-                        if (employees.get(i).DNI.equals(DNI)) {
-                            currentEmployee = employees.get(i);
-                        }
-                    }
-                    if (currentEmployee == null) {
-                        System.out.println("No se ha encontrado el ID. Por favor, ingrese un ID válido.");
-                        return;
-                    } else {
-                        if (!currentEmployee.active) {
-                            System.out.println("La cuenta asociada a este ID está bloqueada.\nContacte con el personal del banco");
+                    int triesEmp = 0;
+                    boolean loginEmpOk = false;
+                    while (triesEmp < 3 && !loginEmpOk) {
+                        System.out.println("Por favor, ingrese su contraseña: ");
+                        String pass = sc.nextLine();
+                        Employee currentEmployee = db.loginEmployee(DNI, pass);
+                        if (currentEmployee == null) {
+                            triesEmp++;
+                            System.out.println("Credenciales incorrectas. Intento " + triesEmp + " de 3.");
+                            if (triesEmp == 3) System.out.println("Cuenta bloqueada.");
                         } else {
-                            int tries = 0;
-                            while (tries != 3) {
-                                System.out.println("Por favor, ingrese su contraseña: ");
-                                String pass = sc.nextLine();
-                                if (pass.equals(currentEmployee.password)) {
-                                    System.out.println("Inicio de sesión correcto");
-                                    menuEmployee(currentEmployee);
-                                    break;
-                                } else {
-                                    System.out.println("Contraseña incorrecta, inténtelo de nuevo: ");
-                                    tries++;
-                                    if (tries == 3) {
-                                        System.out.println("La cuenta asociada a este ID está bloqueada.\nContacte con el personal del banco");
-                                        currentEmployee.active = false;
-                                    }
-                                }
+                            if (!currentEmployee.active) {
+                                System.out.println("Esta cuenta de Empleado está desactivada.");
+                                triesEmp = 3;
+                            } else {
+                                System.out.println("Inicio de sesión correcto.");
+                                menuEmployee(currentEmployee);
+                                loginEmpOk = true;
                             }
-
                         }
-
                     }
                     break;
                 case 4:

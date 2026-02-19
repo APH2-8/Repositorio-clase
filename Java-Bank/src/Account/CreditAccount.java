@@ -3,6 +3,8 @@ package Account;
 import Person.User;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 /**
  * Representa una cuenta de crédito en el sistema bancario.
@@ -48,18 +50,55 @@ public class CreditAccount extends BankAccount {
 
     @Override
     public void deposit(int amount, BankAccount account) {
-
+        account.balance += amount;
+        System.out.println("Deposited: " + amount);
+        System.out.println("New Balance: " + account.balance);
+        account.addTransaction("Deposit: ", amount, account.idPropietario);
     }
 
     @Override
     public void withdraw(int amount, BankAccount account) {
-
+        if (account.balance <= 0 || account.balance - amount < 0) {
+            System.out.println("Insufficient funds");
+        } else {
+            account.balance -= amount;
+            System.out.println("Operation successful");
+            System.out.println("New balance in " + account.accNumber + " is: " + account.balance);
+            account.addTransaction("Retirada: ", -amount, account.idPropietario);
+        }
     }
 
 
     @Override
-    public void transfer(double amount, BankAccount account, ArrayList<BankAccount> accounts) {
+    public void transfer(double amount, BankAccount account, ArrayList<BankAccount> bankAccounts) {
+        Scanner sc = new Scanner(System.in);
+        try {
+            String sourceAcc = account.accNumber;
+            System.out.println("Please enter the destination account number\n");
+            String destinationAcc = sc.nextLine();
+            System.out.println("Please enter the amount to be transferred (With decimals)\n");
+            double ammount = sc.nextDouble();
 
+            if (ammount > account.balance) {
+                System.out.println("Insufficient funds");
+            } else {
+                account.balance -= ammount;
+                BankAccount destAcc = null;
+                for (int i = 0; i < bankAccounts.size(); i++) {
+                    if (bankAccounts.get(i).accNumber.equals(destinationAcc)) {
+                        bankAccounts.get(i).balance += ammount;
+                        destAcc = bankAccounts.get(i);
+                    }
+                }
+                System.out.println("Operation successful");
+                System.out.println("New balance in " + sourceAcc + " is: " + account.balance);
+                System.out.println("New balance in " + destinationAcc + " is: " + destAcc.balance);
+                account.addTransaction("Transferencia enviada a " + destAcc.accNumber, -ammount, account.idPropietario);
+                destAcc.addTransaction("Transferencia recibida de " + account.accNumber, ammount, account.idPropietario);
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -84,5 +123,8 @@ public class CreditAccount extends BankAccount {
         double credito = asignarLimiteCredito();
         System.out.println("Cuenta creada correctamente");
         return new CreditAccount(accNumber, dc, IBAN, credito, 0.0, alias, currentUser.DNI); //limite de credito falta.
+    }
+    public double getCreditLimit() {
+        return this.creditLimit;
     }
 }
