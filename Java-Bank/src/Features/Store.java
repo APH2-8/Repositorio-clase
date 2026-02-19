@@ -1,5 +1,6 @@
 package Features;
 
+import Account.BankAccount;
 import Account.CreditAccount;
 import Account.DebitAccount;
 import Account.Transaction;
@@ -39,9 +40,9 @@ public class Store implements Serializable {
         return " ID: " + this.idProducto + ", Producto: " + this.nombreProducto + ", Resumen: " + this.descripcionProducto + ", Precio: " + this.precioProducto;
     }
 
-    public void StoreInicio() {
+    public void StoreInicio(ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
         productos.clear();
-       /* try {
+        try {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream("Java-Bank/data/storeProducts.dat"));
             int longitud = input.readInt();
             for (int i = 0; i < longitud; i++) {
@@ -54,18 +55,11 @@ public class Store implements Serializable {
             throw new RuntimeException(e);
         } catch (ClassCastException e) {
             System.err.println(e.getMessage());
-        } */
-        StoreMenu();
+        }
+        StoreMenu(tarjetasTotales, currentUser);
     }
 
-    public void StoreMenu() {
-
-        productos.add(new Store(0, "pPhone 16 Pro", "Inserte su descripción", 1800.85, "Tecnología y Electrónica", false));
-        productos.add(new Store(1, "Jugueis 2X max", "Inserte su descripción", 650.99, "Movilidad y Ocio", true));
-        productos.add(new Store(2, "pPhone 12 pro", "Inserte su descripción", 1049.99, "Tecnología y Electrónica", false));
-        productos.add(new Store(3, "pPhone 7 SE", "Inserte su descripción", 849.99, "Tecnología y Electrónica", false));
-        productos.add(new Store(4, "Bailais TurboClean 23", "Inserte su descripción", 234.99, "Hogar", true));
-        productos.add(new Store(5, "Jugueis CicloTurbo 3", "Inserte su descripción", 299.99, "Movilidad y Ocio", true));
+    public void StoreMenu(ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
         productos.sort(Comparator.comparing(Store::getTipoProducto));
 
         int option = 0;
@@ -79,10 +73,10 @@ public class Store implements Serializable {
             option = sc.nextInt();
             switch (option) {
                 case 1:
-                    Escaparate();
+                    Escaparate(tarjetasTotales, currentUser);
                     break;
                 case 2:
-                    outletCompra();
+                    OutletCompra(tarjetasTotales, currentUser);
                 case 3:
                     try {
 
@@ -102,7 +96,7 @@ public class Store implements Serializable {
 
     }
 
-    public void Escaparate() {
+    public void Escaparate(ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
 
         int option = 0;
         Scanner sc = new Scanner(System.in);
@@ -122,21 +116,23 @@ public class Store implements Serializable {
         option = sc.nextInt();
         switch (option) {
             case 1:
-                cesta(productos);
+                cesta(productos, tarjetasTotales, currentUser);
                 break;
             case 2:
                 break;
         }
     }
 
-    public ArrayList<Store> outletCompra() {
+    public ArrayList<Store> OutletCompra(ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
 
-        ArrayList<Store> compraFinal = new ArrayList<Store>();
+        ArrayList<Store> outletLista = new ArrayList<>();
+        ArrayList<Store> compraFinal = new ArrayList<>();
         int option = 0;
         Scanner sc = new Scanner(System.in);
         System.out.println("---V--- Productos en oferta ---V---");
         for (int i = 0; i < productos.size(); i++) {
             if (productos.get(i).outlet) {
+                outletLista.add(productos.get(i));
                 System.out.println(productos.get(i).toString());
             }
         }
@@ -146,7 +142,7 @@ public class Store implements Serializable {
         option = sc.nextInt();
         switch (option) {
             case 1:
-                cesta(productos);
+                compraFinal = cesta(outletLista, tarjetasTotales, currentUser);
                 break;
             case 2:
                 break;
@@ -154,48 +150,75 @@ public class Store implements Serializable {
         return compraFinal;
     }
 
-    public ArrayList<Store> cesta(ArrayList<Store> productosDisponibles) {
+    public ArrayList<Store> cesta(ArrayList<Store> productosDisponibles, ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
 
-        ArrayList<Store> compraFinal = new ArrayList<Store>();
+        ArrayList<Store> compraFinal = new ArrayList<>();
         int option = 0;
         Scanner sc = new Scanner(System.in);
         System.out.println("Selecciona la ID del producto que deseas meter en la cesta:");
         option = sc.nextInt();
-        while (true) {
-            for (Store producto : productosDisponibles) {
-                if (producto.idProducto == option) {
-                    compraFinal.add(producto);
-                }
+        for (Store producto : productosDisponibles) {
+            if (producto.idProducto == option) {
+                compraFinal.add(producto);
+                System.out.println("Producto en la cesta");
             }
-            System.out.println("Producto en la cesta \n 1- Ver cesta de la compra \n 2- Seguir comprando \n 3- Finalizar la compra \n 4- Volver");
+        }
+        while (option != 4) {
+            System.out.println("1- Ver cesta de la compra \n 2- Seguir comprando \n 3- Finalizar la compra \n 4- Volver");
             option = sc.nextInt();
             switch (option) {
                 case 1:
                     for (int i = 0; i < compraFinal.size(); i++) {
                         System.out.println(compraFinal.get(i).toString());
                     }
+                    System.out.println("1- Seguir comprando \n 2- Finalizar la compra \n 3- Volver");
+                    option = sc.nextInt();
+                    if (option == 3) {
+                        break;
+                    }
+                    break;
                 case 2:
+                    String tipo = "Default";
+                    for (int i = 0; i < productos.size(); i++) {
+                        if (productos.get(i).tipoProducto.equals(tipo)) {
+                            System.out.println(productos.get(i).toString());
+                        } else {
+                            System.out.println("--V--" + productos.get(i).tipoProducto + "--V--");
+                            System.out.println(productos.get(i).toString());
+                        }
+                        tipo = productos.get(i).tipoProducto;
+                    }
                     System.out.println("Selecciona la ID del producto que deseas meter en la cesta:");
                     option = sc.nextInt();
+                    for (Store producto : productosDisponibles) {
+                        if (producto.idProducto == option) {
+                            compraFinal.add(producto);
+                            System.out.println("Producto en la cesta");
+                        }
+                    }
+                    break;
                 case 3:
-                    confirmarCompra();
+                    confirmarCompra(tarjetasTotales, currentUser);
                     break;
                 case 4:
                     break;
             }
-            break;
         }
         return productos;
     }
 
-    public void confirmarCompra() {
+    public void confirmarCompra(ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
         int option = 0;
         Scanner sc = new Scanner(System.in);
 
+        for (int i =  0; i < tarjetasTotales.size(); i++) {
+            if (tarjetasTotales.get(i).cuentaAsociada.getIdPropietario().equals(currentUser.DNI)) {
+                System.out.println((i) + "- " + tarjetasTotales.get(i).toString());
+            }
+        }
         System.out.println("Seleccione el método de pago:");
-        System.out.println("Número de targeta: ");
         option = sc.nextInt();
-        // no están hechas las targetas, hasta que no estén hechas no se puede usar la tienda
+        // no están hechas las tarjetas, hasta que no estén hechas no se puede usar la tienda
     }
 
     public String getTipoProducto() {
