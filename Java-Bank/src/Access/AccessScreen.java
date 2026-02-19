@@ -650,7 +650,7 @@ public class AccessScreen {
             System.out.println("4. Transferir");
             System.out.println("5. Recargar SIM");
             System.out.println("6. Desbloquear usuario");
-            System.out.println("7. Ver TODAS las cuentas del banco");
+            System.out.println("7. Ver todas las cuentas del banco");
             System.out.println("8. Salir");
             System.out.println("Elija una opción del 1-8");
             option = sc.nextInt();

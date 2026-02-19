@@ -3,6 +3,8 @@ package Utils;
 import java.sql.*;
 import Account.CreditAccount;
 import Account.DebitAccount;
+import Features.Store;
+import Features.Tarjeta;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
@@ -401,4 +403,68 @@ public class Database {
             if(!hayDatos) System.out.println("No hay transacciones registradas para este usuario.");
         } catch (SQLException e) { e.printStackTrace(); }
     }
-}
+    // --- GESTIÓN DE TIENDA ---
+    public ArrayList<Store> getProductosTienda() {
+        ArrayList<Store> lista = new ArrayList<>();
+        String sql = "SELECT * FROM tienda_productos";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                lista.add(new Store(rs.getInt("id"), rs.getString("nombre"),
+                        rs.getString("descripcion"), rs.getDouble("precio"),
+                        rs.getString("tipo"), rs.getBoolean("outlet")));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return lista;
+    }
+
+    // --- GESTIÓN DE TARJETAS ---
+    public void guardarTarjeta(Tarjeta t) {
+        String sql = "INSERT INTO tarjetas VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, t.numTarjeta);
+            pst.setInt(2, t.cvv);
+            pst.setInt(3, t.numSecreto);
+            pst.setTimestamp(4, java.sql.Timestamp.valueOf(t.fechaCaducidad));
+            pst.setTimestamp(5, java.sql.Timestamp.valueOf(t.fechaCreacion));
+            pst.setString(6, t.cuentaAsociada.getAccNumber());
+            pst.setBoolean(7, t.activo);
+            pst.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public ArrayList<Tarjeta> getTarjetasUsuario(String dni) {
+        ArrayList<Tarjeta> lista = new ArrayList<>();
+        String sql = "SELECT t.* FROM tarjetas t JOIN cuentas c ON t.num_cuenta = c.numero_cuenta WHERE c.dni_propietario = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            ResultSet rs = pst.executeQuery();
+            ArrayList<BankAccount> cuentas = getUserAccounts(dni);
+            while (rs.next()) {
+                String numCuentaAsociada = rs.getString("num_cuenta");
+                BankAccount cuentaEncontrada = null;
+                for (BankAccount acc : cuentas) {
+                    if (acc.getAccNumber().equals(numCuentaAsociada)) {
+                        cuentaEncontrada = acc;
+                        break;
+                    }
+                }
+
+                if (cuentaEncontrada != null) {
+                    Tarjeta t = new Tarjeta(rs.getInt("num_secreto"), cuentaEncontrada);
+                    t.numTarjeta = rs.getString("num_tarjeta");
+                    t.cvv = rs.getInt("cvv");
+                    t.fechaCaducidad = rs.getTimestamp("fecha_caducidad").toLocalDateTime();
+                    t.fechaCreacion = rs.getTimestamp("fecha_creacion").toLocalDateTime();
+                    t.activo = rs.getBoolean("activo");
+                    lista.add(t);
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return lista;
+    }
+    }
+

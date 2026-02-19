@@ -1,5 +1,6 @@
 package Features;
 import Account.BankAccount;
+import Utils.Database;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -70,6 +71,8 @@ public class Tarjeta {
         } else  {
             System.out.println("Creación de tarjeta exitosa");
             Tarjeta nuevaTarjeta = new Tarjeta(Integer.parseInt(dato), cuentaAsociada);
+            Database db = new Database();
+            db.guardarTarjeta(nuevaTarjeta);
         }
     }
 

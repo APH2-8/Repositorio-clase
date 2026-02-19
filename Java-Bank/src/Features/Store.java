@@ -7,6 +7,7 @@ import Account.Transaction;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
+import Utils.Database;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -198,8 +199,7 @@ public class Store implements Serializable {
                     }
                     break;
                 case 3:
-                    confirmarCompra(tarjetasTotales, currentUser);
-                    break;
+                    confirmarCompra(compraFinal, tarjetasTotales, currentUser);                    break;
                 case 4:
                     break;
             }
@@ -207,20 +207,40 @@ public class Store implements Serializable {
         return productos;
     }
 
-    public void confirmarCompra(ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
-        int option = 0;
+    public void confirmarCompra(ArrayList<Store> compraFinal, ArrayList<Tarjeta> tarjetasTotales, User currentUser) {
         Scanner sc = new Scanner(System.in);
-
-        for (int i =  0; i < tarjetasTotales.size(); i++) {
-            if (tarjetasTotales.get(i).cuentaAsociada.getIdPropietario().equals(currentUser.DNI)) {
-                System.out.println((i) + "- " + tarjetasTotales.get(i).toString());
+        Database db = new Database();
+        System.out.println("--- Finalizar Compra ---");
+        System.out.println("Seleccione la tarjeta para realizar el pago:");
+        if (currentUser.bankAccounts.isEmpty()) {
+            System.out.println("No tienes cuentas asociadas para pagar.");
+            return;
+        }
+        for (int i = 0; i < currentUser.bankAccounts.size(); i++) {
+            System.out.println((i + 1) + "- " + currentUser.bankAccounts.get(i).toString());
+        }
+        int seleccion = sc.nextInt() - 1;
+        if (seleccion >= 0 && seleccion < currentUser.bankAccounts.size()) {
+            BankAccount cuentaPago = currentUser.bankAccounts.get(seleccion);
+            double total = 0;
+            for (Store producto : compraFinal) {
+                total += producto.precioProducto;
+            }
+            if (total <= 0) {
+                System.out.println("La cesta está vacía.");
+                return;
+            }
+            System.out.println("El importe total es: " + total + "€");
+            if (cuentaPago.getBalance() >= total) {
+                cuentaPago.setBalance(cuentaPago.getBalance() - total);
+                db.updateSaldo(cuentaPago.getAccNumber(), cuentaPago.getBalance());
+                db.registrarTransaccion(currentUser.DNI, "COMPRA JAVA-STORE", total, "Compra de productos en tienda");
+                System.out.println("¡Compra realizada con éxito! Total: " + total + "€");
+            } else {
+                System.out.println("Saldo insuficiente en la cuenta asociada.");
             }
         }
-        System.out.println("Seleccione el método de pago:");
-        option = sc.nextInt();
-        // no están hechas las tarjetas, hasta que no estén hechas no se puede usar la tienda
     }
-
     public String getTipoProducto() {
         return tipoProducto;
     }
