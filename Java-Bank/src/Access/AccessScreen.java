@@ -336,7 +336,34 @@ public class AccessScreen {
                     }
                     break;
                 case 4:
-                    System.out.println("No implementado");
+                    System.out.println("--- Recargar Móvil  ---");
+                    if (currentUser.bankAccounts.isEmpty()) {
+                        System.out.println("No tienes cuentas para pagar la recarga.");
+                        break;
+                    }
+                    System.out.println("Seleccione el número de la cuenta con la que desea pagar:");
+                    for (int i = 0; i < currentUser.bankAccounts.size(); i++) {
+                        System.out.println((i + 1) + "- " + currentUser.bankAccounts.get(i).toString());
+                    }
+                    int indexCuentaSim = sc.nextInt() - 1;
+                    sc.nextLine();
+                    if (indexCuentaSim >= 0 && indexCuentaSim < currentUser.bankAccounts.size()) {
+                        BankAccount cuentaPago = currentUser.bankAccounts.get(indexCuentaSim);
+                        System.out.println("Introduzca el número de teléfono a recargar:");
+                        String numeroTelefono = sc.nextLine();
+                        System.out.println("Introduzca la cantidad a recargar: ");
+                        double importeRecarga = sc.nextDouble();
+                        if (importeRecarga > 0 && cuentaPago.getBalance() >= importeRecarga) {
+                            cuentaPago.setBalance(cuentaPago.getBalance() - importeRecarga);
+                            db.updateSaldo(cuentaPago.getAccNumber(), cuentaPago.getBalance());
+                            db.registrarTransaccion(currentUser.DNI, "RECARGA SIM", importeRecarga, "Recarga al número " + numeroTelefono);
+                            System.out.println("Recarga de " + importeRecarga + "€ al número " + numeroTelefono + " realizada con éxito");
+                        } else {
+                            System.out.println("Operación denegada: Saldo insuficiente o cantidad no válida.");
+                        }
+                    } else {
+                        System.out.println("Número de cuenta incorrecto.");
+                    }
                     break;
                 case 5:
                     System.out.println("V--Cuentas de Débito--V");
@@ -386,11 +413,9 @@ public class AccessScreen {
             switch (option) {
                 case 1:
                     System.out.println("Indique el DNI del usuario:");
-                    sc.nextLine(); // Limpiar buffer
+                    sc.nextLine();
                     DNI = sc.nextLine();
-
-                    User currentUser = db.getUser(DNI); // BÚSQUEDA EN BASE DE DATOS
-
+                    User currentUser = db.getUser(DNI);
                     if (currentUser == null) {
                         System.out.println("El DNI no existe en la base de datos.");
                     } else {
@@ -416,16 +441,162 @@ public class AccessScreen {
                     }
                     break;
                 case 2:
-
-
-                    login();
+                    System.out.println("--- Ingresar dinero a Cliente ---");
+                    System.out.println("Indique el DNI del cliente: ");
+                    sc.nextLine();
+                    String dniIngreso = sc.nextLine();
+                    User clienteIngreso = db.getUser(dniIngreso);
+                    if (clienteIngreso == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteIngreso.bankAccounts = db.getUserAccounts(clienteIngreso.DNI);
+                        if (clienteIngreso.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas bancarias.");
+                        } else {
+                            System.out.println("Cuentas de " + clienteIngreso.name + ":");
+                            for (int i = 0; i < clienteIngreso.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteIngreso.bankAccounts.get(i).toString());
+                            }
+                            System.out.println("Seleccione el número de cuenta:");
+                            int indexCuenta = sc.nextInt() - 1;
+                            if (indexCuenta >= 0 && indexCuenta < clienteIngreso.bankAccounts.size()) {
+                                BankAccount cuentaElegida = clienteIngreso.bankAccounts.get(indexCuenta);
+                                System.out.println("Introduzca la cantidad a ingresar: ");
+                                int cantidad = sc.nextInt();
+                                cuentaElegida.deposit(cantidad, cuentaElegida);
+                                db.updateSaldo(cuentaElegida.getAccNumber(), cuentaElegida.getBalance());
+                                db.registrarTransaccion(clienteIngreso.DNI, "INGRESO", cantidad, "Ingreso realizado por personal del banco");
+                                System.out.println("Ingreso realizado con éxito en la cuenta de " + clienteIngreso.name + "");
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
+                    }
                     break;
                 case 3:
-                    return;
+                    System.out.println("--- Retirar dinero ---");
+                    System.out.println("Indique el DNI del cliente: ");
+                    sc.nextLine();
+                    String dniRetiro = sc.nextLine();
+                    User clienteRetiro = db.getUser(dniRetiro);
+                    if (clienteRetiro == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteRetiro.bankAccounts = db.getUserAccounts(clienteRetiro.DNI);
+                        if (clienteRetiro.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas bancarias.");
+                        } else {
+                            System.out.println("Cuentas de " + clienteRetiro.name + ":");
+                            for (int i = 0; i < clienteRetiro.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteRetiro.bankAccounts.get(i).toString());
+                            }
+                            System.out.println("Seleccione el número de cuenta:");
+                            int indexRetiro = sc.nextInt() - 1;
+                            if (indexRetiro >= 0 && indexRetiro < clienteRetiro.bankAccounts.size()) {
+                                BankAccount cuentaElegida = clienteRetiro.bankAccounts.get(indexRetiro);
+                                System.out.println("Introduzca la cantidad a retirar: ");
+                                double cantidad = sc.nextDouble();
+                                if (cuentaElegida.getBalance() >= cantidad) {
+                                    cuentaElegida.setBalance(cuentaElegida.getBalance() - cantidad);
+                                    db.updateSaldo(cuentaElegida.getAccNumber(), cuentaElegida.getBalance());
+                                    db.registrarTransaccion(clienteRetiro.DNI, "RETIRO ", cantidad, "Retiro realizado correctamente");
+                                    System.out.println("¡Retiro de " + cantidad + "€ realizado con éxito!");
+                                } else {
+                                    System.out.println("Operación denegada: El cliente no tiene saldo suficiente.");
+                                }
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
+                    }
+                    break;
+
                 case 4:
-                    return;
+                    System.out.println("--- Transferencia ---");
+                    System.out.println("Indique el DNI del cliente que envía el dinero: ");
+                    sc.nextLine();
+                    String dniOrigen = sc.nextLine();
+                    User clienteOrigen = db.getUser(dniOrigen);
+                    if (clienteOrigen == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteOrigen.bankAccounts = db.getUserAccounts(clienteOrigen.DNI);
+                        if (clienteOrigen.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas bancarias para enviar dinero.");
+                        } else {
+                            System.out.println("Seleccione la cuenta de origen de " + clienteOrigen.name + ":");
+                            for (int i = 0; i < clienteOrigen.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteOrigen.bankAccounts.get(i).toString());
+                            }
+                            int indexOrigen = sc.nextInt() - 1;
+                            sc.nextLine();
+                            if (indexOrigen >= 0 && indexOrigen < clienteOrigen.bankAccounts.size()) {
+                                BankAccount cuentaOrigen = clienteOrigen.bankAccounts.get(indexOrigen);
+                                System.out.println("Introduzca el número de cuenta de destino:");
+                                String cuentaDestino = sc.nextLine();
+                                if (cuentaOrigen.getAccNumber().equals(cuentaDestino)) {
+                                    System.out.println("No se puede transferir dinero a la misma cuenta.");
+                                    break;
+                                }
+                                System.out.println("Introduzca la cantidad a transferir: ");
+                                double cantidadTrans = sc.nextDouble();
+
+                                if (cantidadTrans > 0 && cuentaOrigen.getBalance() >= cantidadTrans) {
+                                    boolean exito = db.realizarTransferencia(cuentaOrigen.getAccNumber(), cuentaDestino, cantidadTrans);
+                                    if (exito) {
+                                        db.registrarTransaccion(clienteOrigen.DNI, "TRANSFERENCIA ", cantidadTrans, "Transferencia ordenada por personal a " + cuentaDestino);
+                                        System.out.println("¡Transferencia de " + cantidadTrans + "€ realizada con éxito en nombre de " + clienteOrigen.name + "!");
+                                    } else {
+                                        System.out.println("Error: La cuenta de destino no existe en la base de datos.");
+                                    }
+                                } else {
+                                    System.out.println("Operación denegada: Saldo insuficiente o cantidad no válida.");
+                                }
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
+                    }
+                    break;
                 case 5:
-                    return;
+                    System.out.println("--- Recargar Móvil (SIM) por Ventanilla ---");
+                    System.out.println("Indique el DNI del cliente que va a pagar la recarga: ");
+                    sc.nextLine();
+                    String dniSim = sc.nextLine();
+                    User clienteSim = db.getUser(dniSim);
+                    if (clienteSim == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteSim.bankAccounts = db.getUserAccounts(clienteSim.DNI);
+                        if (clienteSim.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas para pagar la recarga.");
+                        } else {
+                            System.out.println("Seleccione la cuenta de " + clienteSim.name + " para pagar:");
+                            for (int i = 0; i < clienteSim.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteSim.bankAccounts.get(i).toString());
+                            }
+                            int indexCuentaVentanilla = sc.nextInt() - 1;
+                            sc.nextLine();
+                            if (indexCuentaVentanilla >= 0 && indexCuentaVentanilla < clienteSim.bankAccounts.size()) {
+                                BankAccount cuentaPagoVentanilla = clienteSim.bankAccounts.get(indexCuentaVentanilla);
+                                System.out.println("Introduzca el número de teléfono a recargar:");
+                                String numeroTelefonoVentanilla = sc.nextLine();
+                                System.out.println("Introduzca la cantidad a recargar: ");
+                                double importeRecargaVentanilla = sc.nextDouble();
+                                if (importeRecargaVentanilla > 0 && cuentaPagoVentanilla.getBalance() >= importeRecargaVentanilla) {
+                                    cuentaPagoVentanilla.setBalance(cuentaPagoVentanilla.getBalance() - importeRecargaVentanilla);
+                                    db.updateSaldo(cuentaPagoVentanilla.getAccNumber(), cuentaPagoVentanilla.getBalance());
+                                    db.registrarTransaccion(clienteSim.DNI, "RECARGA SIM", importeRecargaVentanilla, "Recarga al número " + numeroTelefonoVentanilla);
+                                    System.out.println("Recarga de " + importeRecargaVentanilla + "€ al número " + numeroTelefonoVentanilla + " realizada con éxito");
+                                } else {
+                                    System.out.println("Operación denegada: Saldo insuficiente o cantidad no válida.");
+                                }
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
+                    }
+                    break;
                 case 6:
                     System.out.println("--- Usuarios Bloqueados ---");
                     ArrayList<User> usuariosBloqueados = db.getLockedUsers();
@@ -486,11 +657,9 @@ public class AccessScreen {
             switch (option) {
                 case 1:
                     System.out.println("Indique el DNI del usuario:");
-                    sc.nextLine(); // Limpiar buffer
+                    sc.nextLine();
                     DNI = sc.nextLine();
-
-                    User currentUser = db.getUser(DNI); // BÚSQUEDA EN BASE DE DATOS
-
+                    User currentUser = db.getUser(DNI);
                     if (currentUser == null) {
                         System.out.println("El DNI no existe en la base de datos.");
                     } else {
@@ -516,25 +685,162 @@ public class AccessScreen {
                     }
                     break;
                 case 2:
-
-
+                    System.out.println("--- Ingresar dinero a Cliente ---");
+                    System.out.println("Indique el DNI del cliente: ");
+                    sc.nextLine();
+                    String dniIngreso = sc.nextLine();
+                    User clienteIngreso = db.getUser(dniIngreso);
+                    if (clienteIngreso == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteIngreso.bankAccounts = db.getUserAccounts(clienteIngreso.DNI);
+                        if (clienteIngreso.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas bancarias.");
+                        } else {
+                            System.out.println("Cuentas de " + clienteIngreso.name + ":");
+                            for (int i = 0; i < clienteIngreso.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteIngreso.bankAccounts.get(i).toString());
+                            }
+                            System.out.println("Seleccione el número de cuenta:");
+                            int indexCuenta = sc.nextInt() - 1;
+                            if (indexCuenta >= 0 && indexCuenta < clienteIngreso.bankAccounts.size()) {
+                                BankAccount cuentaElegida = clienteIngreso.bankAccounts.get(indexCuenta);
+                                System.out.println("Introduzca la cantidad a ingresar: ");
+                                int cantidad = sc.nextInt();
+                                cuentaElegida.deposit(cantidad, cuentaElegida);
+                                db.updateSaldo(cuentaElegida.getAccNumber(), cuentaElegida.getBalance());
+                                db.registrarTransaccion(clienteIngreso.DNI, "INGRESO", cantidad, "Ingreso realizado por personal del banco");
+                                System.out.println("Ingreso realizado con éxito en la cuenta de " + clienteIngreso.name + "");
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
+                    }
                     break;
                 case 3:
+                    System.out.println("--- Retirar dinero ---");
+                    System.out.println("Indique el DNI del cliente: ");
+                    sc.nextLine();
+                    String dniRetiro = sc.nextLine();
+                    User clienteRetiro = db.getUser(dniRetiro);
+
+                    if (clienteRetiro == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteRetiro.bankAccounts = db.getUserAccounts(clienteRetiro.DNI);
+                        if (clienteRetiro.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas bancarias.");
+                        } else {
+                            System.out.println("Cuentas de " + clienteRetiro.name + ":");
+                            for (int i = 0; i < clienteRetiro.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteRetiro.bankAccounts.get(i).toString());
+                            }
+                            System.out.println("Seleccione el número de cuenta:");
+                            int indexRetiro = sc.nextInt() - 1;
+                            if (indexRetiro >= 0 && indexRetiro < clienteRetiro.bankAccounts.size()) {
+                                BankAccount cuentaElegida = clienteRetiro.bankAccounts.get(indexRetiro);
+                                System.out.println("Introduzca la cantidad a retirar: ");
+                                double cantidad = sc.nextDouble();
+                                if (cuentaElegida.getBalance() >= cantidad) {
+                                    cuentaElegida.setBalance(cuentaElegida.getBalance() - cantidad);
+                                    db.updateSaldo(cuentaElegida.getAccNumber(), cuentaElegida.getBalance());
+                                    db.registrarTransaccion(clienteRetiro.DNI, "RETIRO ", cantidad, "Retiro realizado correctamente");
+                                    System.out.println("¡Retiro de " + cantidad + "€ realizado con éxito!");
+                                } else {
+                                    System.out.println("Operación denegada: El cliente no tiene saldo suficiente.");
+                                }
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
+                    }
                     break;
                 case 4:
+                    System.out.println("--- Transferencia ---");
+                    System.out.println("Indique el DNI del cliente que envía el dinero: ");
+                    sc.nextLine();
+                    String dniOrigen = sc.nextLine();
+                    User clienteOrigen = db.getUser(dniOrigen);
+                    if (clienteOrigen == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteOrigen.bankAccounts = db.getUserAccounts(clienteOrigen.DNI);
+                        if (clienteOrigen.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas bancarias para enviar dinero.");
+                        } else {
+                            System.out.println("Seleccione la cuenta de origen de " + clienteOrigen.name + ":");
+                            for (int i = 0; i < clienteOrigen.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteOrigen.bankAccounts.get(i).toString());
+                            }
+                            int indexOrigen = sc.nextInt() - 1;
+                            sc.nextLine();
+                            if (indexOrigen >= 0 && indexOrigen < clienteOrigen.bankAccounts.size()) {
+                                BankAccount cuentaOrigen = clienteOrigen.bankAccounts.get(indexOrigen);
+                                System.out.println("Introduzca el número de cuenta de destino:");
+                                String cuentaDestino = sc.nextLine();
+                                if (cuentaOrigen.getAccNumber().equals(cuentaDestino)) {
+                                    System.out.println("No se puede transferir dinero a la misma cuenta.");
+                                    break;
+                                }
+                                System.out.println("Introduzca la cantidad a transferir: ");
+                                double cantidadTrans = sc.nextDouble();
+
+                                if (cantidadTrans > 0 && cuentaOrigen.getBalance() >= cantidadTrans) {
+                                    boolean exito = db.realizarTransferencia(cuentaOrigen.getAccNumber(), cuentaDestino, cantidadTrans);
+                                    if (exito) {
+                                        db.registrarTransaccion(clienteOrigen.DNI, "TRANSFERENCIA ", cantidadTrans, "Transferencia ordenada por personal a " + cuentaDestino);
+                                        System.out.println("¡Transferencia de " + cantidadTrans + "€ realizada con éxito en nombre de " + clienteOrigen.name + "!");
+                                    } else {
+                                        System.out.println("Error: La cuenta de destino no existe en la base de datos.");
+                                    }
+                                } else {
+                                    System.out.println("Operación denegada: Saldo insuficiente o cantidad no válida.");
+                                }
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
+                    }
                     break;
                 case 5:
-                  /* System.out.println("V--Cuentas de Débito--V");
-                    for (int i = 0; i < debitAccounts.size(); i++) {
-                        System.out.println(debitAccounts.get(i).toString());
+                    System.out.println("--- Recargar Móvil ---");
+                    System.out.println("Indique el DNI del cliente que va a pagar la recarga: ");
+                    sc.nextLine();
+                    String dniSim = sc.nextLine();
+                    User clienteSim = db.getUser(dniSim);
+                    if (clienteSim == null) {
+                        System.out.println("No se ha encontrado a ningún cliente con ese DNI.");
+                    } else {
+                        clienteSim.bankAccounts = db.getUserAccounts(clienteSim.DNI);
+                        if (clienteSim.bankAccounts.isEmpty()) {
+                            System.out.println("Este cliente no tiene cuentas para pagar la recarga.");
+                        } else {
+                            System.out.println("Seleccione la cuenta de " + clienteSim.name + " para pagar:");
+                            for (int i = 0; i < clienteSim.bankAccounts.size(); i++) {
+                                System.out.println((i + 1) + "- " + clienteSim.bankAccounts.get(i).toString());
+                            }
+                            int indexCuentaVentanilla = sc.nextInt() - 1;
+                            sc.nextLine();
+                            if (indexCuentaVentanilla >= 0 && indexCuentaVentanilla < clienteSim.bankAccounts.size()) {
+                                BankAccount cuentaPagoVentanilla = clienteSim.bankAccounts.get(indexCuentaVentanilla);
+
+                                System.out.println("Introduzca el número de teléfono a recargar:");
+                                String numeroTelefonoVentanilla = sc.nextLine();
+                                System.out.println("Introduzca la cantidad a recargar: ");
+                                double importeRecargaVentanilla = sc.nextDouble();
+                                if (importeRecargaVentanilla > 0 && cuentaPagoVentanilla.getBalance() >= importeRecargaVentanilla) {
+                                    cuentaPagoVentanilla.setBalance(cuentaPagoVentanilla.getBalance() - importeRecargaVentanilla);
+                                    db.updateSaldo(cuentaPagoVentanilla.getAccNumber(), cuentaPagoVentanilla.getBalance());
+                                    db.registrarTransaccion(clienteSim.DNI, "RECARGA SIM ", importeRecargaVentanilla, "Recarga al número " + numeroTelefonoVentanilla);
+                                    System.out.println("¡Recarga de " + importeRecargaVentanilla + "€ al número " + numeroTelefonoVentanilla + " realizada con éxito!");
+                                } else {
+                                    System.out.println("Operación denegada: Saldo insuficiente o cantidad no válida.");
+                                }
+                            } else {
+                                System.out.println("Número de cuenta incorrecto.");
+                            }
+                        }
                     }
-                    System.out.println("^-----^-----^-----^");
-                    System.out.println(" ");
-                    System.out.println("V--Cuentas de Crédito--V");
-                    for (int i = 0; i < creditAccounts.size(); i++) {
-                        System.out.println(creditAccounts.get(i).toString());
-                    }
-                    System.out.println("^-----^-----^-----^");*/ // Sirve para ver todas las cuentas, sin importar usuarios
                     break;
                 case 6:
                     System.out.println("--- Usuarios Bloqueados ---");
