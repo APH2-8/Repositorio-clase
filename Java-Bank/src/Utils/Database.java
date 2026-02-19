@@ -220,4 +220,185 @@ public class Database {
         }
         return user;
     }
+    // --- MEJORA 1: DESBLOQUEAR USUARIOS ---
+
+    // 1. Método para obtener solo los usuarios bloqueados
+    public ArrayList<User> getLockedUsers() {
+        ArrayList<User> lockedUsers = new ArrayList<>();
+        // Buscamos los que tengan activo = false (0 en MySQL)
+        String sql = "SELECT * FROM usuarios WHERE activo = false";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                User u = new User(
+                        rs.getString("dni"),
+                        rs.getString("nombre"),
+                        rs.getString("password"),
+                        rs.getString("fecha_nacimiento")
+                );
+                u.active = false;
+                lockedUsers.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lockedUsers;
+    }
+    // BLOQUEOS
+
+    public Manager getManager(String dni) {
+        Manager manager = null;
+        String sql = "SELECT * FROM managers WHERE dni = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                manager = new Manager(rs.getString("dni"), rs.getString("nombre"),
+                        rs.getString("password"), rs.getString("fecha_nacimiento"), rs.getInt("id_manager"));
+                if (!rs.getBoolean("activo")) manager.active = false;
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return manager;
+    }
+    public void lockManager(String dni) {
+        String sql = "UPDATE managers SET activo = false WHERE dni = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            pst.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+    public Employee getEmployee(String dni) {
+        Employee employee = null;
+        String sql = "SELECT * FROM empleados WHERE dni = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                employee = new Employee(rs.getString("dni"), rs.getString("nombre"),
+                        rs.getString("password"), rs.getString("fecha_nacimiento"), rs.getInt("id_empleado"));
+                if (!rs.getBoolean("activo")) employee.active = false;
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return employee;
+    }
+
+    public void lockEmployee(String dni) {
+        String sql = "UPDATE empleados SET activo = false WHERE dni = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            pst.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+    public void lockUser(String dni) {
+        String sql = "UPDATE usuarios SET activo = false WHERE dni = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al bloquear: " + e.getMessage());
+        }
+    }
+    public boolean unlockUser(String dni) {
+        String sql = "UPDATE usuarios SET activo = true WHERE dni = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+
+            int filasModificadas = pst.executeUpdate();
+            return filasModificadas > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al desbloquear: " + e.getMessage());
+            return false;
+        }
+    }
+    // --- ACTUALIZAR SALDO ---
+    public void updateSaldo(String numeroCuenta, double nuevoSaldo) {
+        String sql = "UPDATE cuentas SET saldo = ? WHERE numero_cuenta = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setDouble(1, nuevoSaldo);
+            pst.setString(2, numeroCuenta);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar saldo: " + e.getMessage());
+        }
+    }
+    // ---  TRANSFERENCIAS ---
+    public boolean realizarTransferencia(String cuentaOrigen, String cuentaDestino, double cantidad) {
+        try {
+            PreparedStatement check = connection.prepareStatement("SELECT * FROM cuentas WHERE numero_cuenta = ?");
+            check.setString(1, cuentaDestino);
+            ResultSet rs = check.executeQuery();
+            if (!rs.next()) {
+                return false;
+            }
+            PreparedStatement restar = connection.prepareStatement("UPDATE cuentas SET saldo = saldo - ? WHERE numero_cuenta = ?");
+            restar.setDouble(1, cantidad);
+            restar.setString(2, cuentaOrigen);
+            restar.executeUpdate();
+            PreparedStatement sumar = connection.prepareStatement("UPDATE cuentas SET saldo = saldo + ? WHERE numero_cuenta = ?");
+            sumar.setDouble(1, cantidad);
+            sumar.setString(2, cuentaDestino);
+            sumar.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error en la transferencia: " + e.getMessage());
+            return false;
+        }
+    }
+    // --- VER TODAS LAS CUENTAS (Para Empleados/Managers) ---
+    public void mostrarTodasLasCuentas() {
+        String sql = "SELECT * FROM cuentas";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            boolean hayCuentas = false;
+            while(rs.next()) {
+                hayCuentas = true;
+                System.out.println("Cuenta: " + rs.getString("numero_cuenta") +
+                        " | Propietario (DNI): " + rs.getString("dni_propietario") +
+                        " | Saldo: " + rs.getDouble("saldo") + "€" +
+                        " | Tipo: " + rs.getString("tipo_cuenta"));
+            }
+            if(!hayCuentas) System.out.println("No hay ninguna cuenta en el banco.");
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    // --- GUARDAR EN EL HISTORIAL ---
+    public void registrarTransaccion(String dni, String tipo, double cantidad, String detalles) {
+        String sql = "INSERT INTO transacciones (dni_cliente, tipo_operacion, cantidad, detalles) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            pst.setString(2, tipo);
+            pst.setDouble(3, cantidad);
+            pst.setString(4, detalles);
+            pst.executeUpdate();
+        } catch (SQLException e) { System.err.println("Error al guardar historial: " + e.getMessage()); }
+    }
+
+    // --- LEER EL HISTORIAL ---
+    public void verHistorial(String dni) {
+        String sql = "SELECT * FROM transacciones WHERE dni_cliente = ? ORDER BY fecha DESC";
+        try {
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, dni);
+            ResultSet rs = pst.executeQuery();
+            boolean hayDatos = false;
+            while(rs.next()) {
+                hayDatos = true;
+                System.out.println("[" + rs.getTimestamp("fecha") + "] " +
+                        rs.getString("tipo_operacion") + " | " +
+                        rs.getDouble("cantidad") + "€ | " + rs.getString("detalles"));
+            }
+            if(!hayDatos) System.out.println("No hay transacciones registradas para este usuario.");
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
 }
