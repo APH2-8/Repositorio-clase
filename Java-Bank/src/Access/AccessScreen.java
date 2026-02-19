@@ -6,10 +6,8 @@ import Account.Transaction;
 import Person.Employee;
 import Person.Manager;
 import Person.User;
-
 import java.io.*;
 import java.util.Scanner;
-
 import java.util.ArrayList;
 
 /**
@@ -229,14 +227,12 @@ public class AccessScreen {
                 case 1:
                     int eleccion=0;
                     BankAccount currentAccount = null;
-                    System.out.println("Seleccione entre cuentas de debito o credito (1: debito) (2: credito)");
+                    System.out.println("Seleccione entre cuentas de debito o credito (1: debito) (2: credito) (3: Atras)");
                     eleccion = sc.nextInt();
                     ArrayList<DebitAccount> currentUserDebitAccount = new ArrayList<>();
                     currentUserDebitAccount.add(new DebitAccount("","","", "",""));
                     ArrayList<CreditAccount> currentUserCreditAccount = new ArrayList<>();
                     currentUserCreditAccount.add(new CreditAccount("","","",0,0,"",""));
-
-
                     if (eleccion == 1) {
                         System.out.println("Seleccione el id de su cuenta de debito");
 
@@ -261,7 +257,6 @@ public class AccessScreen {
 
                         for (int i = 1; i < creditAccounts.size(); i++) {
                             if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
-                                System.out.println(creditAccounts.get(i).toString());
                                 currentUserCreditAccount.add(creditAccounts.get(i));
 
                             }
@@ -275,14 +270,61 @@ public class AccessScreen {
                         System.out.println("Seleccione la cantidad a ingresar: ");
                         int amount = sc.nextInt();
 
-                        currentUserCreditAccount.get(eleccionCredito).deposit(amount, currentUserCredit);
+                        currentUserCredit.deposit(amount, currentUserCredit);
+                    }else if (eleccion == 3) {
+                        MenuUser(currentUser);
                     }
-
-
-                    //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
                     break;
                 case 2:
-                    login();
+                    int eleccionW=0;
+                    System.out.println("Seleccione entre cuentas de debito o credito (1: debito) (2: credito)");
+                    eleccionW = sc.nextInt();
+                    ArrayList<DebitAccount> currentUserDebitAccountW = new ArrayList<>();
+                    currentUserDebitAccountW.add(new DebitAccount("","","", "",""));
+                    ArrayList<CreditAccount> currentUserCreditAccountW = new ArrayList<>();
+                    currentUserCreditAccountW.add(new CreditAccount("","","",0,0,"",""));
+                    if (eleccionW == 1) {
+                        System.out.println("Seleccione el id de su cuenta de debito");
+
+                        for (int i = 1; i < debitAccounts.size(); i++) {
+                            if (debitAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                                currentUserDebitAccountW.add(debitAccounts.get(i));
+                            }
+                        }
+                        for (int i = 1; i < currentUserDebitAccountW.size(); i++) {
+                            System.out.println((i)+ "- " + currentUserDebitAccountW.get(i).toString());
+                        }
+                        int eleccionDebito=-1;
+                        eleccionDebito = sc.nextInt();
+                        BankAccount currentUserDebit = currentUserDebitAccountW.get(eleccionDebito);
+                        System.out.println("Seleccione la cantidad a ingresar: ");
+                        int amount = sc.nextInt();
+
+                        currentUserDebitAccountW.get(eleccionDebito).withdraw(amount, currentUserDebit);
+
+                    }else if (eleccionW == 2) {
+                        System.out.println("Seleccione el id de su cuenta de credito: ");
+
+                        for (int i = 1; i < creditAccounts.size(); i++) {
+                            if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                                currentUserCreditAccountW.add(creditAccounts.get(i));
+
+                            }
+                        }
+                        for (int i = 1; i < currentUserCreditAccountW.size(); i++) {
+                            System.out.println((i)+ "- " + currentUserCreditAccountW.get(i).toString());
+                        }
+                        int eleccionCredito=-1;
+                        eleccionCredito = sc.nextInt();
+                        BankAccount currentUserCredit = currentUserCreditAccountW.get(eleccionCredito);
+                        System.out.println("Seleccione la cantidad a retirar: ");
+                        int amount = sc.nextInt();
+
+                        currentUserCredit.withdraw(amount, currentUserCredit);
+                    }else if (eleccionW == 3) {
+                        MenuUser(currentUser);
+                    }
+
                     break;
                 case 3:
                     return;
@@ -376,11 +418,155 @@ public class AccessScreen {
                     //bankAccount  newBA = new bankAccount(dummyBankAccount.getEntity(), dummyBankAccount.getOffice(),  dummyBankAccount.calcDC(), null, null, null);
                     break;
                 case 2:
+                    System.out.println("Realizar deposito");
+                    System.out.println("Indique el id del user");
+                    sc.nextLine();
+                    DNI = sc.nextLine();
+
+                    currentUser = null;
+                    for (int i = 0; i < users.size(); i++) {
+                        if (users.get(i).DNI.equals(DNI)) {
+                            System.out.println(users.get(i));
+                            System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
+                            String confirmacion;
+                            confirmacion = sc.nextLine();
+                            if (confirmacion.equalsIgnoreCase("S")) {
+                                currentUser = users.get(i);
+                                System.out.println("Usuario seleccionado");
+                                System.out.println(users.get(i));
+                                System.out.println(currentUser);
+                            }
+                            break;
+                        }
+                    }
+                    if (currentUser == null) {
+                        System.out.println("El DNI no existe");
+                    } else {
+                        System.out.println("Seleccione 1, 2 o 3 :Seleccionar cuenta de debito(1) o crédito(2), atras (3)");
+                        int eleccion = sc.nextInt();
+                        ArrayList<DebitAccount> currentUserDebitAccount = new ArrayList<>();
+                        currentUserDebitAccount.add(new DebitAccount("","","", "",""));
+                        ArrayList<CreditAccount> currentUserCreditAccount = new ArrayList<>();
+                        currentUserCreditAccount.add(new CreditAccount("","","",0,0,"",""));
+                        if (eleccion == 1) {
+                            System.out.println("Seleccione el id de su cuenta de debito");
+
+                            for (int i = 1; i < debitAccounts.size(); i++) {
+                                if (debitAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                                    currentUserDebitAccount.add(debitAccounts.get(i));
+                                }
+                            }
+                            for (int i = 1; i < currentUserDebitAccount.size(); i++) {
+                                System.out.println((i)+ "- " + currentUserDebitAccount.get(i).toString());
+                            }
+                            int eleccionDebito=-1;
+                            eleccionDebito = sc.nextInt();
+                            BankAccount currentUserDebit = currentUserDebitAccount.get(eleccionDebito);
+                            System.out.println("Seleccione la cantidad a ingresar: ");
+                            int amount = sc.nextInt();
+
+                            currentUserDebitAccount.get(eleccionDebito).deposit(amount, currentUserDebit);
+
+                        }else if (eleccion == 2) {
+                            System.out.println("Seleccione el id de su cuenta de credito: ");
+
+                            for (int i = 1; i < creditAccounts.size(); i++) {
+                                if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                                    currentUserCreditAccount.add(creditAccounts.get(i));
+
+                                }
+                            }
+                            for (int i = 1; i < currentUserCreditAccount.size(); i++) {
+                                System.out.println((i)+ "- " + currentUserCreditAccount.get(i).toString());
+                            }
+                            int eleccionCredito=-1;
+                            eleccionCredito = sc.nextInt();
+                            BankAccount currentUserCredit = currentUserCreditAccount.get(eleccionCredito);
+                            System.out.println("Seleccione la cantidad a ingresar: ");
+                            int amount = sc.nextInt();
+
+                            currentUserCredit.deposit(amount, currentUserCredit);
+                        }else if (eleccion == 3) {
+                            MenuUser(currentUser);
+                        }
+                        break;
+                    }
 
 
-                    login();
-                    break;
                 case 3:
+                    System.out.println("Realizar retirada de fondos");
+                    System.out.println("Indique el id del user");
+                    sc.nextLine();
+                    DNI = sc.nextLine();
+
+                    currentUser = null;
+                    for (int i = 0; i < users.size(); i++) {
+                        if (users.get(i).DNI.equals(DNI)) {
+                            System.out.println(users.get(i));
+                            System.out.println("¿Es esta la id del cliente? Sí (S) / No (N)");
+                            String confirmacion;
+                            confirmacion = sc.nextLine();
+                            if (confirmacion.equalsIgnoreCase("S")) {
+                                currentUser = users.get(i);
+                                System.out.println("Usuario seleccionado");
+                                System.out.println(users.get(i));
+                                System.out.println(currentUser);
+                            }
+                            break;
+                        }
+                    }
+                    if (currentUser == null) {
+                        System.out.println("El DNI no existe");
+                    } else {
+                        System.out.println("Seleccione 1, 2 o 3 :Seleccionar cuenta de debito(1) o crédito(2), atras (3)");
+                        int eleccion = sc.nextInt();
+                        ArrayList<DebitAccount> currentUserDebitAccount = new ArrayList<>();
+                        currentUserDebitAccount.add(new DebitAccount("","","", "",""));
+                        ArrayList<CreditAccount> currentUserCreditAccount = new ArrayList<>();
+                        currentUserCreditAccount.add(new CreditAccount("","","",0,0,"",""));
+                        if (eleccion == 1) {
+                            System.out.println("Seleccione el id de su cuenta de debito");
+
+                            for (int i = 1; i < debitAccounts.size(); i++) {
+                                if (debitAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                                    currentUserDebitAccount.add(debitAccounts.get(i));
+                                }
+                            }
+                            for (int i = 1; i < currentUserDebitAccount.size(); i++) {
+                                System.out.println((i)+ "- " + currentUserDebitAccount.get(i).toString());
+                            }
+                            int eleccionDebito=-1;
+                            eleccionDebito = sc.nextInt();
+                            BankAccount currentUserDebit = currentUserDebitAccount.get(eleccionDebito);
+                            System.out.println("Seleccione la cantidad a ingresar: ");
+                            int amount = sc.nextInt();
+
+                            currentUserDebitAccount.get(eleccionDebito).withdraw(amount, currentUserDebit);
+
+                        }else if (eleccion == 2) {
+                            System.out.println("Seleccione el id de su cuenta de credito: ");
+
+                            for (int i = 1; i < creditAccounts.size(); i++) {
+                                if (creditAccounts.get(i).getIdPropietario().equals(currentUser.DNI)) {
+                                    currentUserCreditAccount.add(creditAccounts.get(i));
+
+                                }
+                            }
+                            for (int i = 1; i < currentUserCreditAccount.size(); i++) {
+                                System.out.println((i)+ "- " + currentUserCreditAccount.get(i).toString());
+                            }
+                            int eleccionCredito=-1;
+                            eleccionCredito = sc.nextInt();
+                            BankAccount currentUserCredit = currentUserCreditAccount.get(eleccionCredito);
+                            System.out.println("Seleccione la cantidad a ingresar: ");
+                            int amount = sc.nextInt();
+
+                            currentUserCredit.withdraw(amount, currentUserCredit);
+                        }else if (eleccion == 3) {
+                            MenuUser(currentUser);
+                        }
+                        break;
+                    }
                     return;
                 case 4:
                     return;
